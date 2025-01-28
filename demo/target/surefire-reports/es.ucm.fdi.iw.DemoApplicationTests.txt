@@ -1,4 +1,4 @@
 -------------------------------------------------------------------------------
 Test set: es.ucm.fdi.iw.DemoApplicationTests
 -------------------------------------------------------------------------------
-Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 13.229 s - in es.ucm.fdi.iw.DemoApplicationTests
+Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 11.07 s - in es.ucm.fdi.iw.DemoApplicationTests

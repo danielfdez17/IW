@@ -24,7 +24,6 @@ public class RootController {
 
     @GetMapping("/")
     public String welcome(HttpSession session, Model model) {
-        
         return "welcome";
     }
     
@@ -64,12 +63,8 @@ public class RootController {
         return "adivina";
     }
 
-
-
     @GetMapping("/autores")
     public String autores(Model model) {
-
         return "autores";
     }
-    
 }
