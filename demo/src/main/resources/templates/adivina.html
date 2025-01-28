@@ -3,35 +3,82 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=+, initial-scale=1.0">
-    <title>Adivina</title>
-
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>¡Adivina!</title>
     <div th:replace="~{/fragments/head :: head}"></div>
-
+    
 </head>
 
-<body>
-    <div class="container">
-        <nav th:replace="~{/fragments/navbar :: navbar}"></nav>
-        <span th:text="${resultado}">Aquí lo que dice el servidor</span>
+<style>
+      body {
+            background-color: #a3c8f7; 
+        }
+</style>
 
-        <form>Intenta adivinarlo
-            <button type="submit" name="entero" value="0">0</button>
-            <button type="submit" name="entero" value="1">1</button>
-            <button type="submit" name="entero" value="2">2</button>
-            <button type="submit" name="entero" value="3">3</button>
-            <button type="submit" name="entero" value="4">4</button>
-            <button type="submit" name="entero" value="5">5</button>
-            <button type="submit" name="entero" value="6">6</button>
-            <button type="submit" name="entero" value="7">7</button>
-            <button type="submit" name="entero" value="8">8</button>
-            <button type="submit" name="entero" value="9">9</button>
-            <button type="submit" name="entero" value="10">10</button>
-        </form>
-
+<nav class="navbar navbar-expand-lg bg-body-tertiary" style="background-color: #007be0 !important">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="#"><b>Adivina el número</b></a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+          <li class="nav-item">
+            <a class="nav-link active" aria-current="page" href="/"><i>Inicio</i></a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/jugar">Jugar</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/autores">Autores</a>
+          </li>
+        </ul>
+      </div>
     </div>
+  </nav>
+
+<body>
+    <div class="container py-5">
+
+        
+        <div class="alert alert-primary text-center" role="alert">
+            <span th:text="${resultado}">Aquí lo que dice el servidor</span>
+        </div>
+
+        <div class="card text-center border-black text-bg-light mt-4">
+            <div class="card-header text-bg-primary">
+                <p class="h1 text-center">¡Intenta adivinarlo!</p>
+            </div>
+            <div class="card-body">
+                <form class="d-flex justify-content-center">
+                    <div class="btn-group" role="group" aria-label="Basic outlined example">
+                        <button type="submit" name="entero" value="0" class="btn btn-outline-info">0</button>
+                        <button type="submit" name="entero" value="1" class="btn btn-outline-info">1</button>
+                        <button type="submit" name="entero" value="2" class="btn btn-outline-info">2</button>
+                        <button type="submit" name="entero" value="3" class="btn btn-outline-info">3</button>
+                        <button type="submit" name="entero" value="4" class="btn btn-outline-info">4</button>
+                        <button type="submit" name="entero" value="5" class="btn btn-outline-info">5</button>
+                        <button type="submit" name="entero" value="6" class="btn btn-outline-info">6</button>
+                        <button type="submit" name="entero" value="7" class="btn btn-outline-info">7</button>
+                        <button type="submit" name="entero" value="8" class="btn btn-outline-info">8</button>
+                        <button type="submit" name="entero" value="9" class="btn btn-outline-info">9</button>
+                        <button type="submit" name="entero" value="10" class="btn btn-outline-info">10</button>
+                    </div>
+                </form>
+            </div>
+            <div class="card-footer text-body-secondary text-bg-primary">
+                <h3>
+                    <small class="text-body-secondary">¡A jugar!</small>
+                  </h3>
+            </div>
+          </div>
+
     
+    </div>
+
     <div th:replace="~{/fragments/scripts :: scripts}"></div>
+
+   
 </body>
 
 </html>
