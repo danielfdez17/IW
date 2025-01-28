@@ -60,7 +60,7 @@ public class RootController {
 		session.setAttribute(INTENTOS, i);
 		session.setAttribute(OBJETIVO, o);
     	
-        log.info("El usuario dice que se llama {}", entero); 
+        log.info("El usuario piensa que el numero es {}", entero); 
         return "adivina";
     }
 
