@@ -1,5 +1,7 @@
 package es.ucm.fdi.iw.controller;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 import javax.servlet.http.HttpSession;
@@ -10,6 +12,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+
+import es.ucm.fdi.iw.dto.AutorDTO;
 
 @Controller
 public class RootController {
@@ -65,6 +69,12 @@ public class RootController {
 
     @GetMapping("/autores")
     public String autores(Model model) {
+        List<AutorDTO> autores = new ArrayList<>();
+        autores.add(new AutorDTO("Elena Abreu", "Descripción"));
+        autores.add(new AutorDTO("Daniel Fernández", "Descripción"));
+        autores.add(new AutorDTO("Pablo Martínez", "Descripción"));
+        autores.add(new AutorDTO("José Villacres", "Descripción"));
+        model.addAttribute("autores", autores);
         return "autores";
     }
 }

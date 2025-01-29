@@ -9,10 +9,18 @@
 </head>
 
 <body>
+    <nav th:replace="~{/fragments/navbar :: navbar}"></nav>
 
     <div class="container">
-        <nav th:replace="~{/fragments/navbar :: navbar}"></nav>
+
+        <!-- <h1 class="mb-3 text-center fw-bold">Autores</h1> -->
+
+        <div th:each="autor : ${autores}">
+            <div class="d-flex justify-content-center" th:insert="~{/fragments/card-autor :: card-autor(${autor})}"></div>
+        </div>
+        
     </div>
+    <footer th:insert="~{/fragments/footer :: footer}"></footer>
     <div th:replace="~{/fragments/scripts :: scripts}"></div>
 </body>
 
