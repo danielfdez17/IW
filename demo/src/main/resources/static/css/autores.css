@@ -1,7 +1,7 @@
 body {
-  background-color: #cbe9cb !important;
+  background-color: #3e54d3 !important;
 }
 
-.navbar {
-  background-color: #78ad78 !important;
+.navbar, footer > p {
+  background-color: #4f80e2 !important;
 }

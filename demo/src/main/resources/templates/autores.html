@@ -6,6 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Autores</title>
     <div th:replace="~{/fragments/head :: head}"></div>
+    <link rel="stylesheet" th:href="@{/css/autores.css}">
+    <link rel="stylesheet" th:href="@{/css/card-autor.css}">
 </head>
 
 <body>
@@ -15,6 +17,7 @@
 
         <!-- <h1 class="mb-3 text-center fw-bold">Autores</h1> -->
 
+        <div class="mt-4"></div>
         <div th:each="autor : ${autores}">
             <div class="d-flex justify-content-center" th:insert="~{/fragments/card-autor :: card-autor(${autor})}"></div>
         </div>

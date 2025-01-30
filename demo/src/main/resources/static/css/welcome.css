@@ -2,6 +2,6 @@ body {
   background-color: #cbe9cb !important;
 }
 
-.navbar {
+.navbar, footer > p {
   background-color: #78ad78 !important;
 }
