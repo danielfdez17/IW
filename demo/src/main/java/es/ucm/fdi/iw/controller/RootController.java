@@ -70,10 +70,10 @@ public class RootController {
     @GetMapping("/autores")
     public String autores(Model model) {
         List<AutorDTO> autores = new ArrayList<>();
-        autores.add(new AutorDTO("Elena Abreu", "Descripción"));
-        autores.add(new AutorDTO("Daniel Fernández", "Descripción"));
-        autores.add(new AutorDTO("Pablo Martínez", "Descripción"));
-        autores.add(new AutorDTO("José Villacres", "Descripción"));
+        autores.add(new AutorDTO("Elena Abreu", "Estudiante en la Universidad Complutense de Madrid"));
+        autores.add(new AutorDTO("Daniel Fernández", "Estudiante en la Universidad Complutense de Madrid"));
+        autores.add(new AutorDTO("Pablo Martínez", "Estudiante en la Universidad Complutense de Madrid"));
+        autores.add(new AutorDTO("José Villacres", "Estudiante en la Universidad Complutense de Madrid"));
         model.addAttribute("autores", autores);
         return "autores";
     }
