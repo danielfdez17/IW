@@ -5,22 +5,21 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 /**
- *  Non-authenticated requests only.
+ *  Site administration.
+ *
+ *  Access to this end-point is authenticated - see SecurityConfig
  */
 @Controller
-public class RootController {
+@RequestMapping("admin")
+public class AdminController {
 
-	private static final Logger log = LogManager.getLogger(RootController.class);
-
-	@GetMapping("/login")
-    public String login(Model model) {
-        return "login";
-    }
+	private static final Logger log = LogManager.getLogger(AdminController.class);
 
 	@GetMapping("/")
     public String index(Model model) {
-        return "index";
+        return "admin";
     }
 }
