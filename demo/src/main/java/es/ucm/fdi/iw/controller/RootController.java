@@ -30,6 +30,7 @@ public class RootController {
     public String welcome(HttpSession session, Model model) {
         return "welcome";
     }
+
     
     
     @GetMapping("/jugar")            
