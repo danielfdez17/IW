@@ -1,9 +1,9 @@
-package es.ucm.fdi.iw;
+package ucm.iw.casa_apuestas;
 
 import java.util.ArrayList;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -12,7 +12,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
-import es.ucm.fdi.iw.model.User;
+import ucm.iw.casa_apuestas.model.User;
 
 /**
  * Authenticates login attempts against a JPA database

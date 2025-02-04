@@ -1,11 +1,11 @@
-package es.ucm.fdi.iw.model;
+package ucm.iw.casa_apuestas.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 
 import java.util.ArrayList;
 import java.util.Arrays;

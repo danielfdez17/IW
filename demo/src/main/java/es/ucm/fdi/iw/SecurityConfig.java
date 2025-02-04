@@ -1,4 +1,4 @@
-package es.ucm.fdi.iw;
+package ucm.iw.casa_apuestas;
 
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;

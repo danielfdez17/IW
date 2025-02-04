@@ -1,4 +1,4 @@
-package es.ucm.fdi.iw.model;
+package ucm.iw.casa_apuestas.model;
 
 import java.util.Random;
 

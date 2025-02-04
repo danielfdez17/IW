@@ -1,4 +1,4 @@
-package es.ucm.fdi.iw.controller;
+package ucm.iw.casa_apuestas.controller;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,7 +13,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import es.ucm.fdi.iw.dto.AutorDTO;
+import ucm.iw.casa_apuestas.dto.AutorDTO;
 
 @Controller
 public class RootController {

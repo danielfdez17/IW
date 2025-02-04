@@ -1,10 +1,10 @@
-package es.ucm.fdi.iw.controller;
+package ucm.iw.casa_apuestas.controller;
 
-import es.ucm.fdi.iw.LocalData;
-import es.ucm.fdi.iw.model.Message;
-import es.ucm.fdi.iw.model.Transferable;
-import es.ucm.fdi.iw.model.User;
-import es.ucm.fdi.iw.model.User.Role;
+import ucm.iw.casa_apuestas.LocalData;
+import ucm.iw.casa_apuestas.model.Message;
+import ucm.iw.casa_apuestas.model.Transferable;
+import ucm.iw.casa_apuestas.model.User;
+import ucm.iw.casa_apuestas.model.User.Role;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -27,10 +27,10 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBody;
 
-import javax.persistence.EntityManager;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-import javax.transaction.Transactional;
+import jakarta.persistence.EntityManager;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
+import jakarta.transaction.Transactional;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;

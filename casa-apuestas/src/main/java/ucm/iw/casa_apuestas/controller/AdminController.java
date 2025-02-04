@@ -1,4 +1,4 @@
-package es.ucm.fdi.iw.controller;
+package ucm.iw.casa_apuestas.controller;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;

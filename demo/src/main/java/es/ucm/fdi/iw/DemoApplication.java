@@ -1,4 +1,4 @@
-package es.ucm.fdi.iw;
+package ucm.iw.casa_apuestas;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

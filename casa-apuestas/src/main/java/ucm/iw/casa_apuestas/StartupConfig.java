@@ -1,4 +1,4 @@
-package es.ucm.fdi.iw;
+package ucm.iw.casa_apuestas;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -8,7 +8,7 @@ import org.springframework.context.event.EventListener;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 
-import javax.servlet.ServletContext;
+import jakarta.servlet.ServletContext;
 import java.text.SimpleDateFormat;
 
 /**

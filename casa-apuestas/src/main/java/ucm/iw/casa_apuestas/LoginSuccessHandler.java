@@ -1,13 +1,13 @@
-package es.ucm.fdi.iw;
+package ucm.iw.casa_apuestas;
 
 import java.io.IOException;
 import java.util.Collection;
 
-import javax.persistence.EntityManager;
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
+import jakarta.persistence.EntityManager;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -17,8 +17,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
 
-import es.ucm.fdi.iw.model.User;
-import es.ucm.fdi.iw.model.User.Role;
+import ucm.iw.casa_apuestas.model.User;
+import ucm.iw.casa_apuestas.model.User.Role;
 
 /**
  * Called when a user is first authenticated (via login).
