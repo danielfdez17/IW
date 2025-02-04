@@ -1,20 +1,21 @@
 <!DOCTYPE html>
-<html xmlns:th="http://thymeleaf.org">
+<html class="h-100" xmlns:th="http://www.thymeleaf.org">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Inicio</title>
-    <div th:replace="~{/fragments/head :: links}"></div>
-    <link rel="stylesheet" th:href="@{/css/index.css}">
+    <th:block th:replace="fragments/head :: header" />
+    <title>IW: Welcome</title>
 </head>
 
-<body>
-    <div class="container">
-    </div>
+<body class="d-flex flex-column h-100">
+    <header th:replace="fragments/nav.html :: nav"></header>
 
-    <div th:replace="~{/fragments/scripts :: scripts}"></div>
-    <script th:src="@{/js/index.js}"></script>
+    <main class="flex-shrink-0">
+        <div class="container">
+            <h1 class="mt-5">Bienvenid@</h1>
+        </div>
+    </main>
+
+    <th:block th:replace="fragments/footer.html :: footer" />
 </body>
 
 </html>
