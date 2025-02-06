@@ -31,14 +31,15 @@
 </head>
 
 <body class="d-flex flex-column h-100">
+    
     <header th:replace="fragments/nav.html :: nav"></header>
 
     
         <div class="container">
             <h1 class="mt-5">Actualmente, este objeto se está pujando por 80€</h1>
 
-            
-            <div class="detalles-card">
+            <div th:fragment="objeto">
+            <div class="detalles-card" >
                
                 <img th:src="@{/img/reloj.jpeg}" class="border border-dark" alt="Imagen objeto" width="400" height="500">
         
@@ -63,6 +64,7 @@
                  
                 </div>
             </div>
+             </div>
         </div>
     
 
