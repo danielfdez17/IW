@@ -3,7 +3,37 @@
 
 <head>
     <th:block th:replace="fragments/head :: header" />
-    <title>IW: Welcome</title>
+    
+    <style>
+        body { /* Cuerpo pagina */
+            background-color: #FFFFFF;
+            color: #070000;
+            background-color: #BBDEFB; 
+        }
+
+        h1 { /* Titulo */
+            background-color: #1565C0;
+            color: white;
+            text-align: center;
+            padding: 10px;
+            margin-bottom: 0;
+        }
+
+        .table thead tr { /* Tabla cabecera */
+            background-color: #1565C0;
+            color: #FFFFFF;
+        }
+
+        .table tbody tr { /* Tabla cuerpo */
+            background-color: #ffffff; 
+        }
+
+        .table, .table th, .table td { /* Tabla completa */
+            border: 2px solid #0d1e38;
+            text-align: center; /* Centrar horizontal */
+            vertical-align: middle; /* Centrar vertical */  
+        }
+    </style>
 </head>
 
 <body class="d-flex flex-column h-100">
@@ -22,12 +52,15 @@
             <th>Fecha de Cierre</th>
         </tr>
     </thead>
+
     <tbody>
-        <th:block th:replace="fragments/historicalbid :: historicalbid('001', 'Pintura al óleo', 'img/default-pic.jpg', '$1.200', 'usuario123', '2023-10-01')" />
-        <th:block th:replace="fragments/historicalbid :: historicalbid('002', 'Reloj', 'img/default-pic.jpg', '$850', 'MR', '2023-10-05')" />
-        <th:block th:replace="fragments/historicalbid :: historicalbid('006', 'Piruleta', 'img/default-pic.jpg', '$89.500', 'antoñito', '2023-10-05')" />
-        <th:block th:replace="fragments/historicalbid :: historicalbid('006', 'OpelCorsa', 'img/default-pic.jpg', '$2.000', 'robertofan7', '2023-10-05')" />
-        <th:block th:replace="fragments/historicalbid :: historicalbid('006', 'Felicidad', 'img/default-pic.jpg', '$0', 'sad_user_666', '2023-10-05')" />
+        <th:block th:replace="fragments/historicalbid :: historicalbid('001', 'Pintura al óleo', 'img/default-pic.jpg', '$1.200', 'usuario123', '01/10/2023')" />
+        <th:block th:replace="fragments/historicalbid :: historicalbid('002', 'Reloj', 'img/default-pic.jpg', '$850', 'MR', '05/10/2023')" />
+        <th:block th:replace="fragments/historicalbid :: historicalbid('003', 'Piruleta', 'img/default-pic.jpg', '$89.500', 'antoñito', '05/10/2023')" />
+        <th:block th:replace="fragments/historicalbid :: historicalbid('004', 'OpelCorsa', 'img/default-pic.jpg', '$2.000', 'robertofan7', '06/10/2023')" />
+        <th:block th:replace="fragments/historicalbid :: historicalbid('005', 'Felicidad', 'img/default-pic.jpg', '$0', 'sad_user_666', '05/12/2023')" />
+        <th:block th:replace="fragments/historicalbid :: historicalbid('404', 'Amor', 'img/default-pic.jpg', '-', 'not you', '14/02/20XX')" />
+        <th:block th:replace="fragments/historicalbid :: historicalbid('504', '%-?p&$^[2·/()', 'img/default-pic.jpg', 'ERROR', '??????', '99/13/1500')" />
     </tbody>
 </table>
 
