@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html class="h-100" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <th:block th:replace="fragments/head :: header" />
+    <title>IW: Welcome</title>
+</head>
+
+<body class="d-flex flex-column h-100">
+    <header th:replace="fragments/nav.html :: nav"></header>
+
+<h1>Historial de Subastas</h1>
+
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>ID Subasta</th>
+            <th>Objeto Subastado</th>
+            <th>Imagen</th>
+            <th>Precio Final</th>
+            <th>Ganador</th>
+            <th>Fecha de Cierre</th>
+        </tr>
+    </thead>
+    <tbody>
+        <th:block th:replace="fragments/historicalbid :: historicalbid('001', 'Pintura al óleo', 'img/default-pic.jpg', '$1.200', 'usuario123', '2023-10-01')" />
+        <th:block th:replace="fragments/historicalbid :: historicalbid('002', 'Reloj', 'img/default-pic.jpg', '$850', 'MR', '2023-10-05')" />
+        <th:block th:replace="fragments/historicalbid :: historicalbid('006', 'Piruleta', 'img/default-pic.jpg', '$89.500', 'antoñito', '2023-10-05')" />
+        <th:block th:replace="fragments/historicalbid :: historicalbid('006', 'OpelCorsa', 'img/default-pic.jpg', '$2.000', 'robertofan7', '2023-10-05')" />
+        <th:block th:replace="fragments/historicalbid :: historicalbid('006', 'Felicidad', 'img/default-pic.jpg', '$0', 'sad_user_666', '2023-10-05')" />
+    </tbody>
+</table>
+
+<th:block th:replace="fragments/footer.html :: footer" />
+</body>
+</html>
