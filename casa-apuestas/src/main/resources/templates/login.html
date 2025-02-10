@@ -3,7 +3,51 @@
 
 <head>
     <th:block th:replace="fragments/head :: header" />
-    <title>IW: Login</title>
+    <title>Login | ¡Barato,Barato!</title>
+
+    <style>
+        body {
+            background-color: #BBDEFB;
+            color: #070000;
+            
+        }
+
+        .container {
+            max-width: 400px;
+            margin-top: 100px;
+        }
+
+        .form-signin {
+            background-color: #ffffff;
+            padding: 20px;
+        }
+
+        .form-signin h2 {
+            font-size: 24px;
+            color: #000000;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .form-control {
+            margin-bottom: 15px;
+            padding: 10px;
+            font-size: 16px;
+        }
+
+        .btn-primary {
+            border: 2px solid #000;
+            background-color: #37a0f6;
+            font-size: 16px;
+            border-radius: 4px;
+            width: 100%;
+        }
+
+        .error {
+            color: #f44336;
+            text-align: center;
+        }
+    </style>
 </head>
 
 <body class="d-flex flex-column h-100">
@@ -12,19 +56,19 @@
     <main class="flex-shrink-0">
         <div class="container">
             <form class="form-signin" method="post" th:action="@{/login}">
-                <h2 class="form-signin-heading">Please sign in</h2>
+                <h2 class="form-signin-heading">Iniciar sesión</h2>
                 <p th:if="${#request.getQueryString() == 'error'}" class="error">
                     Error en nombre de usuario o contraseña
                 </p>
                 <p>
-                    <label for="username" class="visually-hidden">Username</label>
-                    <input type="text" id="username" name="username" class="form-control" placeholder="Username" required="required">
+                    <label for="username" class="visually-hidden">Usuario</label>
+                    <input type="text" id="username" name="username" class="form-control" placeholder="Usuario" required="required">
                 </p>
                 <p>
-                    <label for="password" class="visually-hidden">Password</label>
-                    <input type="password" id="password" name="password" class="form-control" placeholder="Password" required="required">
+                    <label for="password" class="visually-hidden">Contraseña</label>
+                    <input type="password" id="password" name="password" class="form-control" placeholder="Contraseña" required="required">
                 </p>
-                <button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
+                <button class="btn btn-lg btn-primary btn-block" type="submit">Iniciar sesión</button>
             </form>
         </div>
     </main>
