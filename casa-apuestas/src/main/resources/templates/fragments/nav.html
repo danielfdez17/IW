@@ -2,7 +2,12 @@
 <html class="h-100" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 
 <head>
-    <title>Nav fragment - rest intentionally left empty</title>
+    <style>
+        body {
+            background-color: #BBDEFB;
+            color: #070000;
+        }
+    </style>
 </head>
 
 <body class="d-flex flex-column h-100">
@@ -13,7 +18,7 @@
             <div class="container-fluid">
                 <!-- nombre del sitio; es un enlace que lleva a la página ppal -->
                 <a class="navbar-brand" th:href="@{/}" href="/">
-                    <img th:src="@{/img/logo.png}" src="/img/logo.png" alt="logo IW" width="32" height="32" class="d-inline-block align-text-top"> IW 2024-25
+                    <img th:src="@{/img/BARATO.png}" src="/img/BARATO.png" alt="logo BB" width="32" height="32" class="d-inline-block align-text-top"> ¡Barato,Barato!<h3>Casa de Subastas</h3>
                 </a>
                 <!-- menu hamburguesa si no cabe todo -->
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
