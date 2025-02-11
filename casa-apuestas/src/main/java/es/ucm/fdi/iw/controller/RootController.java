@@ -36,4 +36,9 @@ public class RootController {
     public String index(Model model) {
         return "index";
     }
+
+    @GetMapping("/historical")
+    public String historical(Model model) {
+        return "historical";
+    }
 }
