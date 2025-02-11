@@ -4,7 +4,7 @@
 
 
 <head>
-    <th:block th:replace="fragments/head :: header" />
+    <th:block th:replace="~{fragments/head :: header}" />
     <title>Inicio | ¡Barato Barato!</title>
     
     <style>
@@ -16,7 +16,7 @@
 </head>
 
 <body class="d-flex flex-column h-100">
-    <header th:replace="fragments/nav.html :: nav"></header>
+    <header th:replace="~{fragments/nav.html :: nav}"></header>
 
     <main class="flex-shrink-0">
         <div class="container">
@@ -29,7 +29,7 @@
         </div>
     </main>
 
-    <th:block th:replace="fragments/footer.html :: footer" />
+    <th:block th:replace="~{fragments/footer.html :: footer}" />
 </body>
 
 </html>

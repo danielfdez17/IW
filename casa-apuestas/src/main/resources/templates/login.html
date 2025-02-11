@@ -2,7 +2,7 @@
 <html class="h-100" xmlns:th="http://www.thymeleaf.org">
 
 <head>
-    <th:block th:replace="fragments/head :: header" />
+    <th:block th:replace="~{fragments/head :: header}" />
     <title>Login | ¡Barato,Barato!</title>
 
     <style>
@@ -51,13 +51,13 @@
 </head>
 
 <body class="d-flex flex-column h-100">
-    <header th:replace="fragments/nav.html :: nav"></header>
+    <header th:replace="~{fragments/nav.html :: nav}"></header>
 
     <main class="flex-shrink-0">
         <div class="container">
             <form class="form-signin" method="post" th:action="@{/login}">
                 <h2 class="form-signin-heading">Iniciar sesión</h2>
-                <p th:if="${#request.getQueryString() == 'error'}" class="error">
+                <p th:if="${loginError != false}" class="error">
                     Error en nombre de usuario o contraseña
                 </p>
                 <p>
@@ -73,7 +73,7 @@
         </div>
     </main>
 
-    <th:block th:replace="fragments/footer.html :: footer" />
+    <th:block th:replace="~{fragments/footer.html :: footer}" />
 </body>
 
 </html>
