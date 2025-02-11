@@ -1,0 +1,19 @@
+body {
+    background-color: #BBDEFB;
+    color: #070000;
+}
+
+.detalles-card {
+    display: flex;
+    flex-direction: row;
+    gap: 2rem;
+    background-color: #e0ded0;
+    border: 1px solid #000;
+}
+
+.botones {
+
+    border: 2px solid #000;
+    background-color: #37a0f6;
+
+}

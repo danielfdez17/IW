@@ -2,7 +2,7 @@
 <html class="h-100" xmlns:th="http://www.thymeleaf.org">
 
 <head>
-    <th:block th:replace="fragments/head :: header" />
+    <th:block th:replace="~{fragments/head :: header}" />
     <title>Subasta | ¡Barato Barato!</title>
     
     <style>
@@ -32,33 +32,34 @@
 
 <body class="d-flex flex-column h-100">
     
-    <header th:replace="fragments/nav.html :: nav"></header>
+    <header th:replace="~{fragments/nav.html :: nav}"></header>
 
     
         <div class="container">
             <h1 class="mt-5">Actualmente, este objeto se está pujando por 80€</h1>
 
-            <div th:fragment="objeto">
+            <div th:fragment="objeto(obj)">
             <div class="detalles-card" >
                
                 <img th:src="@{/img/reloj.jpeg}" class="border border-dark" alt="Imagen objeto" width="400" height="500">
         
                 <div class="details">
                    
-                        <h2 class="mt-3">Reloj de Muñeca</h2>
-                        <p>Este sofisticado reloj dorado para mujer es el accesorio perfecto para añadir un toque de lujo y elegancia a cualquier conjunto. Con una caja metálica de acabado dorado brillante, captura la luz con cada movimiento, brindando una sensación de glamour en todo momento. Su diseño minimalista y moderno se complementa con una esfera limpia y delicada, que presenta marcadores de hora sutiles, haciendo que el tiempo no solo sea funcional, sino también una verdadera obra de arte.
+                        <h2 class="mt-3" th:text="${obj.nombre}">Reloj de Muñeca</h2>
+                        <p th:text="${obj.descripcion}">Este sofisticado reloj dorado para mujer es el accesorio perfecto para añadir un toque de lujo y elegancia a cualquier conjunto. Con una caja metálica de acabado dorado brillante, captura la luz con cada movimiento, brindando una sensación de glamour en todo momento. Su diseño minimalista y moderno se complementa con una esfera limpia y delicada, que presenta marcadores de hora sutiles, haciendo que el tiempo no solo sea funcional, sino también una verdadera obra de arte.
 
                             La correa, hecha de acero inoxidable dorado, asegura una comodidad excepcional y un ajuste perfecto en tu muñeca, mientras que el cierre ajustable te permite encontrar el tamaño ideal. Este reloj es ideal tanto para ocasiones especiales como para el uso diario, siendo una verdadera declaración de estilo, sofisticación y feminidad. Con un cristal resistente a los arañazos y una estructura que resiste el agua para su uso diario (aunque se debe evitar la inmersión prolongada), este reloj es tan duradero como hermoso.
                             
                             Haz de este elegante reloj dorado tu accesorio imprescindible y añade un toque brillante a tu día a día.</p>
+                        <p th:text="${obj.precio + ' €'}"></p>
                 </div>
 
             
                 
                     
-                        <div class="btn-group-vertical" role="group" aria-label="Vertical button group">
-                            <button type="button" class="btn botones">Contactar al comprador</button>
-                            <button type="button" class="btn botones">¡Pujar!</button>
+                        <div class="btn-group-vertical w-100" role="group" aria-label="Vertical button group">
+                            <button type="button" class="btn btn-primary mb-1 ">Contactar al comprador</button>
+                            <button type="button" class="btn btn-warning ">¡Pujar!</button>
                           </div>
                         
                  
@@ -68,7 +69,7 @@
         </div>
     
 
-    <th:block th:replace="fragments/footer.html :: footer" />
+    <th:block th:replace="~{fragments/footer.html :: footer}" />
 </body>
 
 </html>

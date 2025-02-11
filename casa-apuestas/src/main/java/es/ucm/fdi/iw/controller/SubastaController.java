@@ -1,11 +1,15 @@
 package es.ucm.fdi.iw.controller;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import es.ucm.fdi.iw.dto.ObjetoDTO;
 import jakarta.servlet.http.HttpSession;
 
 @Controller
@@ -21,7 +25,11 @@ public class SubastaController {
 
     @GetMapping("/")
     public String subastas(Model model, HttpSession session) {
-        // session.setAttribute("role", "USER");
+        List<ObjetoDTO> objetos = new ArrayList<>();
+        objetos.add(new ObjetoDTO("Nombre", "Descripcion", 50.00));
+        objetos.add(new ObjetoDTO("Nombre", "Descripcion", 50.00));
+        objetos.add(new ObjetoDTO("Nombre", "Descripcion", 50.00));
+        model.addAttribute("objetos", objetos);
         return "subastas";
     }
 

@@ -21,19 +21,24 @@
                     <img th:src="@{/img/BARATO.png}" src="/img/BARATO.png" alt="logo BB" width="32" height="32" class="d-inline-block align-text-top"> ¡Barato,Barato!<h3>Casa de Subastas</h3>
                 </a>
                 <!-- menu hamburguesa si no cabe todo -->
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+                    aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <ul class="navbar-nav ms-auto">
                         <th:block th:if="${u}">
                             <li class="nav-item mx-3">
                                 <a class="nav-link" th:href="@{/objetos/}">Objetos</a>
                             </li>
+                            <li class="nav-item mx-3">
                                 <a class="nav-link" th:href="@{/subastas/}">Subastas</a>
                             </li>
+                            <li class="nav-item mx-3">
                                 <a class="nav-link" th:href="@{/historial/}">Historial</a>
                             </li>
+                            <li class="nav-item mx-3">
                                 <a class="nav-link" th:if="${u.hasRole('ADMIN')}" th:href="@{/admin/}">Administrar</a>
                             </li>
 
@@ -45,7 +50,9 @@
                             </li>
                             <li class="nav-item align-self-center me-4">
                                 <button type="button" class="btn btn-outline-primary btn-sm position-relative">
-                                    ✉️ <span id="nav-unread" class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-secondary">+99 <span class="visually-hidden">unread messages</span></span>
+                                    ✉️ <span id="nav-unread"
+                                        class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-secondary">+99
+                                        <span class="visually-hidden">unread messages</span></span>
                                 </button>
                             </li>
                             <li class="nav-item align-self-center mx-3">
