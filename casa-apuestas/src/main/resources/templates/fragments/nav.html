@@ -28,6 +28,12 @@
                     <ul class="navbar-nav ms-auto">
                         <th:block th:if="${u}">
                             <li class="nav-item mx-3">
+                                <a class="nav-link" th:href="@{/objetos/}">Objetos</a>
+                            </li>
+                                <a class="nav-link" th:href="@{/subastas/}">Subastas</a>
+                            </li>
+                                <a class="nav-link" th:href="@{/historial/}">Historial</a>
+                            </li>
                                 <a class="nav-link" th:if="${u.hasRole('ADMIN')}" th:href="@{/admin/}">Administrar</a>
                             </li>
 

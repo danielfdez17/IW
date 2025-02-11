@@ -1,120 +1,102 @@
 <!DOCTYPE html>
-<html lang="en">
+<html class="h-100" xmlns:th="http://www.thymeleaf.org">
+
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Perfil de Usuario - App de Subastas</title>
-  <!-- Bootstrap CSS -->
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Perfil de Usuario</title>
+    <!-- Bootstrap CSS -->
 </head>
+
 <body>
-  <!-- Navbar -->
-  <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-    <div class="container">
-      <a class="navbar-brand" href="#">SubastasApp</a>
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse" id="navbarNav">
-        <ul class="navbar-nav ms-auto">
-          <li class="nav-item">
-            <a class="nav-link" href="#">Inicio</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#">Mis Subastas</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#">Configuración</a>
-          </li>
-        </ul>
-      </div>
+    <!-- Navbar -->
+    <header th:replace="~{fragments/nav.html :: nav}"></header>
+
+
+    <!-- Main Content -->
+    <div class="container my-5">
+        <div class="row">
+            <!-- Perfil del Usuario -->
+            <div class="col-lg-4 mb-4">
+                <div class="card">
+                    <div class="card-body text-center">
+                        <img src="https://via.placeholder.com/150" class="rounded-circle mb-3" alt="Foto de perfil"
+                            width="150">
+                        <h5 class="card-title">Juan Pérez</h5>
+                        <p class="text-muted">Usuario desde 2021</p>
+                        <p><strong>Calificación:</strong> ⭐⭐⭐⭐☆</p>
+                        <button class="btn btn-primary btn-sm">Editar Perfil</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Información del Usuario -->
+            <div class="col-lg-8">
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h5>Subastas Activas</h5>
+                    </div>
+                    <div class="card-body">
+                        <ul class="list-group">
+                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                Cámara DSLR - Canon
+                                <span class="badge bg-primary rounded-pill">Ofertas: 5</span>
+                            </li>
+                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                Guitarra Fender Stratocaster
+                                <span class="badge bg-primary rounded-pill">Ofertas: 8</span>
+                            </li>
+                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                iPhone 14 Pro Max
+                                <span class="badge bg-primary rounded-pill">Ofertas: 12</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h5>Historial de Compras</h5>
+                    </div>
+                    <div class="card-body">
+                        <ul class="list-group">
+                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                Smart TV Samsung
+                                <span class="badge bg-success rounded-pill">$750</span>
+                            </li>
+                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                Laptop Dell XPS 13
+                                <span class="badge bg-success rounded-pill">$1200</span>
+                            </li>
+                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                Reloj Inteligente Garmin
+                                <span class="badge bg-success rounded-pill">$350</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h5>Favoritos</h5>
+                    </div>
+                    <div class="card-body">
+                        <ul class="list-group">
+                            <li class="list-group-item">Bicicleta de Montaña</li>
+                            <li class="list-group-item">Consola PlayStation 5</li>
+                            <li class="list-group-item">Libro: El Quijote</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
-  </nav>
 
-  <!-- Main Content -->
-  <div class="container my-5">
-    <div class="row">
-      <!-- Perfil del Usuario -->
-      <div class="col-lg-4 mb-4">
-        <div class="card">
-          <div class="card-body text-center">
-            <img src="https://via.placeholder.com/150" class="rounded-circle mb-3" alt="Foto de perfil" width="150">
-            <h5 class="card-title">Juan Pérez</h5>
-            <p class="text-muted">Usuario desde 2021</p>
-            <p><strong>Calificación:</strong> ⭐⭐⭐⭐☆</p>
-            <button class="btn btn-primary btn-sm">Editar Perfil</button>
-          </div>
-        </div>
-      </div>
+    <!-- Footer -->
+    <header th:replace="~{fragments/footer.html :: footer}"></header>
 
-      <!-- Información del Usuario -->
-      <div class="col-lg-8">
-        <div class="card mb-4">
-          <div class="card-header">
-            <h5>Subastas Activas</h5>
-          </div>
-          <div class="card-body">
-            <ul class="list-group">
-              <li class="list-group-item d-flex justify-content-between align-items-center">
-                Cámara DSLR - Canon
-                <span class="badge bg-primary rounded-pill">Ofertas: 5</span>
-              </li>
-              <li class="list-group-item d-flex justify-content-between align-items-center">
-                Guitarra Fender Stratocaster
-                <span class="badge bg-primary rounded-pill">Ofertas: 8</span>
-              </li>
-              <li class="list-group-item d-flex justify-content-between align-items-center">
-                iPhone 14 Pro Max
-                <span class="badge bg-primary rounded-pill">Ofertas: 12</span>
-              </li>
-            </ul>
-          </div>
-        </div>
-
-        <div class="card mb-4">
-          <div class="card-header">
-            <h5>Historial de Compras</h5>
-          </div>
-          <div class="card-body">
-            <ul class="list-group">
-              <li class="list-group-item d-flex justify-content-between align-items-center">
-                Smart TV Samsung
-                <span class="badge bg-success rounded-pill">$750</span>
-              </li>
-              <li class="list-group-item d-flex justify-content-between align-items-center">
-                Laptop Dell XPS 13
-                <span class="badge bg-success rounded-pill">$1200</span>
-              </li>
-              <li class="list-group-item d-flex justify-content-between align-items-center">
-                Reloj Inteligente Garmin
-                <span class="badge bg-success rounded-pill">$350</span>
-              </li>
-            </ul>
-          </div>
-        </div>
-
-        <div class="card mb-4">
-          <div class="card-header">
-            <h5>Favoritos</h5>
-          </div>
-          <div class="card-body">
-            <ul class="list-group">
-              <li class="list-group-item">Bicicleta de Montaña</li>
-              <li class="list-group-item">Consola PlayStation 5</li>
-              <li class="list-group-item">Libro: El Quijote</li>
-            </ul>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Footer -->
-  <footer class="bg-dark text-white text-center py-3">
-    <p class="mb-0">© 2025 SubastasApp. Todos los derechos reservados.</p>
-  </footer>
-
-  <!-- Bootstrap JS -->
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
+
 </html>

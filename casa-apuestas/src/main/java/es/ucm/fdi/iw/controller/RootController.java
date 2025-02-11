@@ -26,6 +26,7 @@ public class RootController {
         }
     }
 
+    @GetMapping("/login")
     public String login(Model model, HttpServletRequest request) {
         boolean error = request.getQueryString() != null && request.getQueryString().indexOf("error") != -1;
         model.addAttribute("loginError", error);

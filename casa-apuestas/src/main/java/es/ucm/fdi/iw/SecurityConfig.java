@@ -63,6 +63,7 @@ public class SecurityConfig {
 				.requestMatchers("/api/**").permitAll()            // <-- public api access
 				.requestMatchers("/admin/**").hasRole("ADMIN")	   // <-- administration
 				.requestMatchers("/user/**").hasRole("USER")	     // <-- logged-in users
+				.requestMatchers("/subastas/**").hasRole("USER")	     // <-- logged-in users
 				.anyRequest().authenticated()
             )
             .formLogin(formLogin -> formLogin
