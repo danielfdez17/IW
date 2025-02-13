@@ -12,12 +12,17 @@ import lombok.AllArgsConstructor;
 
 
 @Controller
-@RequestMapping("objetos")
+@RequestMapping("products")
 @AllArgsConstructor
 public class DetailProduct {
 
     private final ProductService productService;
 
+    @GetMapping("/")
+    public String index(Model model) {
+        model.addAttribute("productos", productService.getProducts());
+        return "subastas";
+    }
 
     @GetMapping("/{id}")
     public String product(@PathVariable int id, Model model) {

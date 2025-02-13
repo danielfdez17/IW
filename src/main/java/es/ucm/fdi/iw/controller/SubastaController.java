@@ -31,7 +31,7 @@ public class SubastaController {
     @GetMapping("/")
     public String subastas(Model model, HttpSession session) {
         List<ProductDTO> objetos = this.productService.getProducts();
-        model.addAttribute("objetos", objetos);
+        model.addAttribute("productos", objetos);
         return "subastas";
     }
 }
