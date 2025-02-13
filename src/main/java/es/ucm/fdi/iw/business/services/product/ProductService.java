@@ -1,10 +1,10 @@
 package es.ucm.fdi.iw.business.services.product;
 
-import java.util.List;
+import java.util.Map;
 
 import es.ucm.fdi.iw.business.dto.ProductDTO;
 
 public interface ProductService {
-    List<ProductDTO> getProducts();
+    Map<Integer, ProductDTO> getProducts();
     ProductDTO getProduct(final int id);
 }

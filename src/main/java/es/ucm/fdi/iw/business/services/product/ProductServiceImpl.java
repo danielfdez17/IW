@@ -22,8 +22,8 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public List<ProductDTO> getProducts() {
-        return objetos.values().stream().toList();
+    public Map<Integer, ProductDTO> getProducts() {
+        return objetos;
     }
 
     @Override
