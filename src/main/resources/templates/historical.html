@@ -3,41 +3,11 @@
 
 <head>
     <th:block th:replace="fragments/head :: header" />
-    
-    <style>
-        body { /* Cuerpo pagina */
-            background-color: #FFFFFF;
-            color: #070000;
-            background-color: #BBDEFB; 
-        }
-
-        h1 { /* Titulo */
-            background-color: #1565C0;
-            color: white;
-            text-align: center;
-            padding: 10px;
-            margin-bottom: 0;
-        }
-
-        .table thead tr { /* Tabla cabecera */
-            background-color: #1565C0;
-            color: #FFFFFF;
-        }
-
-        .table tbody tr { /* Tabla cuerpo */
-            background-color: #ffffff; 
-        }
-
-        .table, .table th, .table td { /* Tabla completa */
-            border: 2px solid #0d1e38;
-            text-align: center; /* Centrar horizontal */
-            vertical-align: middle; /* Centrar vertical */  
-        }
-    </style>
+    <link rel="stylesheet" th:href="@{/css/historical.css}">
 </head>
 
 <body class="d-flex flex-column h-100">
-    <header th:replace="fragments/nav.html :: nav"></header>
+<header th:replace="fragments/nav.html :: nav"></header>
 
 <h1>Historial de Subastas</h1>
 
