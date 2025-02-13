@@ -1,4 +1,4 @@
-package es.ucm.fdi.iw;
+package es.ucm.fdi.iw.config;
 
 import java.io.File;
 
@@ -7,6 +7,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.support.ResourceBundleMessageSource;
 import org.springframework.core.env.Environment;
+
+import es.ucm.fdi.iw.business.fileconfiglocal.LocalData;
 
 /**
  * General configuration for a Spring app.

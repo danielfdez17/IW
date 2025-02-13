@@ -1,4 +1,4 @@
-package es.ucm.fdi.iw;
+package es.ucm.fdi.iw.security;
 
 import java.util.ArrayList;
 
@@ -12,7 +12,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
-import es.ucm.fdi.iw.model.User;
+import es.ucm.fdi.iw.business.model.User;
 
 /**
  * Authenticates login attempts against a JPA database

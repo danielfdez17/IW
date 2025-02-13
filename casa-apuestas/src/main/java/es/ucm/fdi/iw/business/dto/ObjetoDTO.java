@@ -1,4 +1,4 @@
-package es.ucm.fdi.iw.dto;
+package es.ucm.fdi.iw.business.dto;
 
 
 import lombok.AllArgsConstructor;

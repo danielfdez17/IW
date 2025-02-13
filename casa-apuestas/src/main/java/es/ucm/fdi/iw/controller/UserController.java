@@ -1,10 +1,10 @@
 package es.ucm.fdi.iw.controller;
 
-import es.ucm.fdi.iw.LocalData;
-import es.ucm.fdi.iw.model.Message;
-import es.ucm.fdi.iw.model.Transferable;
-import es.ucm.fdi.iw.model.User;
-import es.ucm.fdi.iw.model.User.Role;
+import es.ucm.fdi.iw.business.fileconfiglocal.LocalData;
+import es.ucm.fdi.iw.business.model.Message;
+import es.ucm.fdi.iw.business.model.Transferable;
+import es.ucm.fdi.iw.business.model.User;
+import es.ucm.fdi.iw.business.model.User.Role;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;

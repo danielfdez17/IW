@@ -1,4 +1,4 @@
-package es.ucm.fdi.iw;
+package es.ucm.fdi.iw.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -7,7 +7,7 @@ import org.springframework.security.authorization.AuthorizationManager;
 import org.springframework.security.config.annotation.web.socket.EnableWebSocketSecurity;
 import org.springframework.security.messaging.access.intercept.MessageMatcherDelegatingAuthorizationManager;
 
-import es.ucm.fdi.iw.model.User;
+import es.ucm.fdi.iw.business.model.User;
 
 /**
  * Similar to SecurityConfig, but for websockets that use STOMP.

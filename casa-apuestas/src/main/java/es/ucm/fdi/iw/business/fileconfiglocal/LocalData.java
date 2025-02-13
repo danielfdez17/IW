@@ -1,4 +1,4 @@
-package es.ucm.fdi.iw;
+package es.ucm.fdi.iw.business.fileconfiglocal;
 
 import java.io.File;
 

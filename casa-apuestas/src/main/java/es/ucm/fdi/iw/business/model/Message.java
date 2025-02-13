@@ -1,4 +1,4 @@
-package es.ucm.fdi.iw.model;
+package es.ucm.fdi.iw.business.model;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;

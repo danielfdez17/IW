@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import es.ucm.fdi.iw.dto.ObjetoDTO;
+import es.ucm.fdi.iw.business.dto.ObjetoDTO;
 import jakarta.servlet.http.HttpSession;
 
 @Controller
