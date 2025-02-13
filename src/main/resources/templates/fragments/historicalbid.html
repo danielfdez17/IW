@@ -2,7 +2,7 @@
     <tr>
         <td th:text="${bidId}"></td>
         <td th:text="${itemName}"></td>
-        <td><img th:src="${imgSrc}" alt="Imagen del objeto" width="50" height="50"></td>
+        <td><img th:src="@{${imgSrc}}" alt="Imagen del objeto" width="50" height="50"></td>
         <td th:text="${finalPrice}"></td>
         <td th:text="${winner}"></td>
         <td th:text="${closeDate}"></td>

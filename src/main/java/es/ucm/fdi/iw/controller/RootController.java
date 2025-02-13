@@ -38,8 +38,5 @@ public class RootController {
         return "index";
     }
 
-    @GetMapping("/historical")
-    public String historical(Model model) {
-        return "historical";
-    }
+    
 }
