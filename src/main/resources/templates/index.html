@@ -1,12 +1,9 @@
 <!DOCTYPE html>
 <html class="h-100" xmlns:th="http://www.thymeleaf.org">
 
-
-
 <head>
     <th:block th:replace="~{fragments/head :: header}" />
-    <title>Inicio | ¡Barato Barato!</title>
-
+    <title>IW: Subastas</title>
 </head>
 
 <body class="d-flex flex-column h-100">
@@ -14,13 +11,20 @@
 
     <main class="flex-shrink-0">
         <div class="container">
-            <h1 class="mt-5">Bienvenid@ </h1>
-            <h2>¡Barato Barato! es una casa de subastas comprometida con ofrecerte una amplia variedad
-                de reliquias, objetos de coleccionista y auténticas gangas que se pujan en tiempo real. Puedes unirte a la subasta que 
-                más de interese y pujar el precio que veas adecuado, o simplemente participar como espectador. Además, tenemos un chat
-                habilitado para que puedas preguntar cualquier duda que te surja al vendedor.
-            </h2>
-            <img th:src="@{/img/BARATO.png}" src="/img/BARATO.png" alt="logo BB" width="500" height="500" style="display: block; margin: 20px auto;"> 
+            <div class="row mt-3">
+                <div class="col" th:each="obj: ${productos}">
+                    <div class="detalles-card" >
+                        <img th:src="@{/img/reloj.jpeg}" class="border border-dark" alt="Imagen objeto" width="400" height="500">
+                        <div class="details">
+                            <h2 class="mt-3" th:text="${obj.nombre}">Reloj de Muñeca</h2>
+                            <p th:text="${obj.precio + ' €'}"></p>
+                        </div>    
+                        <div class="btn-group-vertical w-100" role="group" aria-label="Vertical button group">
+                            <button type="button" class="btn btn-primary mb-1 ">Contactar al comprador</button>
+                            <a th:href="@{/products/1}" class="btn btn-warning">¡Pujar!</a>
+                        </div>
+                </div>
+            </div>
         </div>
     </main>
 

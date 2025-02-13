@@ -9,15 +9,18 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 
+import es.ucm.fdi.iw.business.services.product.ProductService;
 import jakarta.servlet.http.HttpSession;
+import lombok.AllArgsConstructor;
 
 /**
  * Non-authenticated requests only.
  */
 @Controller
+@AllArgsConstructor
 public class RootController {
 
-    private static final Logger log = LogManager.getLogger(RootController.class);
+    private final ProductService productService;
 
     @ModelAttribute
     public void populateModel(HttpSession session, Model model) {
@@ -35,8 +38,7 @@ public class RootController {
 
     @GetMapping("/")
     public String index(Model model) {
+        model.addAttribute("productos", productService.getProducts());
         return "index";
     }
-
-    
 }
