@@ -9,12 +9,17 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import es.ucm.fdi.iw.business.dto.ObjetoDTO;
+import es.ucm.fdi.iw.business.dto.ProductDTO;
+import es.ucm.fdi.iw.business.services.product.ProductService;
 import jakarta.servlet.http.HttpSession;
+import lombok.AllArgsConstructor;
 
 @Controller
 @RequestMapping("subastas")
+@AllArgsConstructor
 public class SubastaController {
+    
+    private final ProductService productService;
 
     @ModelAttribute
     public void populateModel(HttpSession session, Model model) {
@@ -25,17 +30,8 @@ public class SubastaController {
 
     @GetMapping("/")
     public String subastas(Model model, HttpSession session) {
-        List<ObjetoDTO> objetos = new ArrayList<>();
-        objetos.add(new ObjetoDTO("Nombre", "Descripcion", 50.00));
-        objetos.add(new ObjetoDTO("Nombre", "Descripcion", 50.00));
-        objetos.add(new ObjetoDTO("Nombre", "Descripcion", 50.00));
+        List<ProductDTO> objetos = this.productService.getProducts();
         model.addAttribute("objetos", objetos);
         return "subastas";
     }
-
-    @GetMapping("/objeto")
-    public String objeto() {
-        return "objeto";
-    }
-
 }

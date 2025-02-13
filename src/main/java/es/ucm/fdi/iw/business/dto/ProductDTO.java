@@ -6,7 +6,7 @@ import lombok.Data;
 
 @Data
 @AllArgsConstructor
-public class ObjetoDTO {
+public class ProductDTO {
 
     private String nombre;
     private String descripcion;
