@@ -15,7 +15,7 @@ public class HistoricalServiceImpl implements HistoricalServices {
             new HistoricalDTO("003", "Piruleta", "/img/default-pic.jpg", "$89.500", "antoñito", "05/10/2023"),
             new HistoricalDTO("004", "OpelCorsa", "/img/default-pic.jpg", "$2.000", "robertofan7", "06/10/2023"),
             new HistoricalDTO("005", "Felicidad", "/img/default-pic.jpg", "$0", "sad_user_666", "05/12/2023"),
-            new HistoricalDTO("404", "Amor", "/img/default-pic.jpg", "-", "not you", "14/02/20XX")
+            new HistoricalDTO("404", "Amor", "/img/default-pic.jpg", "-", "not you", "14/02/1999")
         );
 
 

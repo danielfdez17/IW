@@ -4,6 +4,7 @@
 <head>
     <th:block th:replace="fragments/head :: header" />
     <link rel="stylesheet" th:href="@{/css/historical.css}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
 </head>
 
 <body class="d-flex flex-column h-100">
@@ -11,15 +12,30 @@
 
 <h1>Historial de Subastas</h1>
 
-<table class="table table-bordered">
+<table class="table table-bordered" id="mainTable">
     <thead>
         <tr>
-            <th>ID Subasta</th>
-            <th>Objeto Subastado</th>
-            <th>Imagen</th>
-            <th>Precio Final</th>
-            <th>Ganador</th>
-            <th>Fecha de Cierre</th>
+            <th class="sortable-header" onclick="sortTable(0)">ID Subasta
+                <i class="bi bi-caret-up-fill sort-icon"></i>
+                <i class="bi bi-caret-down-fill sort-icon"></i>
+            </th>
+            <th class="sortable-header" onclick="sortTable(1)">Objeto Subastado
+                <i class="bi bi-caret-up-fill sort-icon"></i>
+                <i class="bi bi-caret-down-fill sort-icon"></i>
+            </th>
+            <th class="sortable-header">Imagen</th>
+            <th class="sortable-header" onclick="sortTable(3)">Precio Final
+                <i class="bi bi-caret-up-fill sort-icon"></i>
+                <i class="bi bi-caret-down-fill sort-icon"></i>
+            </th>
+            <th class="sortable-header" onclick="sortTable(4)">Ganador
+                <i class="bi bi-caret-up-fill sort-icon"></i>
+                <i class="bi bi-caret-down-fill sort-icon"></i>
+            </th>
+            <th class="sortable-header" onclick="sortTable(5)">Fecha de Cierre
+                <i class="bi bi-caret-up-fill sort-icon"></i>
+                <i class="bi bi-caret-down-fill sort-icon"></i>
+            </th>
         </tr>
     </thead>
 
@@ -36,5 +52,82 @@
 </table>
 
 <th:block th:replace="fragments/footer.html :: footer" />
+
+<script>
+let currentSort = {
+    column: null,
+    direction: 'asc' // 'asc' o 'desc'
+};
+
+function sortTable(columnIndex) {
+    const table = document.getElementById('mainTable');
+    const tbody = table.querySelector('tbody');
+    const rows = Array.from(tbody.querySelectorAll('tr'));
+    const header = table.querySelectorAll('th')[columnIndex];
+    
+    // Resetear headers
+    table.querySelectorAll('th').forEach(h => h.classList.remove('active'));
+    
+    // Direccion
+    if (currentSort.column === columnIndex) {
+        currentSort.direction = currentSort.direction === 'asc' ? 'desc' : 'asc';
+    } else {
+        currentSort.direction = 'asc';
+    }
+    
+    currentSort.column = columnIndex;
+    header.classList.add('active');
+
+    // Actualizar iconos
+    document.querySelectorAll('.sort-icon').forEach(icon => icon.style.display = 'none');
+    const icons = header.querySelectorAll('.sort-icon');
+    const activeIcon = currentSort.direction === 'asc' ? icons[0] : icons[1];
+    activeIcon.style.display = 'inline-block';
+
+    // Ordenar
+    rows.sort((a, b) => {
+        const aValue = a.cells[columnIndex].textContent;
+        const bValue = b.cells[columnIndex].textContent;
+        
+        let comparator;
+        
+        // Ver cual es el tipo de dato de la columna
+        switch(columnIndex) {
+            case 0: // ID (numerico)
+                comparator = parseInt(aValue) - parseInt(bValue);
+                break;
+            case 3: // Precio (los '.' son separadores y las ',' decimales)
+                const numA = parseFloat(aValue.replace(/\$/g, '').replace(/\./g, '').replace(',', '.'));
+                const numB = parseFloat(bValue.replace(/\$/g, '').replace(/\./g, '').replace(',', '.'));
+                comparator = numA - numB;
+                break;
+            case 5: // Fecha (dd/mm/yyyy)
+                comparator = compareDates(aValue, bValue);
+                break;
+            case 2: case 4: // Texto
+                comparator = aValue.localeCompare(bValue);
+
+            default:
+                comparator = aValue.localeCompare(bValue);
+        }
+        
+        return currentSort.direction === 'asc' ? comparator : -comparator;
+    });
+
+    // Reinsertar filas ordenadas
+    tbody.append(...rows);
+}
+
+function compareDates(a, b) {
+    const parseDate = (str) => {
+        const [day, month, year] = str.split('/');
+        return new Date(year, month - 1, day);
+    };
+    
+    const dateA = parseDate(a);
+    const dateB = parseDate(b);
+    return dateA - dateB;
+}
+</script>
 </body>
 </html>
