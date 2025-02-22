@@ -1,6 +1,7 @@
 
 # IW 24/25
 
+
 # Propuesta de proyecto
 Tema del proyecto: Casa de Subastas en Línea
 El proyecto consiste en diseñar y desarrollar una aplicación web de subastas inspirada en el funcionamiento de una casa de subastas tradicional. El objetivo es que los usuarios puedan registrarse, ver los objetos en puja, realizar ofertas y conocer al ganador cuando finalice cada subasta.
