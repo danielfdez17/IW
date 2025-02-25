@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 """Despliega tu aplicación web en tu contenedor Docker de la FDI
+
 Requiere:
     ejecutarse desde consola en la misma carpeta en la que esté tu pom.xml, volcado de BD, y ficheros de datos
     que tu proyecto esté actualizado (y en particular, que tenga un application-container.properties)
@@ -85,4 +86,3 @@ with sshtunnel.open_tunnel(
         print("Uploading jar file ... ")            
         c.put(jar)
         print(f"All files uploaded, deploy via `SPRING_PROFILES_ACTIVE=container java -jar {jar}` FROM TMUX to keep it running.")
-
