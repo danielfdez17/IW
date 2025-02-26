@@ -14,7 +14,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 @Embeddable
-public class SubastaUsuarioEmbed implements Serializable {
+public class PujaEmbed implements Serializable {
     @Column(name = "user_id")
     private long usuarioId;
     

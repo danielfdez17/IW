@@ -58,7 +58,7 @@ public class User implements Transferable<User.Transfer> {
 	private List<Message> received = new ArrayList<>();
     
     @ManyToMany
-    private List<SubastaUsuario> subastaUsuarios;
+    private List<Puja> subastaUsuarios;
 
     /**
      * Checks whether this user has a given role.

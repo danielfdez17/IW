@@ -1,6 +1,7 @@
 package es.ucm.fdi.iw.business.model;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 
 import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
@@ -17,10 +18,10 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-public class SubastaUsuario {
+public class Puja {
     
     @EmbeddedId
-    private SubastaUsuarioEmbed id;
+    private PujaEmbed id;
 
     @ManyToOne
     @MapsId("usuarioId")
@@ -33,4 +34,7 @@ public class SubastaUsuario {
     private Subasta subasta;
 
     private BigDecimal dineroPujado; 
+    private int puntuacion;
+    private String comentario;
+    private LocalDateTime fecha;
 }
