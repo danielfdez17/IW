@@ -81,6 +81,12 @@
             <scope>test</scope>
         </dependency>
 
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-devtools</artifactId>
+            <version>3.3.2</version>
+        </dependency>
+
         <!-- pruebas con Karate https://github.com/karatelabs/karate -->
         <dependency>
             <groupId>com.intuit.karate</groupId>
