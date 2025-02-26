@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import es.ucm.fdi.iw.business.dto.ProductDTO;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -43,4 +44,14 @@ public class Subasta {
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
     private User creador;
+
+    public ProductDTO toDTO() {
+        return ProductDTO.builder()
+        .id(id)
+        .precio(precio)
+        .descripcion(descripcion)
+        .nombre(nombre)
+        .build();
+    }
+    
 }
