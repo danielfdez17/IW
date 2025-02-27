@@ -1,7 +1,5 @@
 package es.ucm.fdi.iw.business.services.product;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -9,6 +7,7 @@ import java.util.stream.Collectors;
 import org.springframework.stereotype.Service;
 
 import es.ucm.fdi.iw.business.dto.ProductDTO;
+import es.ucm.fdi.iw.business.mapper.SubastaMapper;
 import es.ucm.fdi.iw.business.model.Subasta;
 import es.ucm.fdi.iw.business.repository.SubastaRepository;
 
@@ -33,7 +32,7 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public List<ProductDTO> getAllProducts() {
-        return subastaRepository.getAll().stream().map(Subasta::toDTO).collect(Collectors.toList());
+        return subastaRepository.getAll().stream().map(SubastaMapper.INSTANCE::subastaToProductDTO).collect(Collectors.toList());
     }
 
     @Override

@@ -13,13 +13,18 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
-import jakarta.persistence.OneToOne;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 
 @Getter
 @Setter
 @Entity
+@AllArgsConstructor
+@NoArgsConstructor
+@ToString
 public class Subasta {
 
     @Id
@@ -45,13 +50,13 @@ public class Subasta {
     @JoinColumn(name = "user_id", nullable = false)
     private User creador;
 
-    public ProductDTO toDTO() {
-        return ProductDTO.builder()
-        .id(id)
-        .precio(precio)
-        .descripcion(descripcion)
-        .nombre(nombre)
-        .build();
-    }
-    
+    // public ProductDTO toDTO() {
+    // return ProductDTO.builder()
+    // .id(id)
+    // .precio(precio)
+    // .descripcion(descripcion)
+    // .nombre(nombre)
+    // .build();
+    // }
+
 }
