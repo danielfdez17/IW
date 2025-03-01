@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html class="h-100" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <th:block th:replace="~{fragments/head :: header}" />
+    <title>Dejar Reseña | ¡Barato Barato!</title>
+    <link rel="stylesheet" th:href="@{/css/custom.css}">
+</head>
+<body class="d-flex flex-column h-100">
+    <header th:replace="~{fragments/nav.html :: nav}"></header>
+    
+    <main class="container py-5">
+        <div class="card shadow-sm">
+            <div class="card-header bg-primary text-white">
+                <h3 class="mb-0" th:text="${producto.nombre}">Nombre del Producto</h3>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <img th:src="@{/img/reloj.jpeg}" class="img-fluid rounded" alt="Producto">
+                    </div>
+                    <div class="col-md-6">
+                        <h5 class="text-muted">Descripción</h5>
+                        <p th:text="${producto.descripcion}">Descripción del producto.</p>
+                        <h5 class="text-muted">Precio</h5>
+                        <p class="fs-4 text-success fw-bold" th:text="'€' + ${producto.precio}">€0.00</p>
+
+                        <!-- Formulario para dejar una reseña (estático) -->
+                        <div class="review-section mt-4">
+                            <h6 class="text-muted">Deja tu reseña</h6>
+
+                            <!-- Formulario estático de reseña -->
+                            <form>
+                                <div class="form-group">
+                                    <label for="score">Puntuación (1-5):</label>
+                                    <select id="score" name="score" class="form-control" disabled>
+                                        <option value="1">1</option>
+                                        <option value="2">2</option>
+                                        <option value="3">3</option>
+                                        <option value="4">4</option>
+                                        <option value="5">5</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="comment">Comentario:</label>
+                                    <textarea id="comment" name="comment" class="form-control" rows="3" disabled></textarea>
+                                </div>
+                                <button type="submit" class="btn btn-primary mt-3" disabled>Dejar Reseña</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card-footer text-end">
+                <a href="#" class="btn btn-success">Pujar</a>
+            </div>
+        </div>
+    </main>
+    
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
