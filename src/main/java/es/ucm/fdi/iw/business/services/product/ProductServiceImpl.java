@@ -32,7 +32,7 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public List<ProductDTO> getAllProducts() {
-        return subastaRepository.getAll().stream().map(SubastaMapper.INSTANCE::subastaToProductDTO).collect(Collectors.toList());
+        return subastaRepository.findAll().stream().map(SubastaMapper.INSTANCE::subastaToProductDTO).collect(Collectors.toList());
     }
 
     @Override
