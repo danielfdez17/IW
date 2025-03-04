@@ -1,9 +1,11 @@
 package es.ucm.fdi.iw.business.services.product;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import es.ucm.fdi.iw.business.dto.ProductDTO;
@@ -17,6 +19,11 @@ public class ProductServiceImpl implements ProductService {
     private static Map<Integer, ProductDTO> objetos;
 
     private SubastaRepository subastaRepository;
+
+    @Autowired
+    public ProductServiceImpl(SubastaRepository subastaRepository) {
+        this.subastaRepository = subastaRepository;
+    }
     
     // static {
     //     objetos = new HashMap<>();
@@ -32,7 +39,10 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public List<ProductDTO> getAllProducts() {
-        return subastaRepository.findAll().stream().map(SubastaMapper.INSTANCE::subastaToProductDTO).collect(Collectors.toList());
+        // List<Subasta> products = subastaRepository.findAll();
+
+        // return new ArrayList<>();
+        return subastaRepository.findAll().stream().map(SubastaMapper.INSTANCE::subastaToProductDTO).toList();
     }
 
     @Override

@@ -8,3 +8,4 @@ VALUES (2, TRUE, 'USER', 'b',
 
 -- start id numbering from a value that is larger than any assigned above
 ALTER SEQUENCE "PUBLIC"."GEN" RESTART WITH 1024;
+INSERT INTO SUBASTA (fecha_inicio, fecha_fin, enabled, ruta_imagen, precio, descripcion, nombre, user_id) VALUES ('2022-01-01 00:00:00', '2022-01-01 00:00:00', true, '/img', 10.0, 'Descripcion', 'Reloj', 1), ('2022-01-01 00:00:00', '2022-01-01 00:00:00', true, '/img', 10.0, 'Descripcion', 'Reloj', 1), ('2022-01-01 00:00:00', '2022-01-01 00:00:00', true, '/img', 10.0, 'Descripcion', 'Reloj', 1), ('2022-01-01 00:00:00', '2022-01-01 00:00:00', true, '/img', 10.0, 'Descripcion', 'Reloj', 1), ('2022-01-01 00:00:00', '2022-01-01 00:00:00', true, '/img', 10.0, 'Descripcion', 'Reloj', 1),('2022-01-01 00:00:00', '2022-01-01 00:00:00', true, '/img', 10.0, 'Descripcion', 'Reloj', 1); 
