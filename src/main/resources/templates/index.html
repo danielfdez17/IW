@@ -16,12 +16,12 @@
                     <div class="detalles-card" >
                         <img th:src="@{/img/reloj.jpeg}" class="border border-dark" alt="Imagen objeto" width="400" height="500">
                         <div class="details">
-                            <h2 class="mt-3" th:text="${obj.value.nombre}">Reloj de Muñeca</h2>
-                            <p th:text="${obj.value.precio + ' €'}"></p>
+                            <h2 class="mt-3" th:text="${obj.nombre}">Reloj de Muñeca</h2>
+                            <p th:text="${obj.precio + ' €'}"></p>
                         </div>    
                         <div class="btn-group-vertical w-100" role="group" aria-label="Vertical button group">
                             <button type="button" class="btn btn-primary mb-1 ">Contactar al comprador</button>
-                            <a th:href="@{/products/{id}(id=${obj.key})}" class="btn btn-warning">¡Pujar!</a>
+                            <a th:href="@{/products/{id}(id=${obj.id})}" class="btn btn-warning">¡Pujar!</a>
                         </div>
                 </div>
             </div>
