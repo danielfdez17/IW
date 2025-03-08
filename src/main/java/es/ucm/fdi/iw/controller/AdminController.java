@@ -14,8 +14,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import es.ucm.fdi.iw.model.Lorem;
-import es.ucm.fdi.iw.model.User;
+import es.ucm.fdi.iw.business.model.Lorem;
+import es.ucm.fdi.iw.business.model.User;
 import jakarta.persistence.EntityManager;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;

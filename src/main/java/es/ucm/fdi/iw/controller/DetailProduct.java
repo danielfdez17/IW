@@ -39,5 +39,4 @@ public class DetailProduct {
         model.addAttribute("producto", producto);
         return "productdetail";
     }
-
 }

@@ -40,18 +40,37 @@ public class HistoricalController {
     }
 
     @GetMapping("/reviews/{id}")
-    public String reviews(@PathVariable int id, Model model) {
+    public String reviews(@PathVariable int id, Model model) { //bool isValorated, int rating, string comentario -> se cogeran de la db 
         ProductDTO producto = productService.getProduct(id);
         
         if (producto == null) {
             return "redirect:/historical";  
         }
 
+        // Valores de prueba
+        boolean isValorated = true; 
+        int rating = 4; 
+        String comentario = "Este es un comentario de prueba para el producto.";
+
         model.addAttribute("producto", producto);
+        model.addAttribute("isValorated", isValorated);
+        model.addAttribute("rating", rating);
+        model.addAttribute("comentario", comentario);
+
         return "reviews";
     }
 
+    @PostMapping("/reviews/{id}")
+    public String submitReview(@PathVariable int id, 
+                            @RequestParam("rating") String rating, 
+                            @RequestParam("comment") String comment, 
+                            Model model) {
 
+        System.out.println("####################################################################################################################");
+        System.out.println("Reseña recibida para el producto: " + rating);
+        System.out.println("Comentario: " + comment);
+        System.out.println("####################################################################################################################");
 
-
+        return "redirect:/historical/reviews/" + id;
+    }
 }
