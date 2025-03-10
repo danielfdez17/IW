@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import es.ucm.fdi.iw.business.dto.ProductDTO;
 
+
 @Service
 public class ProductServiceImpl implements ProductService {
     
@@ -30,5 +31,7 @@ public class ProductServiceImpl implements ProductService {
     public ProductDTO getProduct(final int id) {
         return objetos.get(id);
     }
+
+
 
 }

@@ -15,27 +15,13 @@
 <table class="table table-bordered" id="mainTable">
     <thead>
         <tr>
-            <th class="sortable-header" onclick="sortTable(0)">ID Subasta
-                <i class="bi bi-caret-up-fill sort-icon"></i>
-                <i class="bi bi-caret-down-fill sort-icon"></i>
-            </th>
-            <th class="sortable-header" onclick="sortTable(1)">Objeto Subastado
-                <i class="bi bi-caret-up-fill sort-icon"></i>
-                <i class="bi bi-caret-down-fill sort-icon"></i>
-            </th>
+            <th class="sortable-header" onclick="sortTable(0)">ID Subasta</th>
+            <th class="sortable-header" onclick="sortTable(1)">Objeto Subastado</th>
             <th class="sortable-header">Imagen</th>
-            <th class="sortable-header" onclick="sortTable(3)">Precio Final
-                <i class="bi bi-caret-up-fill sort-icon"></i>
-                <i class="bi bi-caret-down-fill sort-icon"></i>
-            </th>
-            <th class="sortable-header" onclick="sortTable(4)">Ganador
-                <i class="bi bi-caret-up-fill sort-icon"></i>
-                <i class="bi bi-caret-down-fill sort-icon"></i>
-            </th>
-            <th class="sortable-header" onclick="sortTable(5)">Fecha de Cierre
-                <i class="bi bi-caret-up-fill sort-icon"></i>
-                <i class="bi bi-caret-down-fill sort-icon"></i>
-            </th>
+            <th class="sortable-header" onclick="sortTable(3)">Precio Final</th>
+            <th class="sortable-header" onclick="sortTable(4)">Ganador</th>
+            <th class="sortable-header" onclick="sortTable(5)">Fecha de Cierre</th>
+            <th class="sortable-header">Reseñas</th> <!-- Nueva columna -->
         </tr>
     </thead>
 
@@ -47,9 +33,15 @@
             <td th:text="${bid.precio}"></td>
             <td th:text="${bid.usuario}"></td>
             <td th:text="${bid.fecha}"></td>
+            <td>
+                <a th:href="@{/historical/reviews/{id}(id=${bid.id})}" class="btn btn-primary btn-sm">Dejar Reseña</a>
+            </td>
+            
         </tr>
     </tbody>
 </table>
+
+
 
 <th:block th:replace="fragments/footer.html :: footer" />
 
