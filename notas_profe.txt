@@ -1,0 +1,5 @@
+creador subasta
+subasta_usuario -> puja
+valoraciones dentro de subasta_usuario
+subasta: necesita id_creador y categoria
+quitar tabla rol:

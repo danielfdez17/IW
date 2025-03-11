@@ -2,13 +2,14 @@ package es.ucm.fdi.iw.controller;
 
 import jakarta.servlet.http.HttpServletRequest;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import java.util.List;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 
+import es.ucm.fdi.iw.business.dto.ProductDTO;
 import es.ucm.fdi.iw.business.services.product.ProductService;
 import jakarta.servlet.http.HttpSession;
 import lombok.AllArgsConstructor;
@@ -38,7 +39,11 @@ public class RootController {
 
     @GetMapping("/")
     public String index(Model model) {
-        model.addAttribute("productos", productService.getProducts());
+        List<ProductDTO> productos = productService.getAllProducts();
+        System.out.println("HOLA" + productos.size());
+
+        model.addAttribute("productos", productos);
+        
         return "index";
     }
 }

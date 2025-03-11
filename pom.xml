@@ -6,7 +6,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.4.0</version> <!-- si subes a 3.4.1, hay problemas; no lo hagas todavía -->
+        <version>3.4.3</version> <!-- si subes a 3.4.1, hay problemas; no lo hagas todavía -->
         <relativePath /> <!-- lookup parent from repository -->
     </parent>
     <groupId>es.ucm.fdi.iw</groupId>
@@ -81,6 +81,25 @@
             <scope>test</scope>
         </dependency>
 
+        <dependency>
+            <groupId>org.mapstruct</groupId>
+            <artifactId>mapstruct</artifactId>
+            <version>1.6.3</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.mapstruct</groupId>
+            <artifactId>mapstruct-processor</artifactId>
+            <version>1.6.3</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-devtools</artifactId>
+            <version>3.3.2</version>
+        </dependency>
+
         <!-- pruebas con Karate https://github.com/karatelabs/karate -->
         <dependency>
             <groupId>com.intuit.karate</groupId>
@@ -112,7 +131,6 @@
                     </excludes>
                 </configuration>
             </plugin>
-
 
         </plugins>
     </build>
