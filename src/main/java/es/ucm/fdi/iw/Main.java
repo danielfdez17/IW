@@ -1,6 +1,5 @@
 package es.ucm.fdi.iw;
 
-import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 
@@ -12,7 +11,7 @@ import es.ucm.fdi.iw.business.model.User;
 
 public class Main {
     public static void main(String[] args) {
-        Subasta subasta = new Subasta(1, LocalDateTime.now(), LocalDateTime.now(), true, "/img", BigDecimal.TEN,
+        Subasta subasta = new Subasta(1, LocalDateTime.now(), LocalDateTime.now(), true, "/img", 10,
                 "Descripcion", "Nombre", new ArrayList<Puja>(), new User());
         System.out.println(subasta.toString());
 
