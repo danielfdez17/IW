@@ -23,6 +23,6 @@ public class ProductDTO {
     private String rutaImagen;
     private BigDecimal precio;
     private String descripcion;
+    private double precio;
     private String nombre;
-
 }

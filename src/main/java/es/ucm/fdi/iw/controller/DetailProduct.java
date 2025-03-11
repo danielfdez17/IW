@@ -60,6 +60,4 @@ public class DetailProduct {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("La puja debe ser mayor al precio actual.");
         }
     }
-
 }
-

@@ -15,6 +15,7 @@ import es.ucm.fdi.iw.business.mapper.SubastaMapper;
 import es.ucm.fdi.iw.business.model.Subasta;
 import es.ucm.fdi.iw.business.repository.SubastaRepository;
 
+
 @Service
 public class ProductServiceImpl implements ProductService {
 
@@ -60,6 +61,8 @@ public class ProductServiceImpl implements ProductService {
         subasta.setPrecio(producto.getPrecio()); 
         subastaRepository.save(subasta);  
     }
+
+
 
 }
 
