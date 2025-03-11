@@ -47,11 +47,11 @@ public class DetailProduct {
 
     @PostMapping("/{id}/pujar")
     @ResponseBody
-    public ResponseEntity<String> realizarPuja(@PathVariable long id, @RequestParam BigDecimal puja) {
+    public ResponseEntity<String> realizarPuja(@PathVariable long id, @RequestParam Double puja) {
         ProductDTO producto = productService.getProduct(id);
 
         
-        if (puja.stripTrailingZeros().compareTo(producto.getPrecio().stripTrailingZeros()) > 0) {
+        if (puja.compareTo(producto.getPrecio()) > 0) {
 
             producto.setPrecio(puja); 
             productService.updateProduct(producto);  
