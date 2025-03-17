@@ -67,4 +67,7 @@ Una vez registrado, el usuario puede editar su perfil como desee, guardar sus su
 ```mvn clean install -DskipTests```
 ### Ejecutar la aplicación
 ```mvn spring-boot:run```
+### Ejecutar tests
+```mvn test -Dtest=InternalRunner```
+```mvn test -Dtest=ExternalRunner```
 

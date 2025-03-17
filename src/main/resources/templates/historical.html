@@ -73,8 +73,10 @@ function sortTable(columnIndex) {
     // Actualizar iconos
     document.querySelectorAll('.sort-icon').forEach(icon => icon.style.display = 'none');
     const icons = header.querySelectorAll('.sort-icon');
-    const activeIcon = currentSort.direction === 'asc' ? icons[0] : icons[1];
-    activeIcon.style.display = 'inline-block';
+    if(icons.length > 0){
+        const activeIcon = currentSort.direction === 'asc' ? icons[0] : icons[1];
+        activeIcon.style.display = 'inline-block';
+    }
 
     // Ordenar
     rows.sort((a, b) => {

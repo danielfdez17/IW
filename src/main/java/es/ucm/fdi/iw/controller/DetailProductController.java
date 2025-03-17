@@ -50,18 +50,19 @@ public class DetailProductController {
     }
 
     @PostMapping("/{id}/pujar")
-    @ResponseBody
-    public ResponseEntity<String> realizarPuja(@PathVariable long id, @RequestParam Double puja) {
+    public String realizarPuja(@PathVariable long id, @RequestParam Double puja, HttpSession session) {
         ProductDTO producto = productService.getProduct(id);
 
         if (puja.compareTo(producto.getPrecio()) > 0) {
 
-            producto.setPrecio(puja);
-            productService.updateProduct(producto);
-            return ResponseEntity.ok("Puja realizada con éxito. Nuevo precio: €" + puja);
-        } else {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("La puja debe ser mayor al precio actual.");
-        }
+            producto.setPrecio(puja); 
+            productService.updateProduct(producto);  
+            return "redirect:/products/" + id;
+            // return ResponseEntity.ok("Puja realizada con éxito. Nuevo precio: €" + puja);
+        } 
+        return "redirect:/products/" + id;
+            // return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("La puja debe ser mayor al precio actual.");
+        
     }
 
     @PostMapping("/nueva_subasta")
