@@ -44,9 +44,10 @@
                                 </div>
                                 
                                 <div class="form-group">
-                                    <label for="comment">Comentario:</label> 
-                                    <textarea id="comment" name="comment" class="form-control" rows="3" 
-                                    th:placeholder="${comentario != null ? comentario : 'Escribe tu comentario aquí...'}"></textarea></textarea>
+                                    <label for="comment">Comentario:</label>
+                                    <textarea id="comment" name="comment" class="form-control" rows="3"
+                                        th:placeholder="${comentario == null ? 'Escribe tu comentario aquí...' : ''}"
+                                        th:text="${comentario != null ? comentario : ''}"></textarea>
                                 </div>
 
                                 <!-- Input hidden para almacenar el valor de la valoración -->

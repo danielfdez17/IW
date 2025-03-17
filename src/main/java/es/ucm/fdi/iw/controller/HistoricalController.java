@@ -9,10 +9,14 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import es.ucm.fdi.iw.business.model.Puja;
+import es.ucm.fdi.iw.business.model.User;
+import es.ucm.fdi.iw.business.dto.PujaDTO;
 import es.ucm.fdi.iw.business.dto.ProductDTO;
 
 import es.ucm.fdi.iw.business.services.historical.HistoricalServices;
 import es.ucm.fdi.iw.business.services.product.ProductService;
+import es.ucm.fdi.iw.business.services.puja.PujaService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.AllArgsConstructor;
@@ -24,6 +28,7 @@ public class HistoricalController {
 
     private final HistoricalServices historicalService;
     private final ProductService productService;
+    private final PujaService pujaService; 
     
     @ModelAttribute
     public void populateModel(HttpSession session, Model model) {
@@ -32,7 +37,6 @@ public class HistoricalController {
         }
     }
 
-
     @GetMapping("/")
     public String historical(Model model) {
         model.addAttribute("historicalBids", historicalService.getHistorical());
@@ -40,18 +44,24 @@ public class HistoricalController {
     }
 
     @GetMapping("/reviews/{id}")
-    public String reviews(@PathVariable int id, Model model) { //bool isValorated, int rating, string comentario -> se cogeran de la db 
+    public String reviews(@PathVariable int id, HttpSession session, Model model) { 
         ProductDTO producto = productService.getProduct(id);
+        User usuario = (User) session.getAttribute("u");
+        Long userId = usuario.getId();
         
         if (producto == null) {
             return "redirect:/historical";  
         }
 
-        // Valores de prueba
-        boolean isValorated = true; 
-        int rating = 4; 
-        String comentario = "Este es un comentario de prueba para el producto.";
+        // Obtener la puja asociada al usuario y subasta
+        PujaDTO pujaDTO = pujaService.getPuja(userId, id);  // Necesitas obtener el userId adecuado
+        
+        // Si no hay puja asociada, usar valores predeterminados
+        boolean isValorated = pujaDTO != null;
+        int rating = isValorated ? pujaDTO.getPuntuacion() : 0;  // Obtener puntuación
+        String comentario = isValorated ? pujaDTO.getComentario() : "";  // Obtener comentario
 
+        // Agregar atributos al modelo
         model.addAttribute("producto", producto);
         model.addAttribute("isValorated", isValorated);
         model.addAttribute("rating", rating);
@@ -62,14 +72,25 @@ public class HistoricalController {
 
     @PostMapping("/reviews/{id}")
     public String submitReview(@PathVariable int id, 
-                            @RequestParam("rating") String rating, 
+                            @RequestParam("rating") int rating, 
                             @RequestParam("comment") String comment, 
+                            HttpSession session, 
                             Model model) {
 
-        System.out.println("####################################################################################################################");
-        System.out.println("Reseña recibida para el producto: " + rating);
-        System.out.println("Comentario: " + comment);
-        System.out.println("####################################################################################################################");
+        // Obtener el usuario de la sesión (asegurarse de que el usuario esté logueado)
+        User usuario = (User) session.getAttribute("u");
+        Long userId = usuario.getId();
+        ProductDTO producto = productService.getProduct(id);
+        
+        if (producto == null || userId == null) {
+            return "redirect:/historical";  
+        }
+
+        // Crear el DTO para la puja/reseña
+        PujaDTO pujaDTO = new PujaDTO(userId, id, null, rating, comment, java.time.LocalDateTime.now());
+
+        // Guardar la reseña en la base de datos
+        pujaService.savePuja(pujaDTO);
 
         return "redirect:/historical/reviews/" + id;
     }
