@@ -10,6 +10,10 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -69,8 +73,17 @@ public class DetailProductController {
     @Transactional
     public String nuevaSubasta(Model model, HttpSession session, @ModelAttribute("product") CreateProductDTO product) {
         User creador = (User) session.getAttribute("u");
-
-        ProductDTO productDTO = SubastaMapper.INSTANCE.createProductDTOToProductDTO(product);
+        // LocalDateTime fechaInicio = LocalDateTime.parse(product.getFechaInicio(), DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+        // LocalDateTime fechaFin = LocalDateTime.parse(product.getFechaFin(), DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+        LocalDateTime fechaInicio = LocalDateTime.now();
+        LocalDateTime fechaFin = LocalDateTime.now();
+        // ProductDTO productDTO = SubastaMapper.INSTANCE.createProductDTOToProductDTO(product);
+        ProductDTO productDTO = new ProductDTO();
+        productDTO.setFechaInicio(fechaInicio);
+        productDTO.setFechaFin(fechaFin);
+        productDTO.setPrecio(product.getPrecio());
+        productDTO.setNombre(product.getNombre());
+        productDTO.setDescripcion(product.getDescripcion());
         productDTO.setCreadorUserId(creador.getId());
         productService.createSubasta(productDTO);
 
