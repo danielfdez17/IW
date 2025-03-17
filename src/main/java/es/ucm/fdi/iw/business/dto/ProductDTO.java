@@ -1,8 +1,5 @@
 package es.ucm.fdi.iw.business.dto;
 
-import java.math.BigDecimal;
-
-import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 import lombok.AllArgsConstructor;
@@ -13,10 +10,10 @@ import lombok.ToString;
 @Data
 @AllArgsConstructor
 @Builder
-@ToString
 public class ProductDTO {
 
     private long id;
+    private long creadorUserId;
     private LocalDateTime fechaInicio;
     private LocalDateTime fechaFin;
     private boolean enabled;

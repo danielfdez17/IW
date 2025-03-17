@@ -47,6 +47,7 @@ public class SecurityConfig {
 		if (debugProperty != null && Boolean.parseBoolean(debugProperty.toLowerCase())) {
 			http.csrf(csrf -> csrf
 				.ignoringRequestMatchers("/h2/**")
+				.ignoringRequestMatchers("/products/**")
 			);
 			http.authorizeHttpRequests(authorize -> authorize
 				.requestMatchers("/h2/**").permitAll()  // <-- no login for h2 console
@@ -64,6 +65,7 @@ public class SecurityConfig {
 				.requestMatchers("/admin/**").hasRole("ADMIN")	   // <-- administration
 				.requestMatchers("/user/**").hasRole("USER")	     // <-- logged-in users
 				.requestMatchers("/subastas/**").hasRole("USER")	     // <-- logged-in users
+				// .requestMatchers("/products/**").hasRole("USER")	     // <-- logged-in users
 				.anyRequest().authenticated()
             )
             .formLogin(formLogin -> formLogin

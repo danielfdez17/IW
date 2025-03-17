@@ -13,15 +13,19 @@ import java.math.BigDecimal;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import es.ucm.fdi.iw.business.dto.CreateProductDTO;
 import es.ucm.fdi.iw.business.dto.ProductDTO;
+import es.ucm.fdi.iw.business.mapper.SubastaMapper;
+import es.ucm.fdi.iw.business.model.User;
 import es.ucm.fdi.iw.business.services.product.ProductService;
 import jakarta.servlet.http.HttpSession;
+import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 
 @Controller
 @RequestMapping("products")
 @AllArgsConstructor
-public class DetailProduct {
+public class DetailProductController {
 
     private final ProductService productService;
 
@@ -34,15 +38,15 @@ public class DetailProduct {
 
     @GetMapping("/")
     public String index(Model model) {
-        model.addAttribute("productos", productService.getAllProducts());  
+        model.addAttribute("productos", productService.getAllProducts());
         return "subastas";
     }
 
     @GetMapping("/{id}")
     public String product(@PathVariable int id, Model model) {
-        ProductDTO producto = productService.getProduct(id);  
+        ProductDTO producto = productService.getProduct(id);
         model.addAttribute("producto", producto);
-        return "productdetail";  
+        return "productdetail";
     }
 
     @PostMapping("/{id}/pujar")
@@ -50,14 +54,25 @@ public class DetailProduct {
     public ResponseEntity<String> realizarPuja(@PathVariable long id, @RequestParam Double puja) {
         ProductDTO producto = productService.getProduct(id);
 
-        
         if (puja.compareTo(producto.getPrecio()) > 0) {
 
-            producto.setPrecio(puja); 
-            productService.updateProduct(producto);  
+            producto.setPrecio(puja);
+            productService.updateProduct(producto);
             return ResponseEntity.ok("Puja realizada con éxito. Nuevo precio: €" + puja);
         } else {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("La puja debe ser mayor al precio actual.");
         }
+    }
+
+    @PostMapping("/nueva_subasta")
+    @Transactional
+    public String nuevaSubasta(Model model, HttpSession session, @ModelAttribute("product") CreateProductDTO product) {
+        User creador = (User) session.getAttribute("u");
+
+        ProductDTO productDTO = SubastaMapper.INSTANCE.createProductDTOToProductDTO(product);
+        productDTO.setCreadorUserId(creador.getId());
+        productService.createSubasta(productDTO);
+
+        return "redirect:/index";
     }
 }

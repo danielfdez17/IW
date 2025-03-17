@@ -13,7 +13,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import es.ucm.fdi.iw.business.dto.ProductDTO;
 import es.ucm.fdi.iw.business.mapper.SubastaMapper;
 import es.ucm.fdi.iw.business.model.Subasta;
+import es.ucm.fdi.iw.business.model.User;
 import es.ucm.fdi.iw.business.repository.SubastaRepository;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
 
 
 @Service
@@ -21,6 +24,13 @@ public class ProductServiceImpl implements ProductService {
 
     private final SubastaRepository subastaRepository;
 
+        private EntityManager entityManager;
+    
+    @PersistenceContext
+    public void setEntityManager(EntityManager em){
+        this.entityManager = em;
+    }
+    
     @Autowired
     public ProductServiceImpl(SubastaRepository subastaRepository) {
         this.subastaRepository = subastaRepository;
@@ -60,6 +70,25 @@ public class ProductServiceImpl implements ProductService {
 
         subasta.setPrecio(producto.getPrecio()); 
         subastaRepository.save(subasta);  
+    }
+
+    @Override
+    public ProductDTO createSubasta(ProductDTO productDTO) {
+        Subasta subasta = new Subasta();
+        subasta.setFechaInicio(productDTO.getFechaInicio());
+        subasta.setFechaFin(productDTO.getFechaFin());
+        subasta.setPrecio(productDTO.getPrecio());
+        subasta.setNombre(productDTO.getNombre());
+        subasta.setDescripcion(productDTO.getDescripcion());
+        User creador = this.entityManager.find(User.class, productDTO.getCreadorUserId());
+        if (creador == null) {
+            return null;
+        }
+        subasta.setCreador(creador);
+
+        this.entityManager.persist(subasta);
+        this.entityManager.flush();
+        return SubastaMapper.INSTANCE.subastaToProductDTO(subasta);
     }
 
 
