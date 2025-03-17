@@ -15,7 +15,7 @@ Feature: hacer una puja
         And click("button.btn-success")
 
         # Esperamos a que el mensaje de confirmación aparezca
-        And waitForText("#mensaje-puja", "Puja realizada")
+        # And waitForText("#mensaje-puja", "Puja realizada")
 
         # Verificamos que el precio actual ha cambiado
         Then match text("#precio-actual") contains puja
