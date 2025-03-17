@@ -40,7 +40,6 @@ public class RootController {
     @GetMapping({"/", "/index"})
     public String index(Model model) {
         List<ProductDTO> productos = productService.getAllProducts();
-        System.out.println("HOLA" + productos.size());
 
         model.addAttribute("productos", productos);
         
