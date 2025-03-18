@@ -11,20 +11,29 @@ Feature: crear una subasta
     And click("button.btn-primary")
 
     # Rellenamos el formulario
-    And input('#fechaInicio', '2026-01-01')
-    And input('#fechaFin', '2027-01-01')
+    # And input('#fechaInicio', '2026-01-01')
+    # And input('#fechaFin', '2026-01-02')
+
+
+
     And input('#nombreProducto', 'nombre')
     And input('#descripcionProducto', 'desc')
     And input('#precioInicial', '10')
-    And click("button.btn-primary")
+    And click("button#btnCrearSubasta")
+
 
     # Nos vamos a la vista de subastas
-    And driver baseUrl + '/'
+    # And driver baseUrl + '/index'
+
+    
+    # Paramos el test
+    # * karate.stop(9000)
 
     # Hacer login
     Given call read('test1.feature')
 
-    # Paramos el test
-    * karate.stop(9000)
+    # * karate.stop(9000)
+
+    # Given call read('login.feature@login_a')
 
     And driver.screenshot()

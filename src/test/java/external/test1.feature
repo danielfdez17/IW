@@ -6,8 +6,8 @@ Feature: hacer una puja
         #Nos vamos a la vista de uno de los productos
         And driver baseUrl + '/products/1' 
         #Pujamos con un precio superior al actual
-        And def puja = "18"
-
+        And def puja = "2000"
+        # * karate.stop(9000)
         # Escribimos la puja en el input correcto
         And input('#nuevaPuja', puja)
         
@@ -18,7 +18,7 @@ Feature: hacer una puja
         # And waitForText("#mensaje-puja", "Puja realizada")
 
         # Paramos el test
-        * karate.stop(9000)
+        # * karate.stop(9000)
 
         # Verificamos que el precio actual ha cambiado
         Then match text("#precio-actual") contains puja

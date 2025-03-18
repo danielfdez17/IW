@@ -34,33 +34,33 @@
                                     <form th:action="@{/products/nueva_subasta}" method="post">
                                         <div class="mb-3">
                                             <label class="form-label" for="fechaInicio">Fecha de inicio</label>
-                                            <input class="form-control" id="fechaInicio" name="fechaInicio" type="date" required>
+                                            <input class="form-control" id="fechaInicio" name="fechaInicio" value="2026-01-01" type="date" required>
                                         </div>
                                         <div class="mb-3">
                                             <label class="form-label" for="fechaFin">Fecha de fin</label>
-                                            <input class="form-control" type="date" id="fechaFin" name="fechaFin" required>
+                                            <input class="form-control" type="date" id="fechaFin" name="fechaFin" value="2026-01-02" required>
                                         </div>
                                         <div class="mb-3">
                                             <label class="form-label" for="nombreProducto">Nombre del producto a
                                                 subastar</label>
-                                            <input class="form-control" type="text" id="nombreProducto" name="nombre" placeholder="Introduce un nombre" required>
+                                            <input class="form-control" type="text" id="nombreProducto" name="nombre" value="nombre" placeholder="Introduce un nombre" required>
                                         </div>
                                         <div class="mb-3">
                                             <label class="form-label" for="descripcionProducto">Descripción del producto
                                                 a subastar</label>
                                             <div class="form-floating">
                                                 <textarea class="form-control" placeholder="Introduce la descripción del producto"
-                                                    id="descripcionProducto" name="descripcion" required></textarea>
+                                                    id="descripcionProducto" name="descripcion" value="descripcion" required></textarea>
                                                 <label for="descripcionProducto">Introduce la descripción del producto</label>
                                             </div>
                                         </div>
                                         <div class="mb-3">
                                             <label class="form-label" for="precioInicial">Precio inicial de
                                                 subasta</label>
-                                            <input class="form-control" id="precioInicial" name="precio" type="number" placeholder="Introduce el precio inicial" min="0" required>
+                                            <input class="form-control" id="precioInicial" name="precio" value="10" type="number" placeholder="Introduce el precio inicial" min="0" required>
                                         </div>
                                         <div class="mb-3">
-                                            <button class="btn btn-primary" type="submit">Crear subasta</button>
+                                            <button id="btnCrearSubasta" class="btn btn-primary" type="submit">Crear subasta</button>
                                         </div>
                                     </form>
                                 </div>
