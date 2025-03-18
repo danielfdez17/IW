@@ -50,13 +50,4 @@ public class Subasta {
     @JoinColumn(name = "user_id", nullable = false)
     private User creador;
 
-    // public ProductDTO toDTO() {
-    // return ProductDTO.builder()
-    // .id(id)
-    // .precio(precio)
-    // .descripcion(descripcion)
-    // .nombre(nombre)
-    // .build();
-    // }
-
 }
