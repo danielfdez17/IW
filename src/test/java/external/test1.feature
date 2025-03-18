@@ -4,9 +4,10 @@ Feature: hacer una puja
         #Hacemos login para poder pujar
         Given call read('login.feature@login_a')
         #Nos vamos a la vista de uno de los productos
-        And driver baseUrl + '/products/3' 
+        And driver baseUrl + '/products/2' 
         #Pujamos con un precio superior al actual
-        And def puja = "18"
+        And def puja =  "20" 
+        #al multiplicar por 1 se pasa a numero
 
         # Escribimos la puja en el input correcto
         And input('#nuevaPuja', puja)
