@@ -47,6 +47,7 @@ public class SecurityConfig {
 		if (debugProperty != null && Boolean.parseBoolean(debugProperty.toLowerCase())) {
 			http.csrf(csrf -> csrf
 				.ignoringRequestMatchers("/h2/**")
+				.ignoringRequestMatchers("/products/**")
 			);
 			http.authorizeHttpRequests(authorize -> authorize
 				.requestMatchers("/h2/**").permitAll()  // <-- no login for h2 console

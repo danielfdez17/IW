@@ -11,21 +11,84 @@
 
     <main class="flex-shrink-0">
         <div class="container">
+            <th:block th:if="${u}">
+                <div class="row mt-3">
+                    <!-- Button trigger modal -->
+                    <button type="button" class="btn btn-primary" data-bs-toggle="modal"
+                        data-bs-target="#modalCrearSubasta">
+                        Crear una nueva subasta
+                    </button>
+
+                    <!-- Modal -->
+                    <div class="modal fade" id="modalCrearSubasta" tabindex="-1"
+                        aria-labelledby="modalCrearSubastaLabel" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h1 class="modal-title fs-5" id="modalCrearSubastaLabel">Crear una nueva subasta
+                                    </h1>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                        aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <form th:action="@{/products/nueva_subasta}" method="post">
+                                        <div class="mb-3">
+                                            <label class="form-label" for="fechaInicio">Fecha de inicio</label>
+                                            <input class="form-control" id="fechaInicio" name="fechaInicio" value="2026-01-01" type="date" required>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label class="form-label" for="fechaFin">Fecha de fin</label>
+                                            <input class="form-control" type="date" id="fechaFin" name="fechaFin" value="2026-01-02" required>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label class="form-label" for="nombreProducto">Nombre del producto a
+                                                subastar</label>
+                                            <input class="form-control" type="text" id="nombreProducto" name="nombre" value="nombre" placeholder="Introduce un nombre" required>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label class="form-label" for="descripcionProducto">Descripción del producto
+                                                a subastar</label>
+                                            <div class="form-floating">
+                                                <textarea class="form-control" placeholder="Introduce la descripción del producto"
+                                                    id="descripcionProducto" name="descripcion" value="descripcion" required></textarea>
+                                                <label for="descripcionProducto">Introduce la descripción del producto</label>
+                                            </div>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label class="form-label" for="precioInicial">Precio inicial de
+                                                subasta</label>
+                                            <input class="form-control" id="precioInicial" name="precio" value="10" type="number" placeholder="Introduce el precio inicial" min="0" required>
+                                        </div>
+                                        <div class="mb-3">
+                                            <button id="btnCrearSubasta" class="btn btn-primary" type="submit">Crear subasta</button>
+                                        </div>
+                                    </form>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary"
+                                        data-bs-dismiss="modal">Cerrar</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </th:block>
             <div class="row mt-3">
                 <div class="col" th:each="obj: ${productos}">
-                    <div class="detalles-card" >
-                        <img th:src="@{/img/reloj.jpeg}" class="border border-dark" alt="Imagen objeto" width="400" height="500">
+                    <div class="detalles-card">
+                        <img th:src="@{/img/reloj.jpeg}" class="border border-dark" alt="Imagen objeto" width="400"
+                            height="500">
                         <div class="details">
                             <h2 class="mt-3" th:text="${obj.nombre}">Reloj de Muñeca</h2>
                             <p th:text="${obj.precio + ' €'}"></p>
-                        </div>    
+                        </div>
                         <div class="btn-group-vertical w-100" role="group" aria-label="Vertical button group">
                             <button type="button" class="btn btn-primary mb-1 ">Contactar al comprador</button>
                             <a th:href="@{/products/{id}(id=${obj.id})}" class="btn btn-warning">¡Pujar!</a>
                         </div>
+                    </div>
                 </div>
             </div>
-        </div>
     </main>
 
     <th:block th:replace="~{fragments/footer.html :: footer}" />

@@ -5,15 +5,17 @@ import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 @Data
 @AllArgsConstructor
+@NoArgsConstructor
 @Builder
-@ToString
 public class ProductDTO {
 
     private long id;
+    private long creadorUserId;
     private LocalDateTime fechaInicio;
     private LocalDateTime fechaFin;
     private boolean enabled;
