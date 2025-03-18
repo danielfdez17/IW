@@ -4,10 +4,12 @@ Feature: hacer una puja
         #Hacemos login para poder pujar
         Given call read('login.feature@login_a')
         #Nos vamos a la vista de uno de los productos
+
         And driver baseUrl + '/products/1' 
         #Pujamos con un precio superior al actual
         And def puja = "2000"
         # * karate.stop(9000)
+
         # Escribimos la puja en el input correcto
         And input('#nuevaPuja', puja)
         

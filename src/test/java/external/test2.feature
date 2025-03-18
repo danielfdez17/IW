@@ -17,5 +17,8 @@ Feature: hacer una puja
         # Esperamos a que el mensaje aparezca
         # And waitForText("#mensaje-puja", "La puja debe ser mayor al precio actual.")
 
+        # Verificamos que el precio actual no ha cambiado
+        Then match text("#precio-actual") contains text("#precio-actual")
+
         # Tomamos una captura de pantalla
         And driver.screenshot()
