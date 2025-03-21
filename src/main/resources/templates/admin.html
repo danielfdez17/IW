@@ -3,7 +3,7 @@
 
 <head>
     <th:block th:replace="~{fragments/head :: header}" />
-    <title>¡Barato, Barato! | Admin</title>
+    <title>¡Barato, Barato! | Admin Usuarios</title>
     <link rel="stylesheet" th:href="@{/css/admin.css}">
 </head>
 
@@ -11,12 +11,11 @@
 <body class="d-flex flex-column h-100">
     <header th:replace="~{fragments/nav.html :: nav}"></header>
 
-    <main class="flex-shrink-0">
+    <main class="container flex-shrink-0">
         <div class="container">
-            <h1 class="mt-5">Administración</h1>
+            <h1 class="mt-5">Administración Usuarios</h1>
         </div>
         <div class="container">
-            <h1 class="mt-5">Usuarios</h1>
             <table>
                 <thead>
                     <tr>
@@ -46,14 +45,14 @@
                             </form>
                         </td>
                     </tr>
-
-            </th:each>
+                </tbody>
+            </table>
         </div>
-
     </main>
 
     <th:block th:replace="~{fragments/footer.html :: footer}" />
-<script>
+
+<script>    
     /* const toggles = document.querySelectorAll('.toggle');
     toggles.forEach(toggle => {
         toggle.addEventListener('click', (e) => {
