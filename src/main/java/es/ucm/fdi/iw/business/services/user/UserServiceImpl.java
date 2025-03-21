@@ -44,7 +44,7 @@ public class UserServiceImpl implements UserService {
                                                                                  .toList());
         if(StringUtils.hasText(userChatNew) && users.stream().noneMatch(u -> u.getUsername().equals(userChatNew))){
             Optional<User> userOpt = this.userRepository.findByUsername(userChatNew);
-            if (userOpt.isPresent()) {
+            if (userOpt.isPresent() && !username.equals(userChatNew)) {
                 UserDTO userDto = UserMapper.INSTANCE.entityToDto(userOpt.get());
                 users.addFirst(userDto);
             }
