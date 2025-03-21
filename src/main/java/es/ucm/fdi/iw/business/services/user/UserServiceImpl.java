@@ -1,8 +1,16 @@
 package es.ucm.fdi.iw.business.services.user;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 
+import es.ucm.fdi.iw.business.dto.UserDTO;
+import es.ucm.fdi.iw.business.mapper.UserMapper;
+import es.ucm.fdi.iw.business.model.User;
 import es.ucm.fdi.iw.business.repository.UserRepository;
 import lombok.AllArgsConstructor;
 
@@ -29,5 +37,18 @@ public class UserServiceImpl implements UserService {
         }).orElse(false);
     }
     
-
+    @Override
+    public List<UserDTO> findChatUsersByUsername(final String username, final String userChatNew) {
+        User user = this.userRepository.findByUsername(username).orElseThrow();
+        List<UserDTO> users = new ArrayList<>(this.userRepository.findChatPartners(user.getId()).stream().map(UserMapper.INSTANCE::entityToDto)
+                                                                                 .toList());
+        if(StringUtils.hasText(userChatNew) && users.stream().noneMatch(u -> u.getUsername().equals(userChatNew))){
+            Optional<User> userOpt = this.userRepository.findByUsername(userChatNew);
+            if (userOpt.isPresent()) {
+                UserDTO userDto = UserMapper.INSTANCE.entityToDto(userOpt.get());
+                users.addFirst(userDto);
+            }
+        }
+        return users;
+    }
 }
