@@ -33,8 +33,15 @@
                             <li class="nav-item mx-3">
                                 <a class="nav-link" th:href="@{/chat/}">Chats</a>
                             </li>
-                            <li class="nav-item mx-3">
-                                <a class="nav-link" th:if="${u.hasRole('ADMIN')}" th:href="@{/admin/}">Administrar</a>
+                            <li class="nav-item dropdown mx-3" th:if="${u.hasRole('ADMIN')}">
+                                <button class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
+                                    Administrar
+                                </button>
+                                <ul class="dropdown-menu">
+                                    <li><a class="dropdown-item" th:href="@{/admin/}">Usuarios</a></li>
+                                    <li><a class="dropdown-item" th:href="@{/admin/puja}">Puja</a></li>
+                                    <li><a class="dropdown-item" th:href="@{/admin/subasta}">Subasta</a></li>
+                                </ul>                                
                             </li>
 
                             <li class="nav-item mx-2">

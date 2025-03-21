@@ -36,13 +36,14 @@
                             </ul>
                         </td>
                         <td>
-                            <form th:action="@{'/admin/user/disable/' + ${user.id}}"
-                                th:method="post"  th:if="${user.enabled} == true" >
-                                <button type="submit" class="toggle btn btn-danger">Deshabilitar</button> 
-                            </form>
-                            <form th:action="@{'/admin/user/enable/' + ${user.id}}"
-                                th:method="post"  th:unless="${user.enabled}"  >
-                                <button type="submit" class="toggle btn btn-primary">Habilitar</button> 
+                            <form th:action="@{'/admin/toggle/' + ${user.id}}"
+                                th:method="post">
+                                <button
+                                    th:if="${user.enabled}" 
+                                    type="submit" class="toggle btn btn-danger">Deshabilitar</button> 
+                                <button
+                                    th:unless="${user.enabled}" 
+                                    type="submit" class="toggle btn btn-primary">Habilitar</button> 
                             </form>
                         </td>
                     </tr>
@@ -54,7 +55,7 @@
 
     <th:block th:replace="~{fragments/footer.html :: footer}" />
 <script>
-    /* const toggles = document.querySelectorAll('.toggle');
+    const toggles = document.querySelectorAll('.toggle');
     toggles.forEach(toggle => {
         toggle.addEventListener('click', (e) => {
             e.preventDefault();
@@ -72,7 +73,7 @@
                 console.log(d);
             });
         });
-    });*/
+    });
 </script>
 </body>
 

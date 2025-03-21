@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import es.ucm.fdi.iw.business.model.Lorem;
 import es.ucm.fdi.iw.business.model.User;
+import es.ucm.fdi.iw.business.services.user.UserService;
 import jakarta.persistence.EntityManager;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
@@ -29,6 +30,9 @@ import jakarta.transaction.Transactional;
 @Controller
 @RequestMapping("admin")
 public class AdminController {
+
+    @Autowired
+    private UserService userService;
 
 	@Autowired
 	private PasswordEncoder passwordEncoder;
@@ -51,6 +55,30 @@ public class AdminController {
         model.addAttribute("users", 
             entityManager.createQuery("select u from User u").getResultList());
         return "admin";
+    }
+
+    @GetMapping("/puja")
+    public String adminPuja(Model model) {
+        return "admin-puja";
+    }
+
+    @GetMapping("/subasta")
+    public String adminSubasta(Model model) {
+        return "admin-subasta";
+    }
+
+    @PostMapping("/user/disable/{id}")
+    public String disableUser(@PathVariable long id) {
+        log.info("Admin deshabilita " + id);
+        this.userService.disableUser(id);
+        return "redirect:/admin/";
+    }
+
+    @PostMapping("/user/enable/{id}")
+    public String enableUser(@PathVariable long id) {
+        log.info("Admin deshabilita " + id);
+        this.userService.enableUser(id);
+        return "redirect:/admin/";
     }
 
 	@PostMapping("/toggle/{id}")
