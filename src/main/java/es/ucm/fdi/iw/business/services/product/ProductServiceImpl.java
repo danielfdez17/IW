@@ -7,7 +7,7 @@ import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.transaction.annotation.Transactional;
 
 
 import es.ucm.fdi.iw.business.dto.ProductDTO;
@@ -73,6 +73,15 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
+    @Transactional
+    public void updateAdminProduct(ProductDTO p){
+        Subasta subasta = subastaRepository.findById(p.getId()).orElseThrow(() -> new RuntimeException("Subasta no encontrada"));
+        subasta.setNombre(p.getNombre());
+        subasta.setDescripcion(p.getDescripcion()); 
+        subastaRepository.save(subasta);
+    }
+
+    @Override
     public ProductDTO createSubasta(ProductDTO productDTO) {
         Subasta subasta = new Subasta();
         subasta.setFechaInicio(productDTO.getFechaInicio());
@@ -91,7 +100,13 @@ public class ProductServiceImpl implements ProductService {
         return SubastaMapper.INSTANCE.subastaToProductDTO(subasta);
     }
 
-
+    @Override
+    @Transactional
+    public void toggleProduct(long id, final boolean active) {
+        Subasta subasta = subastaRepository.findById(id).orElseThrow(() -> new RuntimeException("Subasta no encontrada"));
+        subasta.setEnabled(active);
+        subastaRepository.save(subasta);
+    }
 
 }
 

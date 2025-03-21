@@ -3,7 +3,7 @@
 
 <head>
     <th:block th:replace="~{fragments/head :: header}" />
-    <title>¡Barato, Barato! | Admin</title>
+    <title>¡Barato, Barato! | Admin Subasta</title>
     <link rel="stylesheet" th:href="@{/css/admin.css}">
 </head>
 
@@ -11,70 +11,123 @@
 <body class="d-flex flex-column h-100">
     <header th:replace="~{fragments/nav.html :: nav}"></header>
 
-    <main class="flex-shrink-0">
+    <main class="container flex-shrink-0">
         <div class="container">
-            <h1 class="mt-5">Administración</h1>
+            <h1 class="mt-5">Administración Subasta</h1>
         </div>
         <div class="container">
-            <h1 class="mt-5">Usuarios</h1>
-            <table>
+            <table class="w-100">
                 <thead>
                     <tr>
                         <th>Id</th>
-                        <th>Nombre & Apellidos</th>
-                        <th>Roles</th>
-                        <th>Acciones</th>
+                        <th>Activo</th>
+                        <th>Precio</th>
+                        <th>Fecha Inicio</th>
+                        <th>Fecha Fin</th>
+                        <th>Id Usuario creador</th>
+                        <th>Nombre</th>
+                        <th>Descripción</th>
+                        <th>Modificar</th>
+                        <th>Eliminar</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr th:each="user : ${users}">
-                        <td th:text="${user.id}">1</td>
-                        <td th:text="${user.firstName + ' ' + user.lastName}">Nombre</td>
+                    <tr th:each="p : ${products}">
+                        <td th:text="${p.id}"></td>
+                        <td th:text="${p.enabled ? 'SI' : 'NO'}"></td>
+                        <td th:text="${p.precio}"></td>
+                        <td th:text="${p.fechaInicio}"></td>
+                        <td th:text="${p.fechaFin}"></td>
+                        <td th:text="${p.creadorUserId}"></td>
+                        <td th:text="${p.nombre}"></td>
+                        <td th:text="${p.descripcion}"></td>
                         <td>
-                            <ul>
-                                <li th:text="${user.roles}">Role</li>
-                            </ul>
+                            <button type="button" class="btn btn-warning btn-sm"
+                                data-bs-toggle="modal"
+                                data-bs-target="#modalModificarSubasta"
+                                th:data-id="${p.id}"
+                                th:data-precio="${p.precio}"
+                                th:data-fecha-inicio="${#temporals.format(p.fechaInicio, 'yyyy-MM-dd''T''HH:mm')}"
+                                th:data-fecha-fin="${#temporals.format(p.fechaFin, 'yyyy-MM-dd''T''HH:mm')}"
+                                th:data-nombre="${p.nombre}"
+                                th:data-descripcion="${p.descripcion}">
+                                Modificar
+                            </button>
                         </td>
                         <td>
-                            <form th:action="@{'/admin/toggle/' + ${user.id}}"
+                            <form th:action="@{'/admin/subasta/toggle/' + ${p.id}}"
                                 th:method="post">
-                                <button
-                                    th:if="${user.enabled}" 
-                                    type="submit" class="toggle btn btn-danger">Deshabilitar</button> 
-                                <button
-                                    th:unless="${user.enabled}" 
-                                    type="submit" class="toggle btn btn-primary">Habilitar</button> 
+                                <input type="hidden" name="enabled" th:value="${!p.enabled}" />
+                                <button type="submit" class="toggle btn" th:classappend="${p.enabled} ? 'btn-danger' : 'btn-success'" th:text="${p.enabled ? 'Desactivar' : 'Activar'}"></button> 
                             </form>
                         </td>
                     </tr>
+                </tbody>
+            </table>
+            <!-- Modal para editar subasta -->
+            <div class="modal fade" id="modalModificarSubasta" tabindex="-1"
+            aria-labelledby="modalModificarSubastaLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="modalModificarSubastaLabel">Modificar Subasta</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form th:action="@{/admin/subasta/update}" method="post">
+                            <input type="hidden" id="subastaId" name="id">
 
-            </th:each>
+                            <div class="mb-3">
+                                <label class="form-label" for="nombre">Nombre</label>
+                                <input class="form-control" id="nombre" name="nombre" type="text" required>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label" for="precio">Precio</label>
+                                <input class="form-control" id="precio" name="precio" type="number" min="0" readonly disabled>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label" for="fechaInicio">Fecha de Inicio</label>
+                                <input class="form-control" id="fechaInicio" name="fechaInicio" type="datetime-local" readonly disabled>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label" for="fechaFin">Fecha de Fin</label>
+                                <input class="form-control" id="fechaFin" name="fechaFin" type="datetime-local" readonly disabled>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label" for="descripcion">Descripción</label>
+                                <textarea class="form-control" id="descripcion" name="descripcion" required></textarea>
+                            </div>
+                            <div class="mb-3">
+                                <button class="btn btn-primary" type="submit">Guardar Cambios</button>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                    </div>
+                </div>
+            </div>
+            </div>
         </div>
-
     </main>
 
     <th:block th:replace="~{fragments/footer.html :: footer}" />
-<script>
-    const toggles = document.querySelectorAll('.toggle');
-    toggles.forEach(toggle => {
-        toggle.addEventListener('click', (e) => {
-            e.preventDefault();
-            const form = e.target.parentElement;
-            go(form.action, 'POST').then((d) => {
-                if (d.enabled) {
-                    e.target.classList.remove('btn-primary');
-                    e.target.classList.add('btn-danger');
-                    e.target.textContent = 'Deshabilitar';
-                } else {
-                    e.target.classList.remove('btn-danger');
-                    e.target.classList.add('btn-primary');
-                    e.target.textContent = 'Habilitar';
-                } 
-                console.log(d);
+
+    <script>
+            document.addEventListener("DOMContentLoaded", function() {
+                let modal = document.getElementById("modalModificarSubasta");
+            
+                modal.addEventListener("show.bs.modal", function(event) {
+                    const button = event.relatedTarget;            
+                    document.getElementById("subastaId").value =  button.getAttribute("data-id");
+                    document.getElementById("precio").value = button.getAttribute("data-precio");
+                    document.getElementById("fechaInicio").value = button.getAttribute("data-fecha-inicio");
+                    document.getElementById("fechaFin").value = button.getAttribute("data-fecha-fin");
+                    document.getElementById("nombre").value = button.getAttribute("data-nombre");
+                    document.getElementById("descripcion").value = button.getAttribute("data-descripcion");
+                });
             });
-        });
-    });
-</script>
+    </script>
 </body>
 
 </html>
