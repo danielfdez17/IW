@@ -14,6 +14,7 @@ import lombok.NoArgsConstructor;
 public class ProductDTO {
     private long id;
     private long creadorUserId;
+    private String creadorUsername;
     private LocalDateTime fechaInicio;
     private LocalDateTime fechaFin;
     private boolean enabled;

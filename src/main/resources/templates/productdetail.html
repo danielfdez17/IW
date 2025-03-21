@@ -28,7 +28,7 @@
                         <p class="fs-4 text-success fw-bold" th:text="'€' + ${producto.precio}">€0.00</p>
 
                         <!-- Chat con el vendedor -->
-                        <a th:href="@{/chat?userChatNew=2} ">Chat con el vendedor</a>
+                        <a th:href="@{|/chat?userChatNew=${producto.creadorUsername}|} ">Chat con el vendedor</a>
                         <p id="precio-actual" class="fs-4 text-success fw-bold" th:text="'€' + ${producto.precio}">€0.00
                         </p>
 

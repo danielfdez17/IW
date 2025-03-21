@@ -14,6 +14,7 @@ public interface SubastaMapper {
     SubastaMapper INSTANCE = Mappers.getMapper(SubastaMapper.class);
 
     @Mapping(target = "creadorUserId", source = "creador.id")
+    @Mapping(target = "creadorUsername", source = "creador.username")
     ProductDTO subastaToProductDTO(Subasta subasta);
 
     Subasta productDTOToSubasta(ProductDTO productDTO);

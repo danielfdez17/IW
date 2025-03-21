@@ -56,9 +56,9 @@ public class ProductServiceImpl implements ProductService {
 
 
     @Override
-    public ProductDTO getProduct(long id) {
+    public ProductDTO getProduct(long id) {        
         return subastaRepository.findById(Long.valueOf(id)) // Convertimos id a Long
-                .map(SubastaMapper.INSTANCE::subastaToProductDTO)
+                .map( SubastaMapper.INSTANCE::subastaToProductDTO)
                 .orElse(null);
     }
 
