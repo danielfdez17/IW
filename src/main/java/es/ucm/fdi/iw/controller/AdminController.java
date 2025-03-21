@@ -16,6 +16,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import es.ucm.fdi.iw.business.model.Lorem;
 import es.ucm.fdi.iw.business.model.User;
+import es.ucm.fdi.iw.business.services.product.ProductService;
+import es.ucm.fdi.iw.business.services.puja.PujaService;
 import es.ucm.fdi.iw.business.services.user.UserService;
 import jakarta.persistence.EntityManager;
 import jakarta.servlet.http.HttpServletRequest;
@@ -33,6 +35,12 @@ public class AdminController {
 
     @Autowired
     private UserService userService;
+    
+    @Autowired
+    private PujaService pujaService;
+
+    @Autowired
+    private ProductService productService;
 
 	@Autowired
 	private PasswordEncoder passwordEncoder;
@@ -59,11 +67,15 @@ public class AdminController {
 
     @GetMapping("/puja")
     public String adminPuja(Model model) {
+        log.info("Admin acaba de entrar");
+        model.addAttribute("pujas", pujaService.getAllPujas());
         return "admin-puja";
     }
 
     @GetMapping("/subasta")
     public String adminSubasta(Model model) {
+        log.info("Admin acaba de entrar");
+        model.addAttribute("products", productService.getAllProducts());
         return "admin-subasta";
     }
 
