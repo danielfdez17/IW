@@ -12,5 +12,7 @@ public interface MessageMapper {
     MessageMapper INSTANCE = Mappers.getMapper(MessageMapper.class);
     @Mapping(source = "sender.id", target = "senderId")
     @Mapping(source = "recipient.id", target = "recipientId")
+    @Mapping(source = "sender.username", target = "senderName")
+    @Mapping(source = "recipient.username", target = "recipientName")
     MessageDTO entityToDto(Message message);
 }

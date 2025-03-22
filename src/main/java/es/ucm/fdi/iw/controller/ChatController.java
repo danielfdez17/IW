@@ -66,11 +66,13 @@ public class ChatController {
 
     @MessageMapping("/private")
     public void handlePrivateMessage(Principal principal, @Payload ChatMessage chatMessage) {
-        messagingTemplate.convertAndSendToUser(
-            chatMessage.getRecipient(), 
+        System.out.println("Received message: " + chatMessage.getContent() + " from " + chatMessage.getFrom() + " to " + chatMessage.getRecipient());
+        MessageDTO m = this.messageService.saveMessage(chatMessage);
+        messagingTemplate.convertAndSendToUser( 
+            chatMessage.getRecipient(),
             "/queue/messages",
-            chatMessage
-    );
+            m
+        );
     }
 
 }

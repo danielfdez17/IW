@@ -19,6 +19,7 @@
                         <h3 th:text="${user.id}" hidden>d</h3>
                         <h2 th:text="${user.firstName} + ' ' + ${user.lastName}"></h2>
                         <span id="idUser" th:text="${u.id}" hidden></span>
+                        <h4 th:text="${u.username}" hidden></h4>
                         <!-- 
                         <h3>
                             <span class="status orange"></span>
@@ -47,75 +48,131 @@
                     <div class="message" th:text="${msg.text}"></div>
                 </li>
             </ul>
-            <footer>
-                <textarea placeholder="Escribe tu mensaje"></textarea>
-                <a href="#">enviar</a>
+            <footer th:if="${listUser.size() > 0}">
+                <span id="destinatario" th:text="${listUser[0].username}" hidden></span>
+                <textarea id="txtSend" placeholder="Escribe tu mensaje"></textarea>
+                <button id="btnSend" onclick="sendPrivateMessage()">enviar</button>
             </footer>
         </main>
     </div>
     <th:block th:replace="~{fragments/footer.html :: footer}" />
     <script>
+        function suscribirmeConIntervalo() {
+            const intervalo = setInterval(() => {
+                if (ws.stompClient && ws.stompClient.connected) {
+                    ws.stompClient.subscribe("/user/queue/messages", function (message) {
+                        const messageBody = JSON.parse(message.body);
+                        if(messageBody.recipientId == "[[${u.id}]]") {
+                            const msgDto = {
+                                senderId: messageBody.senderId,
+                                text: messageBody.text,
+                                dateSent: messageBody.dateSent
+                            };
+                            addElement(messageBody.senderName, "[[${u.id}]]", document.getElementById("chat"), msgDto);
+                            forceScroll();
+                        }
+
+                        console.log("Mensaje recibido en /b/queue/messages:", message.body);
+                    });
+                    clearInterval(intervalo); // Parar de intentar no suscribirse mas
+                }
+            }, 1000);
+        }
+
+        function sendPrivateMessage() {
+            const msg = {
+                from: "[[${u.username}]]",
+                recipient: document.getElementById("destinatario").textContent,
+                content: document.getElementById("txtSend").value
+            };        
+            document.getElementById("txtSend").value = "";
+            if (ws.stompClient && ws.stompClient.connected) {
+                ws.stompClient.send("/private", ws.headers, JSON.stringify(msg));
+                const msgDto = {
+                    senderId: "[[${u.id}]]",
+                    text: msg.content,
+                    dateSent: new Date().toISOString()
+                };
+                addElement(msg.from, "[[${u.id}]]", document.getElementById("chat"), msgDto);
+                const chat = document.getElementById("chat");
+                chat.scrollTop = chat.scrollHeight;
+            }
+        };
+
         document.addEventListener("DOMContentLoaded", function () {
             const userListItems = document.querySelectorAll("aside ul li");
+            suscribirmeConIntervalo();    
+            forceScroll();  
             userListItems.forEach((item) => {
                 item.addEventListener("click", function () {
                     let userIdForSearchMsg = this.querySelector("h3").innerText;
                     let userName = this.querySelector("h2").innerText;
+                    let userNameId = this.querySelector("h4").innerText;
+                    document.getElementById("destinatario").textContent = userNameId;
                     const idUserChat = document.getElementById("idUser").textContent;
                     console.log("Usuario seleccionado:", userIdForSearchMsg);
                     go(`chat/${userIdForSearchMsg}`, 'GET').then((messages) => {
                         console.log(messages);
                         const chatList = document.getElementById("chat");
+                        forceScroll();
                         chatList.innerHTML = ""; // Limpiar mensajes actuales
-
                         messages.forEach(msg => {
-                            const isMe = msg.senderId === parseInt(idUserChat);
-
-                            const li = document.createElement("li");
-                            li.className = isMe ? "me" : "you";
-
-                            const entete = document.createElement("div");
-                            entete.className = "entete";
-
-                            const status = document.createElement("span");
-                            status.className = "status " + (isMe ? "blue" : "green");
-
-                            const h2 = document.createElement("h2");
-                            h2.textContent = isMe ? "Yo" : userName;
-
-                            const h3 = document.createElement("h3");
-                            const fecha = new Date(msg.dateSent);
-                            h3.textContent = fecha.toLocaleString("es-ES", {
-                                hour: "2-digit",
-                                minute: "2-digit",
-                                hour12: true,
-                                day: "2-digit",
-                                month: "2-digit",
-                                year: "numeric"
-                            });
-
-                            const triangle = document.createElement("div");
-                            triangle.className = "triangle";
-
-                            const messageDiv = document.createElement("div");
-                            messageDiv.className = "message";
-                            messageDiv.textContent = msg.text;
-
-                            // Ensamblar
-                            entete.appendChild(status);
-                            entete.appendChild(h2);
-                            entete.appendChild(h3);
-
-                            li.appendChild(entete);
-                            li.appendChild(triangle);
-                            li.appendChild(messageDiv);
-
-                            chatList.appendChild(li);
+                            addElement(userName, idUserChat, chatList, msg);
                         });
                     });
                 });
             });
         });
+
+        function addElement(userName, idUserChat, chatList, msg) {
+            console.log(idUserChat, " ", msg.senderId);
+            const isMe = msg.senderId == parseInt(idUserChat);
+            const li = document.createElement("li");
+            li.className = isMe ? "me" : "you";
+
+            const entete = document.createElement("div");
+            entete.className = "entete";
+
+            const status = document.createElement("span");
+            status.className = "status " + (isMe ? "blue" : "green");
+
+            const h2 = document.createElement("h2");
+            h2.textContent = isMe ? "Yo" : userName;
+
+            const h3 = document.createElement("h3");
+            const fecha = new Date(msg.dateSent);
+            h3.textContent = fecha.toLocaleString("es-ES", {
+                hour: "2-digit",
+                minute: "2-digit",
+                hour12: true,
+                day: "2-digit",
+                month: "2-digit",
+                year: "numeric"
+            });
+
+            const triangle = document.createElement("div");
+            triangle.className = "triangle";
+
+            const messageDiv = document.createElement("div");
+            messageDiv.className = "message";
+            messageDiv.textContent = msg.text;
+
+            // Ensamblar
+            entete.appendChild(status);
+            entete.appendChild(h2);
+            entete.appendChild(h3);
+
+            li.appendChild(entete);
+            li.appendChild(triangle);
+            li.appendChild(messageDiv);
+
+            chatList.appendChild(li);
+        }
+
+        function forceScroll() {
+            const chat = document.getElementById("chat");
+            chat.scrollTop = chat.scrollHeight;
+        }
     </script>
 </body>
 </html>

@@ -13,7 +13,7 @@ public interface MessageRepository extends JpaRepository<Message, Long> {
     @Query("""
         SELECT m FROM Message m 
         WHERE m.sender.id = :userId OR m.recipient.id = :userId 
-        ORDER BY m.dateSent DESC
+        ORDER BY m.dateSent ASC
     """)
     List<Message> findMessagesByUserId(Long userId);
 }
