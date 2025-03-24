@@ -38,10 +38,11 @@ public class Subasta {
 
     private String rutaImagen;
 
-    private double precio;
-
     private String descripcion;
     private String nombre;
+
+    private double precio;
+    private String maximoPujador;
 
     @OneToMany(mappedBy = "subasta")
     private List<Puja> pujas;

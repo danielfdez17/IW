@@ -95,7 +95,6 @@ public class DetailProductController {
         return "redirect:/index";
     }
 
-
     @PostMapping("/{id}/toggle-puja")
     public String togglePuja(@PathVariable Long id) {
         ProductDTO producto = productService.getProduct(id);

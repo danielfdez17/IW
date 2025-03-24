@@ -80,6 +80,8 @@ public class ProductServiceImpl implements ProductService {
                                         .orElseThrow(() -> new RuntimeException("Subasta no encontrada"));
 
         subasta.setPrecio(producto.getPrecio()); 
+        subasta.setMaximoPujador(producto.getMaximoPujador());
+
         subastaRepository.save(subasta);  
     }
 
