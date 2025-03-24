@@ -87,7 +87,7 @@ public class HistoricalController {
         }
 
         // Crear el DTO para la puja/reseña
-        PujaDTO pujaDTO = new PujaDTO(userId, id, null, rating, comment, java.time.LocalDateTime.now());
+        PujaDTO pujaDTO = new PujaDTO(userId, id, 0, rating, comment, java.time.LocalDateTime.now());
 
         // Guardar la reseña en la base de datos
         pujaService.savePuja(pujaDTO);
