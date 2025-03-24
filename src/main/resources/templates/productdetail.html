@@ -28,14 +28,7 @@
                         <p class="fs-4 text-success fw-bold" th:text="'€' + ${producto.precio}">€0.00</p>
 
                         <!-- Chat con el vendedor -->
-                        <div class="chat-container mt-3">
-                            <h6 class="text-muted">Chat con el vendedor</h6>
-                            <div class="chat-box">
-                                <div class="message you"><strong>Vendedor:</strong> ¡Hola! ¿En qué puedo ayudarte?</div>
-                                <div class="message me"><strong>Tú:</strong> ¿El precio es negociable?</div>
-                                <div class="message you"><strong>Vendedor:</strong> No, el precio es fijo.</div>
-                            </div>
-                        </div>
+                        <a th:href="@{|/chat?userChatNew=${producto.creadorUsername}|} ">Chat con el vendedor</a>
                         <p id="precio-actual" class="fs-4 text-success fw-bold" th:text="'€' + ${producto.precio}">€0.00
                         </p>
 

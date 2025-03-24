@@ -10,6 +10,7 @@ public interface ProductService {
     List<ProductDTO> getAllProducts();
     ProductDTO getProduct(final long id);
     void updateProduct(ProductDTO productDTO);
+    void updateAdminProduct(ProductDTO productDTO);
     ProductDTO createSubasta(ProductDTO productDTO);
-
+    void toggleProduct(long id, final boolean active);
 }
