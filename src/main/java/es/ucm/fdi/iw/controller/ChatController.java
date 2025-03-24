@@ -51,16 +51,17 @@ public class ChatController {
     @GetMapping
     public String chat(Model model, @RequestParam(defaultValue = "", required = false) final String userChatNew) {
         UserDetails u = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        UserDTO uDto = userService.findUserByUsername(u.getUsername());
         List<UserDTO> users = userService.findChatUsersByUsername(u.getUsername(), userChatNew);
         model.addAttribute("listUser", users);
-        model.addAttribute("messages",  users.isEmpty() ? new ArrayList<>() : messageService.getMessagesOfUser(users.get(0).getId()));
+        model.addAttribute("messages",  users.isEmpty() ? new ArrayList<>() : messageService.getMessagesOfUser(users.get(0).getId(), uDto.getId() ));
         return "chat";
     }
 
-    @GetMapping("/{idUser}")
+    @GetMapping("/{idUser}/{idUserSender}")
     @ResponseBody
-    public List<MessageDTO> getMessages(@PathVariable long idUser) {
-        return messageService.getMessagesOfUser(idUser);
+    public List<MessageDTO> getMessages(@PathVariable long idUser, @PathVariable long idUserSender) {
+        return messageService.getMessagesOfUser(idUser, idUserSender);
     }
     
 

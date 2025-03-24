@@ -5541,3 +5541,19 @@ Caused by: java.lang.StringIndexOutOfBoundsException: Index 0 out of bounds for 
 	at org.h2.util.DateTimeUtils.parseTimestamp(DateTimeUtils.java:338)
 	at org.h2.value.ValueTimestamp.parse(ValueTimestamp.java:86)
 	... 102 more
+2025-03-24 13:40:35.584301+01:00 jdbc[13]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Tabla "HTE_MESSAGE" ya existe
+Table "HTE_MESSAGE" already exists; SQL statement:
+create global temporary table HTE_message(rn_ integer not null, date_read timestamp(6), date_sent timestamp(6), id bigint, recipient_id bigint, sender_id bigint, text varchar(255), primary key (rn_)) TRANSACTIONAL [42101-232]
+2025-03-24 13:40:35.592670+01:00 jdbc[13]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Tabla "HTE_IWUSER" ya existe
+Table "HTE_IWUSER" already exists; SQL statement:
+create global temporary table HTE_iwuser(enabled boolean, rn_ integer not null, id bigint, first_name varchar(255), last_name varchar(255), password varchar(255), roles varchar(255), username varchar(255), primary key (rn_)) TRANSACTIONAL [42101-232]
+2025-03-24 13:40:39.150438+01:00 jdbc[23]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Tabla "HTE_MESSAGE" ya existe
+Table "HTE_MESSAGE" already exists; SQL statement:
+create global temporary table HTE_message(rn_ integer not null, date_read timestamp(6), date_sent timestamp(6), id bigint, recipient_id bigint, sender_id bigint, text varchar(255), primary key (rn_)) TRANSACTIONAL [42101-232]
+2025-03-24 13:40:39.151442+01:00 jdbc[23]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Tabla "HTE_IWUSER" ya existe
+Table "HTE_IWUSER" already exists; SQL statement:
+create global temporary table HTE_iwuser(enabled boolean, rn_ integer not null, id bigint, first_name varchar(255), last_name varchar(255), password varchar(255), roles varchar(255), username varchar(255), primary key (rn_)) TRANSACTIONAL [42101-232]

@@ -56,7 +56,7 @@ public class DetailProductController {
     public String realizarPuja(@PathVariable long id, @RequestParam Double puja, HttpSession session) {
         ProductDTO producto = productService.getProduct(id);
         UserDetails u = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        UserDTO userDTO = userService.getUserByUsername(u.getUsername());
+        UserDTO userDTO = userService.findUserByUsername(u.getUsername());
 
         PujaDTO pujaDTO = new PujaDTO();
         pujaDTO.setUsuarioId(userDTO.getId());

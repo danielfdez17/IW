@@ -51,9 +51,10 @@ public class UserServiceImpl implements UserService {
         }
         return users;
     }
+
     @Override
-    public UserDTO getUserByUsername(String username) {
-        User user = userRepository.findByUsername(username).orElseThrow(() -> new RuntimeException("No existe el usuario con username: " + username));
-        return UserMapper.INSTANCE.entityToDto(user);
+    public UserDTO findUserByUsername(String username) {
+        User u = this.userRepository.findByUsername(username).orElseThrow(() ->  new RuntimeException("User not found"));
+        return UserMapper.INSTANCE.entityToDto(u); 
     }
 }

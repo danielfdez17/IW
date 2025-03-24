@@ -8,5 +8,5 @@ public interface UserService {
     boolean disableUser(long id);
     boolean enableUser(long id);
     List<UserDTO> findChatUsersByUsername(final String username, final String userChatNew);
-    UserDTO getUserByUsername(String username);
+    UserDTO findUserByUsername(String username);
 }
