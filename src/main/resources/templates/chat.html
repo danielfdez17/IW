@@ -111,7 +111,7 @@
                     document.getElementById("destinatario").textContent = userNameId;
                     const idUserChat = document.getElementById("idUser").textContent;
                     console.log("Usuario seleccionado:", userIdForSearchMsg);
-                    go(`chat/${userIdForSearchMsg}`, 'GET').then((messages) => {
+                    go(`chat/${userIdForSearchMsg}/[[${u.id}]]`, 'GET').then((messages) => {
                         console.log(messages);
                         const chatList = document.getElementById("chat");
                         forceScroll();

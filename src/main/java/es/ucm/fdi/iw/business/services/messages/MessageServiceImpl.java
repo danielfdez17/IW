@@ -20,8 +20,8 @@ public class MessageServiceImpl implements MessageService {
     private UserRepository userRepository;
 
     @Override
-    public List<MessageDTO> getMessagesOfUser(long userId) {
-       return this.messageRepository.findMessagesByUserId(userId).stream().map(MessageMapper.INSTANCE::entityToDto).toList();
+    public List<MessageDTO> getMessagesOfUser(long userId1, long userId2) {
+       return this.messageRepository.findMessagesByUserId(userId1, userId2).stream().map(MessageMapper.INSTANCE::entityToDto).toList();
     }
 
     @Override
