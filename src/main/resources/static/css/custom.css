@@ -1,8 +1,10 @@
 /* usa este fichero para personalizar tus vistas */
 
 body {
-  background-color: #bbdefb;
-  color: #070000;
+  /* background-color: #bbdefb; */
+  /* color: #070000; */
+  background-color: rgba(0, 0, 0, 0.8);
+  color: white;
 }
 
 .iwthumb {
