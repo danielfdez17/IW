@@ -8,11 +8,13 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Map;
 
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -58,35 +60,55 @@ public class DetailProductController {
         ProductDTO producto = productService.getProduct(id);
 
         if (puja.compareTo(producto.getPrecio()) > 0) {
-
             producto.setPrecio(puja); 
+            User usuario = (User) session.getAttribute("u");
+            producto.setMaximoPujador(usuario.getUsername());
+
             productService.updateProduct(producto);  
-            return "redirect:/products/" + id;
             // return ResponseEntity.ok("Puja realizada con éxito. Nuevo precio: €" + puja);
         } 
         return "redirect:/products/" + id;
             // return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("La puja debe ser mayor al precio actual.");
-        
     }
 
     @PostMapping("/nueva_subasta")
     @Transactional
     public String nuevaSubasta(Model model, HttpSession session, @ModelAttribute("product") CreateProductDTO product) {
         User creador = (User) session.getAttribute("u");
-        // LocalDateTime fechaInicio = LocalDateTime.parse(product.getFechaInicio(), DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
-        // LocalDateTime fechaFin = LocalDateTime.parse(product.getFechaFin(), DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+
         LocalDateTime fechaInicio = LocalDateTime.now();
-        LocalDateTime fechaFin = LocalDateTime.now();
-        // ProductDTO productDTO = SubastaMapper.INSTANCE.createProductDTOToProductDTO(product);
+        //LocalDateTime fechaFin = LocalDateTime.now().plusMinutes(1); 
+        LocalDateTime fechaFin = LocalDateTime.now().plusSeconds(20);
+        //LocalDateTime fechaFin = LocalDateTime.parse(product.getFechaFin(), DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+
         ProductDTO productDTO = new ProductDTO();
+        productDTO.setEnabled(true);
         productDTO.setFechaInicio(fechaInicio);
         productDTO.setFechaFin(fechaFin);
         productDTO.setPrecio(product.getPrecio());
         productDTO.setNombre(product.getNombre());
         productDTO.setDescripcion(product.getDescripcion());
         productDTO.setCreadorUserId(creador.getId());
+
         productService.createSubasta(productDTO);
 
         return "redirect:/index";
+    }
+
+
+    @PostMapping("/{id}/toggle-puja")
+    public String togglePuja(@PathVariable Long id) {
+        ProductDTO producto = productService.getProduct(id);
+        boolean currentEnabled = producto.isEnabled();
+        producto.setEnabled(!currentEnabled); 
+        productService.updateProduct(producto);
+        return "redirect:/products/" + id;
+    }
+
+    @GetMapping("/products/status/{id}")
+    @ResponseBody
+    public Map<String, Boolean> getSubastaStatus(@PathVariable long id) {
+        boolean isActive = productService.isProductActive(id);
+        return Map.of("isActive", isActive);  // Retorna un JSON con la clave 'isActive'
     }
 }

@@ -13,4 +13,6 @@ public interface ProductService {
     void updateAdminProduct(ProductDTO productDTO);
     ProductDTO createSubasta(ProductDTO productDTO);
     void toggleProduct(long id, final boolean active);
+    void scheduleDeactivation(final long subastaId);
+    boolean isProductActive(long productId);
 }

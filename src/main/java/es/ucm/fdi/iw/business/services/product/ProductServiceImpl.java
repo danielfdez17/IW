@@ -1,8 +1,13 @@
 package es.ucm.fdi.iw.business.services.product;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.time.Duration;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,8 +28,8 @@ import jakarta.persistence.PersistenceContext;
 public class ProductServiceImpl implements ProductService {
 
     private final SubastaRepository subastaRepository;
-
-        private EntityManager entityManager;
+    private EntityManager entityManager;
+    private final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
     
     @PersistenceContext
     public void setEntityManager(EntityManager em){
@@ -36,7 +41,17 @@ public class ProductServiceImpl implements ProductService {
         this.subastaRepository = subastaRepository;
     }
 
-    
+    public void programarDesactivacion(Subasta subasta) {
+        LocalDateTime ahora = LocalDateTime.now();
+        LocalDateTime fechaFin = subasta.getFechaFin();
+
+        long delay = Duration.between(ahora, fechaFin).toMillis();
+        if (delay <= 0) { // Si la fecha ya ha pasado desactivar 
+            scheduleDeactivation(subasta.getId());
+        } else { // Programar la desactivacion
+            scheduler.schedule(() -> scheduleDeactivation(subasta.getId()), delay, TimeUnit.MILLISECONDS);
+        }
+    }
 
     @Override
     public List<ProductDTO> getAllProducts() {
@@ -52,16 +67,12 @@ public class ProductServiceImpl implements ProductService {
                 .collect(Collectors.toMap(Subasta::getId, SubastaMapper.INSTANCE::subastaToProductDTO));
     }
 
-
-
-
     @Override
     public ProductDTO getProduct(long id) {        
         return subastaRepository.findById(Long.valueOf(id)) // Convertimos id a Long
                 .map( SubastaMapper.INSTANCE::subastaToProductDTO)
                 .orElse(null);
     }
-
 
     @Override
     public void updateProduct(ProductDTO producto) {
@@ -89,6 +100,7 @@ public class ProductServiceImpl implements ProductService {
         subasta.setPrecio(productDTO.getPrecio());
         subasta.setNombre(productDTO.getNombre());
         subasta.setDescripcion(productDTO.getDescripcion());
+        subasta.setEnabled(productDTO.isEnabled());
         User creador = this.entityManager.find(User.class, productDTO.getCreadorUserId());
         if (creador == null) {
             return null;
@@ -97,7 +109,19 @@ public class ProductServiceImpl implements ProductService {
 
         this.entityManager.persist(subasta);
         this.entityManager.flush();
+        
+        programarDesactivacion(subasta);
+
         return SubastaMapper.INSTANCE.subastaToProductDTO(subasta);
+    }
+
+    public  void scheduleDeactivation(long subastaId) {
+        Subasta subasta = subastaRepository.findById(subastaId).orElse(null);
+        if (subasta != null && subasta.isEnabled()) {
+            subasta.setEnabled(false);
+            subastaRepository.save(subasta);
+            System.out.println("Subasta con ID " + subastaId + " ha sido desactivada automáticamente.");
+        }
     }
 
     @Override
@@ -108,5 +132,11 @@ public class ProductServiceImpl implements ProductService {
         subastaRepository.save(subasta);
     }
 
+    public boolean isProductActive(long subastaId) {
+        Subasta subasta = subastaRepository.findById(subastaId).orElse(null);
+        if (subasta != null) {
+            return subasta.isEnabled();  // Retorna si la subasta está activa o no
+        }
+        return false;
+    }
 }
-

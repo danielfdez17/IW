@@ -5,7 +5,6 @@
     <th:block th:replace="~{fragments/head :: header}" />
     <title>Detalle del Producto | ¡Barato Barato!</title>
     <link rel="stylesheet" th:href="@{/css/chatvendedor.css}">
-
 </head>
 
 <body class="d-flex flex-column h-100">
@@ -24,24 +23,35 @@
                     <div class="col-md-6">
                         <h5 class="text-muted">Descripción</h5>
                         <p th:text="${producto.descripcion}">Descripción del producto.</p>
-                        <h5 class="text-muted">Precio</h5>
-                        <p class="fs-4 text-success fw-bold" th:text="'€' + ${producto.precio}">€0.00</p>
 
                         <!-- Chat con el vendedor -->
                         <a th:href="@{|/chat?userChatNew=${producto.creadorUsername}|} ">Chat con el vendedor</a>
-                        <p id="precio-actual" class="fs-4 text-success fw-bold" th:text="'€' + ${producto.precio}">€0.00
-                        </p>
 
-                        <form id="formPujar" th:action="@{'/products/' + ${producto.id} +'/pujar'}" th:method="post">
+                        <h5 class="text-muted">Precio</h5>
+                        <p id="precio-actual" class="fs-4 text-success fw-bold" th:text="'€' + ${producto.precio}">€0.00</p>
+                        
+                        <p th:text="${producto.enabled}"></p>
 
-                            <div class="mb-3">
-                                <!-- <p th:text="${producto.id}"></p> -->
-                                <label for="nuevaPuja" class="form-label">Tu Puja</label>
-                                <input type="number" class="form-control" id="nuevaPuja" name="puja" step="1.00" min="0" required>
+
+                        <div th:if="${producto.enabled}">
+                            <form id="formPujar" th:action="@{'/products/' + ${producto.id} + '/pujar'}" method="post">
+                                <input type="hidden" name="_csrf" value="${_csrf.token}">
+                                <div class="mb-3">
+                                    <label for="nuevaPuja" class="form-label">Tu Puja</label>
+                                    <input type="number" class="form-control" id="nuevaPuja" name="puja" step="1.00" min="0" required>
+                                </div>
+                                <button type="submit" class="btn btn-success">Pujar</button>
+                            </form>
+                        </div>
+                        <div th:if="${!producto.enabled}">
+                            <div class="alert alert-warning mt-3">
+                                <h5 class="text-danger mb-3">Puja finalizada</h5>
+                                <ul class="list-unstyled">
+                                    <li><strong>Máximo pujador:</strong> <span th:text="${producto.maximoPujador} ?: 'NO DEFINIDO'"></span></li>
+                                    <li><strong>Pujó:</strong> <span th:text="${producto.precio} + '€'"></span></li>
+                                </ul>
                             </div>
-                            <button type="submit" class="btn btn-success" >Pujar</button>
-                        </form>
-
+                        </div>
 
                         <div id="mensaje-puja" class="mt-3"></div>
                     </div>
