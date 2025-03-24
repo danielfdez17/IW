@@ -33,7 +33,7 @@ public class Puja {
     @JoinColumn(name = "subasta_id", nullable = false)
     private Subasta subasta;
 
-    private BigDecimal dineroPujado; 
+    private double dineroPujado; 
     private int puntuacion;
     private String comentario;
     private LocalDateTime fecha;
