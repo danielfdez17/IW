@@ -69,6 +69,7 @@ public class ProductServiceImpl implements ProductService {
                                         .orElseThrow(() -> new RuntimeException("Subasta no encontrada"));
 
         subasta.setPrecio(producto.getPrecio()); 
+        subasta.setEnabled(true);
         subastaRepository.save(subasta);  
     }
 
@@ -78,6 +79,7 @@ public class ProductServiceImpl implements ProductService {
         Subasta subasta = subastaRepository.findById(p.getId()).orElseThrow(() -> new RuntimeException("Subasta no encontrada"));
         subasta.setNombre(p.getNombre());
         subasta.setDescripcion(p.getDescripcion()); 
+        subasta.setEnabled(true);
         subastaRepository.save(subasta);
     }
 
