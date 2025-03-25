@@ -29,7 +29,7 @@
 
                         <!-- Chat con el vendedor -->
                         <a th:href="@{|/chat?userChatNew=${producto.creadorUsername}|} ">Chat con el vendedor</a>
-                        <p id="precio-actual" class="fs-4 text-success fw-bold" th:text="'€' + ${producto.precio}">€0.00
+                        <p id="precio-actual" class="fs-4 text-success fw-bold" th:text="'€' + ${producto.precioActual}">€0.00
                         </p>
 
                         <form id="formPujar" th:action="@{'/products/' + ${producto.id} +'/pujar'}" th:method="post">
@@ -37,7 +37,7 @@
                             <div class="mb-3">
                                 <!-- <p th:text="${producto.id}"></p> -->
                                 <label for="nuevaPuja" class="form-label">Tu Puja</label>
-                                <input th:value="${producto.precio}" type="number" class="form-control" id="nuevaPuja" name="puja" step="1.00" min="0"
+                                <input th:value="${producto.precioActual}" type="number" class="form-control" id="nuevaPuja" name="puja" step="1.00" min="0"
                                     required>
                             </div>
                             <button type="submit" class="btn btn-success">Pujar</button>

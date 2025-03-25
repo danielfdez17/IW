@@ -31,10 +31,10 @@
                                 <a class="nav-link active" th:href="@{/historical/}">Historial</a>
                             </li>
                             <li class="nav-item mx-3">
-                                <a class="nav-link" th:href="@{/chat}">Chats</a>
+                                <a class="nav-link active" th:href="@{/chat}">Chats</a>
                             </li>
                             <li class="nav-item dropdown mx-3" th:if="${u.hasRole('ADMIN')}">
-                                <button class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
+                                <button class="nav-link active dropdown-toggle" data-bs-toggle="dropdown">
                                     Administrar
                                 </button>
                                 <ul class="dropdown-menu">
