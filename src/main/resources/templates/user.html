@@ -26,7 +26,8 @@
                         <button class="btn btn-primary" id="fetchBook">Buscar datos online</button>
                         <img class="preview" id="portada" alt="portada del libro" />
                         <form th:action="@{/user/__${user.id}__/pic}">
-                            <button id="postPortada" class="perfilable btn btn-primary">Usar como foto de perfil</button>
+                            <button id="postPortada" class="perfilable btn btn-primary">Usar como foto de
+                                perfil</button>
                         </form>
                     </div>
                     <div id="movies" class="border border-2 border-secondary rounded">
@@ -64,23 +65,76 @@
                     <!-- Tarjeta de Perfil -->
                     <div class="card mb-3">
                         <div class="card-body text-center">
-                            <img src="https://via.placeholder.com/150" class="rounded-circle mb-3" alt="Foto de perfil" width="150">
-                            <h5 class="card-title">Juan Pérez</h5>
+                            <img src="https://via.placeholder.com/150" class="rounded-circle mb-3" alt="Foto de perfil"
+                                width="150">
+                            <h5 class="card-title" th:text="${user.firstName + user.lastName}">Juan Pérez</h5>
                             <p class="text-muted">Usuario desde 2021</p>
                             <p><strong>Calificación:</strong> ⭐⭐⭐⭐☆</p>
-                            <button class="btn btn-primary btn-sm">Editar Perfil</button>
+                            <!-- Button trigger modal -->
+                            <button id="btnEditPerfil" type="button" class="btn btn-primary" data-bs-toggle="modal"
+                                data-bs-target="#modalEditarPerfil">
+                                Editar perfil
+                            </button>
+
+                            <!-- Modal -->
+                            <div class="modal fade" id="modalEditarPerfil" tabindex="-1"
+                                aria-labelledby="modalEditarPerfilLabel" aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h1 class="modal-title fs-5" id="modalEditarPerfilLabel">Modal title</h1>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <form th:action="@{'/user/' + ${user.id}}" method="post">
+                                                <div class="mb-3">
+                                                    <label for="username" class="form-label">Username</label>
+                                                    <input type="text" name="username" id="editUsername"
+                                                        th:value="${user.username}" class="form-control">
+                                                </div>
+                                                <div class="mb-3">
+                                                    <label for="firstName" class="form-label">Nombre</label>
+                                                    <input type="text" name="fisrtName" id="editFirstName"
+                                                        th:value="${user.firstName}" class="form-control">
+                                                </div>
+                                                <div class="mb-3">
+                                                    <label for="lastName" class="form-label">Apellidos</label>
+                                                    <input type="text" name="lastName" id="editLastName"
+                                                        th:value="${user.lastName}" class="form-control">
+                                                </div>
+                                                <div class="mb-3">
+                                                    <label for="password" class="form-label">Apellidos</label>
+                                                    <input type="password" name="password" id="editPassword"
+                                                        th:value="${user.password}" class="form-control">
+                                                </div>
+                                                <!-- <div class="mb-3">
+                                                    <label for="availableMoney" class="form-label">Apellidos</label>
+                                                    <input type="number" name="availableMoney" id="editAvailableMoney"
+                                                        th:value="${user.availableMoney + '€' or '0€'}" class="form-control">
+                                                </div> -->
+                                            </form>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary"
+                                                data-bs-dismiss="modal">Close</button>
+                                            <button type="button" class="btn btn-primary">Save changes</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                
+
                     <!-- Tarjeta de Saldo -->
                     <div class="card">
                         <div class="card-body text-center">
                             <h5 class="card-title">Saldo Disponible</h5>
-                            <p class="display-4 text-success fw-bold">$1,250.00</p> 
+                            <p class="display-4 text-success fw-bold">$1,250.00</p>
                         </div>
                     </div>
                 </div>
-                
+
 
                 <!-- Información del Usuario -->
                 <div class="col-lg-7">
@@ -125,7 +179,7 @@
                         </div>
                     </div>
                 </div>
-                
+
             </div>
         </div>
     </main>
@@ -133,6 +187,11 @@
     <th:block th:replace="~{fragments/footer.html :: footer}" />
 
     <script th:src="@{/js/ajax-demo.js}"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            document.getElementById("btnEditPerfil").click()
+        })
+    </script>
 </body>
 
 </html>
