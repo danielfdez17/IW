@@ -97,6 +97,31 @@
         }
     </script>
 
+    <script>
+        let ultimoEstado = null; 
+
+        function verificarCambios() {
+            let productoId = window.location.pathname.split("/").pop();
+
+            fetch(`/products/${productoId}/status`)
+                .then(response => response.json())
+                .then(data => {
+                    let nuevoEstado = `${data.precio}-${data.maximoPujador}-${data.enabled}`;
+
+                    if (ultimoEstado === null) {
+                        ultimoEstado = nuevoEstado;
+                    } 
+                    else if (ultimoEstado !== nuevoEstado) {
+                        location.reload(); // Si algien ha pujado mas o si se ha acabado se recarga
+                    }
+                })
+                .catch(error => console.error("Error al verificar cambios:", error));
+        }
+
+        setInterval(verificarCambios, 1000); // Tiempo entre peticiones ¿cambiar por websockets?
+    </script>
+
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 

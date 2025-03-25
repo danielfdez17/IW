@@ -14,6 +14,7 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.HashMap;
 import java.util.Map;
 
 import org.springframework.web.bind.annotation.RequestParam;
@@ -104,10 +105,16 @@ public class DetailProductController {
         return "redirect:/products/" + id;
     }
 
-    @GetMapping("/products/status/{id}")
+    @GetMapping("/{id}/status")
     @ResponseBody
-    public Map<String, Boolean> getSubastaStatus(@PathVariable long id) {
-        boolean isActive = productService.isProductActive(id);
-        return Map.of("isActive", isActive);  // Retorna un JSON con la clave 'isActive'
+    public ResponseEntity<Map<String, Object>> obtenerEstado(@PathVariable Long id) {
+        ProductDTO producto = productService.getProduct(id);
+        
+        Map<String, Object> estado = new HashMap<>();
+        estado.put("precio", producto.getPrecio());
+        estado.put("maximoPujador", producto.getMaximoPujador());
+        estado.put("enabled", producto.isEnabled());
+
+        return ResponseEntity.ok(estado);
     }
 }
