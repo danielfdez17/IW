@@ -63,11 +63,11 @@ public class DetailProductController {
         pujaDTO.setSubastaId(id);
         pujaDTO.setDineroPujado(puja);
         pujaService.updatePuja(pujaDTO);
-
+        userService.subtractMoney(userDTO.getId(), puja);
 
         if (puja.compareTo(producto.getPrecio()) > 0) {
 
-            producto.setPrecio(puja);
+            producto.setPrecioActual(puja);
             productService.updateProduct(producto);
             // return ResponseEntity.ok("Puja realizada con éxito. Nuevo precio: €" + puja);
         }
@@ -93,9 +93,11 @@ public class DetailProductController {
         productDTO.setFechaInicio(fechaInicio);
         productDTO.setFechaFin(fechaFin);
         productDTO.setPrecio(product.getPrecio());
+        productDTO.setPrecioActual(product.getPrecio());
         productDTO.setNombre(product.getNombre());
         productDTO.setDescripcion(product.getDescripcion());
         productDTO.setCreadorUserId(creador.getId());
+        productDTO.setEnabled(true);
         productService.createSubasta(productDTO);
 
         return "redirect:/index";
