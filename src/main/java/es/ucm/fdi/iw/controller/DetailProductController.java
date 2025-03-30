@@ -1,7 +1,9 @@
 package es.ucm.fdi.iw.controller;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -64,12 +66,18 @@ public class DetailProductController {
             producto.setPrecio(puja); 
             User usuario = (User) session.getAttribute("u");
             producto.setMaximoPujador(usuario.getUsername());
+            productService.updateProduct(producto); 
 
-            productService.updateProduct(producto);  
-            // return ResponseEntity.ok("Puja realizada con éxito. Nuevo precio: €" + puja);
+            sendProductUpdateToWebSocket(producto); 
         } 
         return "redirect:/products/" + id;
-            // return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("La puja debe ser mayor al precio actual.");
+    }
+
+    @Autowired
+    private SimpMessagingTemplate messagingTemplate;
+    private void sendProductUpdateToWebSocket(ProductDTO producto) {
+
+        messagingTemplate.convertAndSend("/topic/product-updates/" + producto.getId(), producto);
     }
 
     @PostMapping("/nueva_subasta")
@@ -79,7 +87,7 @@ public class DetailProductController {
 
         LocalDateTime fechaInicio = LocalDateTime.now();
         //LocalDateTime fechaFin = LocalDateTime.now().plusMinutes(1); 
-        LocalDateTime fechaFin = LocalDateTime.now().plusSeconds(20);
+        LocalDateTime fechaFin = LocalDateTime.now().plusSeconds(10);
         //LocalDateTime fechaFin = LocalDateTime.parse(product.getFechaFin(), DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
 
         ProductDTO productDTO = new ProductDTO();
@@ -99,11 +107,14 @@ public class DetailProductController {
     @PostMapping("/{id}/toggle-puja")
     public String togglePuja(@PathVariable Long id) {
         ProductDTO producto = productService.getProduct(id);
-        boolean currentEnabled = producto.isEnabled();
-        producto.setEnabled(!currentEnabled); 
+        producto.setEnabled(!producto.isEnabled()); 
         productService.updateProduct(producto);
+
+        sendProductUpdateToWebSocket(producto); // Enviar actualización por WebSocket
+
         return "redirect:/products/" + id;
     }
+
 
     @GetMapping("/{id}/status")
     @ResponseBody

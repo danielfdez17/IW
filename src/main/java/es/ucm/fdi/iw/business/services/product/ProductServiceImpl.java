@@ -11,6 +11,8 @@ import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -40,6 +42,7 @@ public class ProductServiceImpl implements ProductService {
     public ProductServiceImpl(SubastaRepository subastaRepository) {
         this.subastaRepository = subastaRepository;
     }
+
 
     public void programarDesactivacion(Subasta subasta) {
         LocalDateTime ahora = LocalDateTime.now();
