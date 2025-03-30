@@ -76,7 +76,6 @@ public class DetailProductController {
     @Autowired
     private SimpMessagingTemplate messagingTemplate;
     private void sendProductUpdateToWebSocket(ProductDTO producto) {
-
         messagingTemplate.convertAndSend("/topic/product-updates/" + producto.getId(), producto);
     }
 
@@ -88,6 +87,7 @@ public class DetailProductController {
         LocalDateTime fechaInicio = LocalDateTime.now();
         //LocalDateTime fechaFin = LocalDateTime.now().plusMinutes(1); 
         LocalDateTime fechaFin = LocalDateTime.now().plusSeconds(10);
+        //LocalDateTime fechaInicio = LocalDateTime.parse(product.getFechaInicio(), DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
         //LocalDateTime fechaFin = LocalDateTime.parse(product.getFechaFin(), DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
 
         ProductDTO productDTO = new ProductDTO();
@@ -102,30 +102,5 @@ public class DetailProductController {
         productService.createSubasta(productDTO);
 
         return "redirect:/index";
-    }
-
-    @PostMapping("/{id}/toggle-puja")
-    public String togglePuja(@PathVariable Long id) {
-        ProductDTO producto = productService.getProduct(id);
-        producto.setEnabled(!producto.isEnabled()); 
-        productService.updateProduct(producto);
-
-        sendProductUpdateToWebSocket(producto); // Enviar actualización por WebSocket
-
-        return "redirect:/products/" + id;
-    }
-
-
-    @GetMapping("/{id}/status")
-    @ResponseBody
-    public ResponseEntity<Map<String, Object>> obtenerEstado(@PathVariable Long id) {
-        ProductDTO producto = productService.getProduct(id);
-        
-        Map<String, Object> estado = new HashMap<>();
-        estado.put("precio", producto.getPrecio());
-        estado.put("maximoPujador", producto.getMaximoPujador());
-        estado.put("enabled", producto.isEnabled());
-
-        return ResponseEntity.ok(estado);
     }
 }
