@@ -1,5 +1,9 @@
 package es.ucm.fdi.iw.controller;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
@@ -8,8 +12,13 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.HashMap;
+import java.util.Map;
+
 import org.springframework.web.bind.annotation.RequestParam;
 import es.ucm.fdi.iw.business.dto.CreateProductDTO;
 import es.ucm.fdi.iw.business.dto.ProductDTO;
@@ -66,29 +75,34 @@ public class DetailProductController {
         userService.subtractMoney(userDTO.getId(), puja);
 
         if (puja.compareTo(producto.getPrecio()) > 0) {
-
             producto.setPrecioActual(puja);
-            productService.updateProduct(producto);
-            // return ResponseEntity.ok("Puja realizada con éxito. Nuevo precio: €" + puja);
-        }
-        return "redirect:/products/" + id;
-        // return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("La puja debe ser
-        // mayor al precio actual.");
+            User usuario = (User) session.getAttribute("u");
+            producto.setMaximoPujador(usuario.getUsername());
+            productService.updateProduct(producto); 
 
+            sendProductUpdateToWebSocket(producto); 
+        } 
+        return "redirect:/products/" + id;
+    }
+
+    @Autowired
+    private SimpMessagingTemplate messagingTemplate;
+    private void sendProductUpdateToWebSocket(ProductDTO producto) {
+        messagingTemplate.convertAndSend("/topic/product-updates/" + producto.getId(), producto);
     }
 
     @PostMapping("/nueva_subasta")
     @Transactional
     public String nuevaSubasta(Model model, HttpSession session, @ModelAttribute("product") CreateProductDTO product) {
         User creador = (User) session.getAttribute("u");
-        // LocalDateTime fechaInicio = LocalDateTime.parse(product.getFechaInicio(),
-        // DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
-        // LocalDateTime fechaFin = LocalDateTime.parse(product.getFechaFin(),
-        // DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+
         LocalDateTime fechaInicio = LocalDateTime.now();
-        LocalDateTime fechaFin = LocalDateTime.now();
-        // ProductDTO productDTO =
+        //LocalDateTime fechaFin = LocalDateTime.now().plusMinutes(1); 
+        LocalDateTime fechaFin = LocalDateTime.now().plusSeconds(10);
+        //LocalDateTime fechaInicio = LocalDateTime.parse(product.getFechaInicio(), DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+        //LocalDateTime fechaFin = LocalDateTime.parse(product.getFechaFin(), DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
         // SubastaMapper.INSTANCE.createProductDTOToProductDTO(product);
+        
         ProductDTO productDTO = new ProductDTO();
         productDTO.setFechaInicio(fechaInicio);
         productDTO.setFechaFin(fechaFin);

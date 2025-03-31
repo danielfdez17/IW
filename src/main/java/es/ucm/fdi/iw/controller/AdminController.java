@@ -82,5 +82,4 @@ public class AdminController {
         this.productService.updateAdminProduct(product);
         return "redirect:/admin/subasta";
     }
-
 }
