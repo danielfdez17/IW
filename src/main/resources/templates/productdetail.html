@@ -29,12 +29,15 @@
                             <a th:href="@{|/chat?userChatNew=${producto.creadorUsername}|} ">Chat con el vendedor</a>
 
                             <h5 class="text-muted">Precio</h5>
-                            <p id="precio-actual" class="fs-4 text-success fw-bold" th:text="'€' + ${producto.precio}">€0.00</p>
+                            <p id="precio-actual" class="fs-4 text-success fw-bold" th:text="${producto.precio} + '€'">€0.00</p>
                             
-                            <p th:text="${producto.enabled}"></p>
-
+                          
 
                             <div th:if="${producto.enabled}">
+                                <h5 class="text-muted">Mejor postor</h5>
+                                <p id="precio-actual" class="fs-4 text-success fw-bold" th:text="${producto.maximoPujador != null ? producto.maximoPujador : 'SIN PUJAS'}"></p>
+
+
                                 <form id="formPujar" th:action="@{'/products/' + ${producto.id} + '/pujar'}" method="post">
                                     <input type="hidden" name="_csrf" value="${_csrf.token}">
                                     <div class="mb-3">

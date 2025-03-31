@@ -128,7 +128,7 @@ public class ProductServiceImpl implements ProductService {
         if (subasta != null && subasta.isEnabled()) {
             subasta.setEnabled(false);
             subastaRepository.save(subasta);
-            System.out.println("Subasta con ID " + subastaId + " ha sido desactivada automáticamente.");
+            //System.out.println("Subasta con ID " + subastaId + " ha sido desactivada automáticamente.");
 
             ProductDTO productDTO = SubastaMapper.INSTANCE.subastaToProductDTO(subasta);
             messagingTemplate.convertAndSend("/topic/product-updates/" + subastaId, productDTO);
