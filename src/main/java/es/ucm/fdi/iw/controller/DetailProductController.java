@@ -4,6 +4,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -12,21 +14,20 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import java.math.BigDecimal;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.Map;
 
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
-
 import es.ucm.fdi.iw.business.dto.CreateProductDTO;
 import es.ucm.fdi.iw.business.dto.ProductDTO;
-import es.ucm.fdi.iw.business.mapper.SubastaMapper;
+import es.ucm.fdi.iw.business.dto.PujaDTO;
+import es.ucm.fdi.iw.business.dto.UserDTO;
 import es.ucm.fdi.iw.business.model.User;
 import es.ucm.fdi.iw.business.services.product.ProductService;
+import es.ucm.fdi.iw.business.services.puja.PujaService;
+import es.ucm.fdi.iw.business.services.user.UserService;
 import jakarta.servlet.http.HttpSession;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
@@ -37,6 +38,8 @@ import lombok.AllArgsConstructor;
 public class DetailProductController {
 
     private final ProductService productService;
+    private final PujaService pujaService;
+    private final UserService userService;
 
     @ModelAttribute
     public void populateModel(HttpSession session, Model model) {
@@ -61,9 +64,18 @@ public class DetailProductController {
     @PostMapping("/{id}/pujar")
     public String realizarPuja(@PathVariable long id, @RequestParam Double puja, HttpSession session) {
         ProductDTO producto = productService.getProduct(id);
+        UserDetails u = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        UserDTO userDTO = userService.findUserByUsername(u.getUsername());
+
+        PujaDTO pujaDTO = new PujaDTO();
+        pujaDTO.setUsuarioId(userDTO.getId());
+        pujaDTO.setSubastaId(id);
+        pujaDTO.setDineroPujado(puja);
+        pujaService.updatePuja(pujaDTO);
+        userService.subtractMoney(userDTO.getId(), puja);
 
         if (puja.compareTo(producto.getPrecio()) > 0) {
-            producto.setPrecio(puja); 
+            producto.setPrecioActual(puja);
             User usuario = (User) session.getAttribute("u");
             producto.setMaximoPujador(usuario.getUsername());
             productService.updateProduct(producto); 
@@ -89,16 +101,17 @@ public class DetailProductController {
         LocalDateTime fechaFin = LocalDateTime.now().plusSeconds(10);
         //LocalDateTime fechaInicio = LocalDateTime.parse(product.getFechaInicio(), DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
         //LocalDateTime fechaFin = LocalDateTime.parse(product.getFechaFin(), DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
-
+        // SubastaMapper.INSTANCE.createProductDTOToProductDTO(product);
+        
         ProductDTO productDTO = new ProductDTO();
-        productDTO.setEnabled(true);
         productDTO.setFechaInicio(fechaInicio);
         productDTO.setFechaFin(fechaFin);
         productDTO.setPrecio(product.getPrecio());
+        productDTO.setPrecioActual(product.getPrecio());
         productDTO.setNombre(product.getNombre());
         productDTO.setDescripcion(product.getDescripcion());
         productDTO.setCreadorUserId(creador.getId());
-
+        productDTO.setEnabled(true);
         productService.createSubasta(productDTO);
 
         return "redirect:/index";

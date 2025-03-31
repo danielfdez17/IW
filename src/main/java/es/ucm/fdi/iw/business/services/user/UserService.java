@@ -8,4 +8,6 @@ public interface UserService {
     boolean disableUser(long id);
     boolean enableUser(long id);
     List<UserDTO> findChatUsersByUsername(final String username, final String userChatNew);
+    UserDTO findUserByUsername(String username);
+    Double subtractMoney(long userId, Double puja);
 }

@@ -41,6 +41,7 @@ public class Subasta {
     private String descripcion;
     private String nombre;
 
+    private double precioActual;
     private double precio;
     private String maximoPujador;
 
@@ -50,5 +51,4 @@ public class Subasta {
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
     private User creador;
-
 }

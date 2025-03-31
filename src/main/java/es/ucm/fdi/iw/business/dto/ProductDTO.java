@@ -22,5 +22,6 @@ public class ProductDTO {
     private String descripcion;
     private String nombre;
     private double precio;
+    private double precioActual;
     private String maximoPujador;
 }

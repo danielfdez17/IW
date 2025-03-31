@@ -28,34 +28,43 @@
                             <!-- Chat con el vendedor -->
                             <a th:href="@{|/chat?userChatNew=${producto.creadorUsername}|} ">Chat con el vendedor</a>
 
-                            <h5 class="text-muted">Precio</h5>
-                            <p id="precio-actual" class="fs-4 text-success fw-bold" th:text="${producto.precio} + '€'">€0.00</p>
-                            
-                          
+    <main class="container py-5">
+        <div class="card shadow-sm">
+            <div class="card-header bg-primary text-white">
+                <h3 class="mb-0 text-center text-uppercase" th:text="${producto.nombre}">Reloj Vintage</h3>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <img th:src="@{/img/reloj.jpeg}" class="img-fluid rounded" alt="Producto">
+                    </div>
+                    <div class="col-md-6">
+                        <h5 class="text-muted">Descripción</h5>
+                        <p th:text="${producto.descripcion}">Descripción del producto.</p>
+                        <h5 class="text-muted">Precio inicial</h5>
+                        <p class="fs-4 text-success fw-bold" th:text="'€' + ${producto.precio}">€0.00</p>
+                        
+                        <h5 class="text-muted">Precio actual</h5>
+                        <p id="precio-actual" class="fs-4 text-success fw-bold" th:text="'€' + ${producto.precioActual}">€0.00
+                        </p>
+                        <!-- Chat con el vendedor -->
+                         <p class="fs-3"> Chat con el vendedor 
+                             <a class="text-decoration-none text-primary" th:href="@{|/chat?userChatNew=${producto.creadorUsername}|} "><i class="bi bi-chat-dots-fill"></i></a>
+                         </p>
 
-                            <div th:if="${producto.enabled}">
-                                <h5 class="text-muted">Mejor postor</h5>
-                                <p id="precio-actual" class="fs-4 text-success fw-bold" th:text="${producto.maximoPujador != null ? producto.maximoPujador : 'SIN PUJAS'}"></p>
 
-
-                                <form id="formPujar" th:action="@{'/products/' + ${producto.id} + '/pujar'}" method="post">
-                                    <input type="hidden" name="_csrf" value="${_csrf.token}">
-                                    <div class="mb-3">
-                                        <label for="nuevaPuja" class="form-label">Tu Puja</label>
-                                        <input type="number" class="form-control" id="nuevaPuja" name="puja" step="1.00" min="0" required>
-                                    </div>
-                                    <button type="submit" class="btn btn-success">Pujar</button>
-                                </form>
+                            <div class="mb-3">
+                                <!-- <p th:text="${producto.id}"></p> -->
+                                <label for="nuevaPuja" class="form-label">Tu Puja</label>
+                                <input th:value="${producto.precioActual}" type="number" class="form-control" id="nuevaPuja" name="puja" step="1.00" min="0"
+                                    required>
                             </div>
-                            <div th:if="${!producto.enabled}">
-                                <div class="alert alert-warning mt-3">
-                                    <h5 class="text-danger mb-3">Puja finalizada</h5>
-                                    <ul class="list-unstyled">
-                                        <li><strong>Máximo pujador:</strong> <span th:text="${producto.maximoPujador} ?: 'NO DEFINIDO'"></span></li>
-                                        <li><strong>Pujó:</strong> <span th:text="${producto.precio} + '€'"></span></li>
-                                    </ul>
-                                </div>
-                            </div>
+                            <button type="submit" class="btn btn-success">Pujar</button>
+                            <button type="button" class="btn btn-outline-primary fw-bolder" onclick="subirPuja(1)">+1 €</button>
+                            <button type="button" class="btn btn-outline-primary fw-bolder" onclick="subirPuja(5)">+5 €</button>
+                            <button type="button" class="btn btn-outline-primary fw-bolder" onclick="subirPuja(50)">+50 €</button>
+                            <button type="button" class="btn btn-outline-primary fw-bolder" onclick="subirPuja(100)">+100 €</button>
+                        </form>
 
                             <div id="mensaje-puja" class="mt-3"></div>
                         </div>
@@ -102,7 +111,7 @@
                 mensajeDiv.innerHTML = `<div class="alert alert-${tipo}" role="alert">${mensaje}</div>`;
             }
         </script>
-
+<script th:src="@{/js/productdetail.js}"></script>
 <script>
     const productoId = window.location.pathname.split("/").pop();
 
