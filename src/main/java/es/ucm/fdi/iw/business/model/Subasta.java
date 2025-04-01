@@ -39,6 +39,7 @@ public class Subasta {
     private String rutaImagen;
 
     private double precio;
+    private double precioInicial;
 
     private String descripcion;
     private String nombre;
