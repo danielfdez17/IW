@@ -11,5 +11,7 @@ public interface ProductService {
     ProductDTO getProduct(final long id);
     void updateProduct(ProductDTO productDTO);
     ProductDTO createSubasta(ProductDTO productDTO);
+    void toggleProduct(long id, final boolean active);
+    List<ProductDTO> obtenerSubastasPujadasPorUsuario(Long userId);
 
 }
