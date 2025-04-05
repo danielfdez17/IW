@@ -61,6 +61,9 @@ public class ProductServiceImpl implements ProductService {
                 .orElseThrow(() -> new RuntimeException("Subasta no encontrada"));
 
         subasta.setPrecioActual(producto.getPrecioActual());
+        subasta.setNombre(producto.getNombre());
+        subasta.setDescripcion(producto.getDescripcion());
+        subasta.setFechaFin(producto.getFechaFin());
         subasta.setEnabled(true);
         subastaRepository.save(subasta);
     }

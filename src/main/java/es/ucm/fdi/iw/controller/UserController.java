@@ -2,9 +2,11 @@ package es.ucm.fdi.iw.controller;
 
 import es.ucm.fdi.iw.business.fileconfiglocal.LocalData;
 import es.ucm.fdi.iw.business.model.Message;
+import es.ucm.fdi.iw.business.model.Subasta;
 import es.ucm.fdi.iw.business.model.Transferable;
 import es.ucm.fdi.iw.business.model.User;
 import es.ucm.fdi.iw.business.model.User.Role;
+import es.ucm.fdi.iw.business.repository.SubastaRepository;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -32,6 +34,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import jakarta.transaction.Transactional;
+import lombok.RequiredArgsConstructor;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -52,21 +55,24 @@ import java.util.stream.Collectors;
  */
 @Controller()
 @RequestMapping("user")
+@RequiredArgsConstructor
 public class UserController {
 
     private static final Logger log = LogManager.getLogger(UserController.class);
 
-    @Autowired
-    private EntityManager entityManager;
+    // @Autowired
+    private final EntityManager entityManager;
 
-    @Autowired
-    private LocalData localData;
+    // @Autowired
+    private final LocalData localData;
 
-    @Autowired
-    private SimpMessagingTemplate messagingTemplate;
+    // @Autowired
+    private final SimpMessagingTemplate messagingTemplate;
 
-    @Autowired
-    private PasswordEncoder passwordEncoder;
+    // @Autowired
+    private final PasswordEncoder passwordEncoder;
+
+    private final SubastaRepository subastaRepository;
 
     @ModelAttribute
     public void populateModel(HttpSession session, Model model) {
@@ -119,7 +125,15 @@ public class UserController {
     public String index(@PathVariable long id, Model model, HttpSession session) {
         User target = entityManager.find(User.class, id);
         model.addAttribute("user", target);
-        // model.addAttribute("subastas", listaSubastas);
+        List<Subasta> listaSubastas = subastaRepository.findByCreador(id);
+        listaSubastas.forEach(subasta -> {
+            boolean isEnabled = (subasta.getFechaInicio().isBefore(LocalDateTime.now())
+                    || subasta.getFechaInicio().isEqual(LocalDateTime.now()))
+                    && (subasta.getFechaFin().isEqual(LocalDateTime.now())
+                            || subasta.getFechaFin().isAfter(LocalDateTime.now()));
+            subasta.setEnabled(isEnabled);
+        });
+        model.addAttribute("subastas", listaSubastas.isEmpty() ? null : listaSubastas);
         return "user";
     }
 
@@ -133,6 +147,7 @@ public class UserController {
             @PathVariable long id,
             @ModelAttribute User edited,
             @RequestParam(required = false) String pass2,
+            @RequestParam(required = false) MultipartFile photo,
             Model model, HttpSession session) throws IOException {
 
         User requester = (User) session.getAttribute("u");
@@ -145,6 +160,21 @@ public class UserController {
             entityManager.persist(target);
             entityManager.flush(); // forces DB to add user & assign valid id
             id = target.getId(); // retrieve assigned id from DB
+        }
+
+        if (!photo.getOriginalFilename().isBlank()) {
+
+            try {
+                String filePath = System.getProperty("user.dir") + "\\iwdata\\users\\" + id + ".jpg";
+                FileOutputStream fout = new FileOutputStream(filePath);
+                fout.write(photo.getBytes());
+
+                fout.close();
+
+            } catch (Exception e) {
+                e.printStackTrace();
+
+            }
         }
 
         // retrieve requested user
@@ -199,7 +229,7 @@ public class UserController {
      */
     @GetMapping("{id}/pic")
     public StreamingResponseBody getPic(@PathVariable long id) throws IOException {
-        File f = localData.getFile("user", "" + id + ".jpg");
+        File f = localData.getFile("users", "" + id + ".jpg");
         InputStream in = new BufferedInputStream(f.exists() ? new FileInputStream(f) : UserController.defaultPic());
         return os -> FileCopyUtils.copy(in, os);
     }

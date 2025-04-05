@@ -31,22 +31,27 @@
                                         aria-label="Close"></button>
                                 </div>
                                 <div class="modal-body">
-                                    <form th:action="@{/products/nueva_subasta}" method="post">
+                                    <form th:action="@{/products/nueva_subasta}" method="post"
+                                        enctype="multipart/form-data">
                                         <div class="mb-3">
-                                            <label class="form-label" for="fechaInicio">Fecha de inicio</label>
-                                            <input class="form-control" id="fechaInicio" name="fechaInicio"
-                                                value="2026-01-01" type="date" required>
+                                            <label for="photo" class="form-label">Foto del objeto</label>
+                                            <input class="form-control" type="file" name="photo" id="photo">
                                         </div>
                                         <div class="mb-3">
-                                            <label class="form-label" for="fechaFin">Fecha de fin</label>
-                                            <input class="form-control" type="date" id="fechaFin" name="fechaFin"
-                                                value="2026-01-02" required>
+                                            <label class="form-label" for="nuevaFechaInicio">Fecha de inicio</label>
+                                            <input class="form-control" id="nuevaFechaInicio" name="nuevaFechaInicio"
+                                                type="date" required>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label class="form-label" for="nuevaFechaFin">Fecha de fin</label>
+                                            <input class="form-control" type="date" id="nuevaFechaFin"
+                                                name="nuevaFechaFin" required>
                                         </div>
                                         <div class="mb-3">
                                             <label class="form-label" for="nombreProducto">Nombre del producto a
                                                 subastar</label>
                                             <input class="form-control" type="text" id="nombreProducto" name="nombre"
-                                                value="nombre" placeholder="Introduce un nombre" required>
+                                                placeholder="Introduce un nombre" required>
                                         </div>
                                         <div class="mb-3">
                                             <label class="form-label" for="descripcionProducto">Descripción del producto
@@ -54,7 +59,7 @@
                                             <div class="form-floating">
                                                 <textarea class="form-control"
                                                     placeholder="Introduce la descripción del producto"
-                                                    id="descripcionProducto" name="descripcion" value="descripcion"
+                                                    id="descripcionProducto" name="descripcion" 
                                                     required></textarea>
                                                 <label for="descripcionProducto">Introduce la descripción del
                                                     producto</label>
@@ -86,8 +91,8 @@
             <div class="row mt-3">
                 <div class="col-auto" th:each="obj: ${productos}">
                     <div class="detalles-card p-1">
-                        <img th:src="@{/img/reloj.jpeg}" class="border border-white rounded" alt="Imagen objeto"
-                            width="400" height="500">
+                        <img th:src="@{/products/{id}/pic(id=${obj.id})}" class="border border-white rounded"
+                            alt="Imagen objeto" width="400" height="500">
                         <div class="row details mt-2 justify-content-between align-items-center">
                             <h3 class="text-uppercase fw-bold col-auto" th:text="${obj.nombre}">Reloj de Muñeca</h3>
                             <h4 class="fw-bold col-auto text-success" th:text="${obj.precioActual + ' €'}"></h4>
