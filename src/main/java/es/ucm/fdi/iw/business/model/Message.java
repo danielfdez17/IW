@@ -3,20 +3,24 @@ package es.ucm.fdi.iw.business.model;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.NamedQueries;
 import jakarta.persistence.NamedQuery;
+import jakarta.persistence.PrePersist;
 import jakarta.persistence.SequenceGenerator;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import lombok.Data;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import lombok.AllArgsConstructor;
 
 /**
@@ -29,7 +33,10 @@ import lombok.AllArgsConstructor;
 	query="SELECT COUNT(m) FROM Message m "
 			+ "WHERE m.recipient.id = :userId AND m.dateRead = null")
 })
-@Data
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
 public class Message implements Transferable<Message.Transfer> {
 	
 	private static Logger log = LogManager.getLogger(Message.class);	
@@ -45,8 +52,21 @@ public class Message implements Transferable<Message.Transfer> {
 	private String text;
 	
 	private LocalDateTime dateSent;
+	@Column(nullable = true)
+	@JoinColumn(nullable = true)
 	private LocalDateTime dateRead;
 	
+	@PrePersist
+	public void prePersist(){
+		this.dateSent = LocalDateTime.now();
+	}
+
+	public Message(User sender, User recipient, String text) {
+		this.sender = sender;
+		this.recipient = recipient;
+		this.text = text;
+	}
+
 	/**
 	 * Objeto para persistir a/de JSON
 	 * @author mfreire

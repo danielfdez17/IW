@@ -22,6 +22,7 @@ public interface PujaRepository extends JpaRepository<Puja, PujaEmbed> {
             @Param("subastaId") Long subastaId);
 
 
+
     @Query("""
         SELECT p FROM Puja p
         WHERE p.user.id = :usuarioId

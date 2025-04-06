@@ -20,6 +20,7 @@ public class ProductDTO {
     private boolean enabled;
     private String rutaImagen;
     private String descripcion;
+    private double precioActual;
     private double precio;
     private double precioInicial;
     private String nombre;

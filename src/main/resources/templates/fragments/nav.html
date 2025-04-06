@@ -9,8 +9,8 @@
 
     <!-- barra de navegación bootstrap 5 -->
     <header th:fragment="nav">
-        <nav class="navbar navbar-expand-lg navbar-light bg-light">
-            <div class="container-fluid">
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+            <div class="container-fluid text-white">
                 <!-- nombre del sitio; es un enlace que lleva a la página ppal -->
                 <a class="navbar-brand" th:href="@{/}" href="/">
                     <img th:src="@{/img/BARATO.png}" src="/img/BARATO.png" alt="logo BB" width="32" height="32" class="d-inline-block align-text-top"> ¡Barato,Barato!<h3>Casa de Subastas</h3>
@@ -25,20 +25,26 @@
                     <ul class="navbar-nav ms-auto">
                         <th:block th:if="${u}">
                             <li class="nav-item mx-3">
-                                <a class="nav-link" th:href="@{/}">Subastas</a>
+                                <a class="nav-link active" th:href="@{/}">Subastas</a>
                             </li>
                             <li class="nav-item mx-3">
-                                <a class="nav-link" th:href="@{/historical/}">Historial</a>
+                                <a class="nav-link active" th:href="@{/historical/}">Historial</a>
                             </li>
                             <li class="nav-item mx-3">
-                                <a class="nav-link" th:href="@{/chat/}">Chats</a>
+                                <a class="nav-link active" th:href="@{/chat}">Chats</a>
                             </li>
-                            <li class="nav-item mx-3">
-                                <a class="nav-link" th:if="${u.hasRole('ADMIN')}" th:href="@{/admin/}">Administrar</a>
+                            <li class="nav-item dropdown mx-3" th:if="${u.hasRole('ADMIN')}">
+                                <button class="nav-link active dropdown-toggle" data-bs-toggle="dropdown">
+                                    Administrar
+                                </button>
+                                <ul class="dropdown-menu">
+                                    <li><a class="dropdown-item" th:href="@{/admin/}">Usuarios</a></li>
+                                    <li><a class="dropdown-item" th:href="@{/admin/subasta}">Subasta</a></li>
+                                </ul>                                
                             </li>
 
                             <li class="nav-item mx-2">
-                                <a class="nav-link" th:href="@{/user/{id}(id=${u.id})}">
+                                <a class="nav-link active" th:href="@{/user/{id}(id=${u.id})}">
                                     <img class="iwthumb rounded" th:src="@{/user/{id}/pic(id=${u.id})}">
                                     <span th:text="${u.username}">Pepe</span>
                                 </a>
@@ -52,13 +58,13 @@
                             </li>
                             <li class="nav-item align-self-center">
                                 <form th:action="@{/logout}" method="post">
-                                    <button type="submit" class="btn btn-outline-secondary btn-sm">logout</button>
+                                    <button type="submit" class="btn btn-outline-secondary btn-sm text-white">logout</button>
                                 </form>
                             </li>
                         </th:block>
                         <th:block th:unless="${u}">
                             <li class="nav-item mx-2">
-                                <a class="nav-link" th:href="@{/login}" href="/login">Login</a>
+                                <a class="btn btn-outline-danger" th:href="@{/login}" href="/login">Login</a>
                             </li>
                             <!--/*
                                 Esto es un comentario "thymeleaf" - no se verá en el HTML
