@@ -34,7 +34,6 @@ Scenario: login malo en github
     When submit().click(".form-signin button")
     Then waitForUrl(baseUrl + '/admin')
 
-  @logout
   Scenario: logout after login
     Given driver baseUrl + '/login'
     And input('#username', 'a')
