@@ -93,7 +93,6 @@ public class DetailProductController {
         return "redirect:/products/" + id;
         // return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("La puja debe ser
         // mayor al precio actual.");
-
     }
 
     @PostMapping("/nueva_subasta")
