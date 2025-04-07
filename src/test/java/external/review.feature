@@ -1,7 +1,7 @@
 Feature: publicar una reseña
     Scenario: entrar en la reseña de un producto, editarla y publicarla correctamente
 
-        #Hacemos login
+        #Hacemos login usuario 1
         Given call read('login.feature@login_a')
 
         # Crear subasta (para asegurar que hay alguna subasta a la que dejar reseña)
@@ -17,6 +17,9 @@ Feature: publicar una reseña
         And input('#precioInicial', '10')
         And click('#btnCrearSubasta')
 
+        #Hacemos login usuario 2
+        Given call read('login.feature@logout')
+        Given call read('login.feature@login_b')
 
         #Nos vamos a la vista del historico
         And driver baseUrl + '/historical/' 
@@ -25,6 +28,7 @@ Feature: publicar una reseña
 
         #Rellenamos la informacion de la reseña
         And script("document.querySelectorAll('#star-widget .fa-star')[2].click()") 
+        And clear("#comment")
         And input("#comment", "Muy buen producto, el vendedor es un crack!")     
         # Hacemos clic en el botón de enviar reseña
         And click("button.btn-primary")
