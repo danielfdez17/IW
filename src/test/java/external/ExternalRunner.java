@@ -24,8 +24,13 @@ class ExternalRunner {
     //     return Karate.run("test2").relativeTo(getClass());
     // }  
 
-    @Karate.Test
-    Karate testCrearSubasta() {
-        return Karate.run("crearSubasta").relativeTo(getClass());
-    }  
+    //@Karate.Test
+   // Karate testCrearSubasta() {
+   //     return Karate.run("crearSubasta").relativeTo(getClass());
+   // }  
+
+   @Karate.Test
+   Karate testCrearSubasta() {
+       return Karate.run("review").relativeTo(getClass());
+   } 
 }

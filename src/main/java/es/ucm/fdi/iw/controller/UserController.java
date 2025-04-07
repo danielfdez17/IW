@@ -6,6 +6,10 @@ import es.ucm.fdi.iw.business.model.Subasta;
 import es.ucm.fdi.iw.business.model.Transferable;
 import es.ucm.fdi.iw.business.model.User;
 import es.ucm.fdi.iw.business.model.User.Role;
+import es.ucm.fdi.iw.business.repository.UserRepository;
+import es.ucm.fdi.iw.business.services.product.*;
+import es.ucm.fdi.iw.business.dto.ProductDTO;
+
 import es.ucm.fdi.iw.business.repository.SubastaRepository;
 
 import org.apache.logging.log4j.LogManager;
@@ -59,6 +63,10 @@ import java.util.stream.Collectors;
 public class UserController {
 
     private static final Logger log = LogManager.getLogger(UserController.class);
+   
+
+    @Autowired
+    private ProductService productService;
 
     // @Autowired
     private final EntityManager entityManager;
@@ -120,7 +128,7 @@ public class UserController {
 
     /**
      * Landing page for a user profile
-     */
+     
     @GetMapping("{id}")
     public String index(@PathVariable long id, Model model, HttpSession session) {
         User target = entityManager.find(User.class, id);
@@ -136,6 +144,20 @@ public class UserController {
         model.addAttribute("subastas", listaSubastas.isEmpty() ? null : listaSubastas);
         return "user";
     }
+        */
+        @GetMapping("{id}")
+        public String getUserProfile(@PathVariable Long id, Model model, HttpSession session) {
+            User target = entityManager.find(User.class, id);
+            model.addAttribute("user", target);
+        
+            // Recuperamos solo las subastas en las que el usuario ha pujado
+            List<ProductDTO> subastas = productService.obtenerSubastasPujadasPorUsuario(id);
+            model.addAttribute("subastas", subastas);
+        
+            return "user";  // Asegúrate de que el archivo HTML es el correcto
+        }
+        
+
 
     /**
      * Alter or create a user
@@ -355,4 +377,9 @@ public class UserController {
         messagingTemplate.convertAndSend("/user/" + u.getUsername() + "/queue/updates", json);
         return "{\"result\": \"message sent.\"}";
     }
+
+
+    
+
+
 }

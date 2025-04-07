@@ -22,5 +22,14 @@ public class ProductDTO {
     private String descripcion;
     private double precioActual;
     private double precio;
+    private double precioInicial;
     private String nombre;
+    //private boolean favorito;
+    private double dineroPujado; 
+    private boolean usuarioHaPujado; 
+    
+    
+    public boolean isActiva() {
+        return fechaFin != null && fechaFin.isAfter(LocalDateTime.now());
+    }
 }

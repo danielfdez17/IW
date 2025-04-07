@@ -15,6 +15,11 @@ public interface SubastaRepository extends JpaRepository<Subasta, Long> {
     @Query("SELECT s FROM Subasta s")
     List<Subasta> getAllSubastas();
 
+
+    @Query("SELECT s FROM Subasta s JOIN s.pujas p WHERE p.user.id = :userId")
+    List<Subasta> findSubastasByUserId(@Param("userId") Long userId);
+
     @Query("SELECT s FROM Subasta s WHERE s.creador.id = :creador")
     List<Subasta> findByCreador(@Param("creador") long creador);
+
 }

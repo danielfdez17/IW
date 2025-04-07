@@ -40,6 +40,7 @@ public class Subasta {
 
     private double precioActual;
     private double precio;
+    private double precioInicial;
 
     private String descripcion;
     private String nombre;

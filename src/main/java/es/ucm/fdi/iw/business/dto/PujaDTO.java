@@ -21,4 +21,5 @@ public class PujaDTO {
     private int puntuacion;
     private String comentario;
     private LocalDateTime fecha;
+    
 }

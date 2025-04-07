@@ -1,7 +1,9 @@
 package es.ucm.fdi.iw.business.services.puja;
 
+import es.ucm.fdi.iw.business.dto.CreateProductDTO;
 import es.ucm.fdi.iw.business.dto.PujaDTO;
 import es.ucm.fdi.iw.business.mapper.PujaMapper;
+import es.ucm.fdi.iw.business.mapper.SubastaMapper;
 import es.ucm.fdi.iw.business.model.Puja;
 import es.ucm.fdi.iw.business.model.PujaEmbed;
 import es.ucm.fdi.iw.business.model.Subasta;
@@ -114,6 +116,7 @@ public class PujaServiceImpl implements PujaService {
                 double lastValue = existingSubasta.getPujas().getLast().getDineroPujado();
                 lastUser.setAvailableMoney(lastUser.getAvailableMoney() + lastValue);
             }
+
             Puja puja = new Puja();
             puja.setId(new PujaEmbed(pujaDTO.getUsuarioId(), pujaDTO.getSubastaId()));
             puja.setFecha(LocalDateTime.now());
@@ -127,4 +130,41 @@ public class PujaServiceImpl implements PujaService {
             // throw new RuntimeException("Puja no encontrada");
         }
     }
+
+
+    @Override
+    public List<PujaDTO> getPujasPorUsuario(long usuarioId) {
+        // Obtener todas las pujas del usuario
+        List<Puja> pujas = pujaRepository.findAllByUserId(usuarioId);
+
+        // Convertir las pujas a DTO y añadir los detalles de la subasta
+        return pujas.stream()
+                    .map(puja -> {
+                        PujaDTO pujaDTO = new PujaDTO();
+                        pujaDTO.setUsuarioId(puja.getUser().getId());
+                        pujaDTO.setSubastaId(puja.getSubasta().getId());
+                        pujaDTO.setDineroPujado(puja.getDineroPujado());
+                        pujaDTO.setPuntuacion(puja.getPuntuacion());
+                        pujaDTO.setComentario(puja.getComentario());
+                        pujaDTO.setFecha(puja.getFecha());
+
+                        // Crear el CreateProductDTO con los detalles de la subasta
+                        Subasta subasta = puja.getSubasta();
+                        CreateProductDTO subastaDTO = new CreateProductDTO(
+                            subasta.getFechaInicio().toString(),
+                            subasta.getFechaFin().toString(),
+                            subasta.getDescripcion(),
+                            subasta.getPrecio(),
+                            subasta.getNombre()
+                        );
+
+                        // Añadir el CreateProductDTO al PujaDTO
+                        puja.setSubasta(subasta);
+
+                        return pujaDTO;
+                    })
+                    .collect(Collectors.toList());
+    }
+
+
 }

@@ -1,6 +1,33 @@
 
 # IW 24/25
 
+
+## Segunda Entrega
+
+En esta versión, nuestra web ha sido actualizada para permitir la creación de subastas en las que los usuarios pueden pujar según su saldo actual, además de contactar con el vendedor a través de un chat habilitado para ello. También tienen la posibilidad de dejar reseñas en subastas finalizadas, basadas en puntuaciones de 1 a 5 estrellas y un apartado de comentarios.
+
+En la vista de perfil, el usuario podrá visualizar:
+
+- Las subastas que ha creado.
+- Las subastas en las que está participando.
+- Su saldo disponible en tiempo real.
+- Todas las opciones de edición de su perfil.
+
+### Funcionalidades implementadas:
+
+-  Chat entre el creador de una subasta y los usuarios que pujan.
+-  Sistema de pujas: solo se permiten pujas superiores al precio actual y si el usuario tiene saldo suficiente.
+-  Sección de reseñas: permite dejar puntuaciones de 1 a 5 estrellas y comentarios.
+-  Funcionalidad para habilitar y deshabilitar subastas desde una cuenta de administrador.
+-  Listado dinámico de subastas creadas y en las que se está participando en la vista de usuario
+-  Edición de perfil
+
+### Aún por implementar:
+
+-  Vincular el historial de subastas con la base de datos
+-  Modificar el saldo al editar el perfil
+-  Corregir listado 
+
 # Estructura de Base de datos
 ![Estructura de BBDD](/bd.png)
 

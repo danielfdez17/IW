@@ -11,9 +11,11 @@ import org.springframework.transaction.annotation.Transactional;
 
 import es.ucm.fdi.iw.business.dto.ProductDTO;
 import es.ucm.fdi.iw.business.mapper.SubastaMapper;
+import es.ucm.fdi.iw.business.model.Puja;
 import es.ucm.fdi.iw.business.model.Subasta;
 import es.ucm.fdi.iw.business.model.User;
 import es.ucm.fdi.iw.business.repository.SubastaRepository;
+import es.ucm.fdi.iw.business.repository.PujaRepository;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 
@@ -21,6 +23,7 @@ import jakarta.persistence.PersistenceContext;
 public class ProductServiceImpl implements ProductService {
 
     private final SubastaRepository subastaRepository;
+    private final PujaRepository pujaRepository;
 
     private EntityManager entityManager;
 
@@ -30,8 +33,9 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Autowired
-    public ProductServiceImpl(SubastaRepository subastaRepository) {
+    public ProductServiceImpl(SubastaRepository subastaRepository,PujaRepository pujaRepository) {
         this.subastaRepository = subastaRepository;
+        this.pujaRepository=   pujaRepository;
     }
 
     @Override
@@ -49,9 +53,9 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public ProductDTO getProduct(long id) {
+    public ProductDTO getProduct(long id) {        
         return subastaRepository.findById(Long.valueOf(id)) // Convertimos id a Long
-                .map(SubastaMapper.INSTANCE::subastaToProductDTO)
+                .map( SubastaMapper.INSTANCE::subastaToProductDTO)
                 .orElse(null);
     }
 
@@ -59,6 +63,10 @@ public class ProductServiceImpl implements ProductService {
     public void updateProduct(ProductDTO producto) {
         Subasta subasta = subastaRepository.findById(producto.getId())
                 .orElseThrow(() -> new RuntimeException("Subasta no encontrada"));
+
+        subasta.setPrecio(producto.getPrecio()); 
+        subasta.setEnabled(true);
+        subastaRepository.save(subasta);  
 
         subasta.setPrecioActual(producto.getPrecioActual());
         subasta.setNombre(producto.getNombre());
@@ -70,11 +78,10 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     @Transactional
-    public void updateAdminProduct(ProductDTO p) {
-        Subasta subasta = subastaRepository.findById(p.getId())
-                .orElseThrow(() -> new RuntimeException("Subasta no encontrada"));
+    public void updateAdminProduct(ProductDTO p){
+        Subasta subasta = subastaRepository.findById(p.getId()).orElseThrow(() -> new RuntimeException("Subasta no encontrada"));
         subasta.setNombre(p.getNombre());
-        subasta.setDescripcion(p.getDescripcion());
+        subasta.setDescripcion(p.getDescripcion()); 
         subasta.setEnabled(true);
         subastaRepository.save(subasta);
     }
@@ -85,7 +92,8 @@ public class ProductServiceImpl implements ProductService {
         subasta.setFechaInicio(productDTO.getFechaInicio());
         subasta.setFechaFin(productDTO.getFechaFin());
         subasta.setPrecio(productDTO.getPrecio());
-        subasta.setPrecioActual(productDTO.getPrecio());
+        subasta.setPrecioInicial(productDTO.getPrecio());
+
         subasta.setNombre(productDTO.getNombre());
         subasta.setDescripcion(productDTO.getDescripcion());
         subasta.setEnabled(true);
@@ -108,5 +116,36 @@ public class ProductServiceImpl implements ProductService {
         subasta.setEnabled(active);
         subastaRepository.save(subasta);
     }
+
+
+    @Override
+    public List<ProductDTO> obtenerSubastasPujadasPorUsuario(Long userId) {
+        List<Subasta> subastas = subastaRepository.findSubastasByUserId(userId); // Obtén las subastas en las que el usuario ha pujado
+        
+        return subastas.stream()
+            .map(subasta -> new ProductDTO(
+                subasta.getId(),
+                subasta.getCreador().getId(),
+                subasta.getCreador().getUsername(),
+                subasta.getFechaInicio(),
+                subasta.getFechaFin(),
+                subasta.isEnabled(),
+                subasta.getRutaImagen(),
+                subasta.getDescripcion(),
+                subasta.getPrecio(), // precioActual
+                subasta.getPrecio(), // precio
+                subasta.getPrecioInicial(),
+                subasta.getNombre(),
+                subasta.getPujas().stream()
+                    .filter(puja -> puja.getUser().getId() == userId)
+                    .mapToDouble(puja -> puja.getDineroPujado())
+                    .sum(),
+                true
+            ))
+            .collect(Collectors.toList());
+            }
+    
+
+    
 
 }
