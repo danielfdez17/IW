@@ -2,8 +2,6 @@
 # IW 24/25
 
 
-# IW 24/25
-
 ## Segunda Entrega
 
 En esta versión, nuestra web ha sido actualizada para permitir la creación de subastas en las que los usuarios pueden pujar según su saldo actual, además de contactar con el vendedor a través de un chat habilitado para ello. También tienen la posibilidad de dejar reseñas en subastas finalizadas, basadas en puntuaciones de 1 a 5 estrellas y un apartado de comentarios.
