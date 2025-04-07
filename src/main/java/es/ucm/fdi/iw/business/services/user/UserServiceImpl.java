@@ -22,6 +22,21 @@ public class UserServiceImpl implements UserService {
 
     @Transactional
     @Override
+    public UserDTO createUser(UserDTO userDTO) {
+        Optional<User> optionalUser = this.userRepository.findByUsername(userDTO.getUsername());
+        if (optionalUser.isPresent()) {
+            throw new RuntimeException("El nombre de usuario " + userDTO.getUsername() + " ya existe");
+        }
+        User user = new User();
+        user.setUsername(userDTO.getUsername());
+        user.setPassword(userDTO.getPassword());
+        user.setFirstName(userDTO.getFirstName());
+        user.setLastName(userDTO.getLastName());
+        return UserMapper.INSTANCE.entityToDto(this.userRepository.save(user));
+    }
+
+    @Transactional
+    @Override
     public boolean disableUser(long id) {
         return this.userRepository.findById(id).map(user -> {
             user.setEnabled(false);
@@ -71,7 +86,7 @@ public class UserServiceImpl implements UserService {
         }
 
         user.setAvailableMoney(user.getAvailableMoney() - money);
-        
+
         return money;
     }
 }

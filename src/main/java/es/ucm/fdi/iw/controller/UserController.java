@@ -127,9 +127,7 @@ public class UserController {
         model.addAttribute("user", target);
         List<Subasta> listaSubastas = subastaRepository.findByCreador(id);
         listaSubastas.forEach(subasta -> {
-            boolean isEnabled = (subasta.getFechaInicio().isBefore(LocalDateTime.now())
-                    || subasta.getFechaInicio().isEqual(LocalDateTime.now()))
-                    && (subasta.getFechaFin().isEqual(LocalDateTime.now())
+            boolean isEnabled = (subasta.getFechaFin().isEqual(LocalDateTime.now())
                             || subasta.getFechaFin().isAfter(LocalDateTime.now()));
             subasta.setEnabled(isEnabled);
         });

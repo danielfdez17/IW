@@ -1,8 +1,10 @@
 package es.ucm.fdi.iw.business.dto;
 
+import lombok.Builder;
 import lombok.Data;
 
 @Data
+@Builder
 public class UserDTO {
     private long id;
     private String username;
