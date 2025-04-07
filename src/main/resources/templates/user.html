@@ -17,55 +17,12 @@
     <header th:replace="~{fragments/nav.html :: nav}"></header>
 
     <main class="flex-shrink-0">
+
         <div class="container-fluid my-5">
             <div class="row">
-
-                <!-- Columna izquierda: Elementos adicionales (ISBN, Foto de perfil, etc.) -->
+                <!-- Perfil del Usuario -->
                 <div class="col-lg-3 mb-4">
-                    <div id="books" class="border border-2 border-primary rounded mb-3">
-                        <label for="isbn">ISBN</label>
-                        <input id="isbn" value="9780140328721" class="form-control" />
-                        <button class="btn btn-primary" id="fetchBook">Buscar datos online</button>
-                        <img class="preview mt-2" id="portada" alt="portada del libro" style="max-width: 100%;" />
-                        <form th:action="@{/user/__${user.id}__/pic}">
-                            <button id="postPortada" class="perfilable btn btn-primary mt-2">Usar como foto de perfil</button>
-                        </form>
-                    </div>
-                    <div id="movies" class="border border-2 border-secondary rounded mb-3">
-                        <label for="imdb">IMDB</label>
-                        <input id="imdb" value="tt11286314" class="form-control" />
-                        <button id="fetchMovie" class="btn btn-primary mt-2">Buscar datos online</button>
-                        <img class="preview mt-2" id="poster" alt="poster de la pelicula" style="max-width: 100%;" />
-                        <form th:action="@{/user/__${user.id}__/pic}">
-                            <button id="postPoster" class="perfilable btn btn-primary mt-2">Usar como foto de perfil</button>
-                        </form>
-                    </div>
-                    <div id="profile" class="border border-2 border-tertiary rounded mb-3">
-                        <input class="form-control" type="file" id="f_avatar" accept="image/jpeg,image/png" />
-                        <img class="preview mt-2" id="avatar" alt="careto a subir" style="max-width: 100%;" />
-                        <form th:action="@{/user/__${user.id}__/pic}">
-                            <button id="postAvatar" class="btn btn-primary mt-2">Usar como foto de perfil</button>
-                        </form>
-                    </div>
-
-                    <div class="container">
-                        <h1 class="mt-5">Perfil de <span th:text="${user.username}">Paco</span></h1>
-                        <!-- Recepción de mensajes -->
-                        <div class="py-5 row" id="mensajes"></div>
-                        <!-- Envío de mensajes -->
-                        <div class="py-5 row">
-                            <form th:action="@{/user/__${user.id}__/msg}" method="POST">
-                                <input type="text" id="message" placeholder="Escribe a este usuario" class="form-control" />
-                                <button id="sendmsg" class="btn btn-secondary mt-2" type="submit">Enviar</button>
-                            </form>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Columna derecha: Perfil del Usuario + Subastas -->
-                <div class="col-lg-9 mb-4">
-                    <!-- Perfil del Usuario -->
-
+                    <!-- Tarjeta de Perfil -->
                     <div class="card mb-3">
                         <div class="card-body text-center">
                             <img th:src="@{/user/{id}/pic(id=${u.id})}" class="rounded-circle mb-3" alt="Foto de perfil"
@@ -122,9 +79,10 @@
                                                     <input type="number" name="availableMoney" id="editAvailableMoney"
                                                         th:value="${user.availableMoney + '€' or '0€'}" class="form-control">
                                                 </div> -->
-                                                <div class="mb-3">
-                                                    <button type="submit" class="btn btn-primary w-100">Actualizar perfil</button>
-                                                </div>
+                                                <mb-3>
+                                                    <button type="submit" class="btn btn-primary w-100">Actualizar
+                                                        perfil</button>
+                                                </mb-3>
                                             </form>
                                         </div>
                                         <div class="modal-footer">
@@ -146,10 +104,11 @@
                             </p>
                         </div>
                     </div>
-
                 </div>
 
-                    <!-- Resumen de Actividad -->
+
+                <!-- Información del Usuario -->
+                <div class="col-lg-7">
                     <div class="card mb-4">
                         <div class="card-header">
                             <h5>Resumen de Actividad</h5>
@@ -158,19 +117,33 @@
                             <table class="table">
                                 <thead>
                                     <tr>
-                                        <th>Subasta</th>
-                                        <th>Fecha de Fin</th>
-                                        <th>Precio Inicial</th>
-                                        <th>Pujado</th>
+                                        <th>Artículo</th>
+                                        <th>Estado</th>
+                                        <th>Precio / Ofertas</th>
+                                        <th>Acciones</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <!-- Recorremos las subastas en las que el usuario ha pujado -->
-                                    <tr th:each="subasta : ${subastas}">
-                                        <td th:text="${subasta.nombre}">Nombre de la Subasta</td>
-                                        <td th:text="${subasta.fechaFin}">Fecha de Fin</td>
-                                        <td th:text="${subasta.precioInicial}">Precio Inicial</td>
-                                        <td th:text="${subasta.dineroPujado}">Dinero Pujado</td>
+                                    <!-- Objeto Activo -->
+                                    <tr>
+                                        <td>Cámara DSLR - Canon</td>
+                                        <td><span class="badge bg-primary">Activo</span></td>
+                                        <td>Ofertas: 5</td>
+                                        <td><button class="btn btn-info btn-sm">Ver detalles</button></td>
+                                    </tr>
+                                    <!-- Objeto Comprado -->
+                                    <tr>
+                                        <td>Smart TV Samsung</td>
+                                        <td><span class="badge bg-success">Comprado</span></td>
+                                        <td>$750</td>
+                                        <td></td>
+                                    </tr>
+                                    <!-- Objeto en Favoritos -->
+                                    <tr>
+                                        <td>Bicicleta de Montaña</td>
+                                        <td><span class="badge bg-warning">Favorito</span></td>
+                                        <td></td>
+                                        <td><button class="btn btn-danger btn-sm">Quitar de favoritos</button></td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -312,13 +285,7 @@
 
     <th:block th:replace="~{fragments/footer.html :: footer}" />
 
-    <input type="hidden" id="userId" value="${user.id}" />
-
-    <!-- Importar el script de JavaScript -->
-    <script src="/js/user-subastas.js"></script>
-
+    <script th:src="@{/js/ajax-demo.js}"></script>
 </body>
 
 </html>
-
-
