@@ -21,6 +21,7 @@ En la vista de perfil, el usuario podrá visualizar:
 -  Funcionalidad para habilitar y deshabilitar subastas desde una cuenta de administrador.
 -  Listado dinámico de subastas creadas y en las que se está participando en la vista de usuario
 -  Edición de perfil
+-  Edición de subastas una vez creadas
 
 ### Aún por implementar:
 
