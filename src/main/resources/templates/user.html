@@ -17,7 +17,6 @@
     <header th:replace="~{fragments/nav.html :: nav}"></header>
 
     <main class="flex-shrink-0">
-
         <div class="container-fluid my-5">
             <div class="row">
                 <!-- Perfil del Usuario -->
@@ -25,70 +24,53 @@
                     <!-- Tarjeta de Perfil -->
                     <div class="card mb-3">
                         <div class="card-body text-center">
-                            <img th:src="@{/user/{id}/pic(id=${u.id})}" class="rounded-circle mb-3" alt="Foto de perfil"
-                                width="150">
+                            <img th:src="@{/user/{id}/pic(id=${u.id})}" class="rounded-circle mb-3" alt="Foto de perfil" width="150">
                             <h5 class="card-title" th:text="${user.firstName + ' ' + user.lastName}">Juan Pérez</h5>
                             <p><strong>Calificación:</strong> ⭐⭐⭐⭐☆</p>
-                            <!-- Button trigger modal -->
-                            <button id="btnEditPerfil" type="button" class="btn btn-primary" data-bs-toggle="modal"
-                                data-bs-target="#modalEditarPerfil">
+
+                            <!-- Botón para abrir modal -->
+                            <button id="btnEditPerfil" type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalEditarPerfil">
                                 Editar perfil
                                 <i class="bi bi-pencil"></i>
                             </button>
 
                             <!-- Modal -->
-                            <div class="modal fade" id="modalEditarPerfil" tabindex="-1"
-                                aria-labelledby="modalEditarPerfilLabel" aria-hidden="true">
+                            <div class="modal fade" id="modalEditarPerfil" tabindex="-1" aria-labelledby="modalEditarPerfilLabel" aria-hidden="true">
                                 <div class="modal-dialog">
                                     <div class="modal-content">
                                         <div class="modal-header">
-                                            <h1 class="modal-title fs-5 fw-bold" id="modalEditarPerfilLabel"
-                                                th:text="${'Editar perfil de ' + user.username}">Editar perfil</h1>
-                                            <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                                aria-label="Close"></button>
+                                            <h1 class="modal-title fs-5 fw-bold" id="modalEditarPerfilLabel" th:text="${'Editar perfil de ' + user.username}">Editar perfil</h1>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                         </div>
                                         <div class="modal-body text-start">
-                                            <form th:object="${edited}" th:action="@{'/user/' + ${user.id}}"
-                                                method="post" enctype="multipart/form-data">
+                                            <form th:object="${edited}" th:action="@{'/user/' + ${user.id}}" method="post" enctype="multipart/form-data">
                                                 <div class="mb-3">
                                                     <label for="photo" class="form-label">Foto de perfil</label>
                                                     <input class="form-control" type="file" name="photo" id="photo">
                                                 </div>
                                                 <div class="mb-3">
                                                     <label for="username" class="form-label">Nombre de usuario</label>
-                                                    <input type="text" name="username" id="editUsername"
-                                                        th:value="${user.username}" class="form-control" required>
+                                                    <input type="text" name="username" id="editUsername" th:value="${user.username}" class="form-control" required>
                                                 </div>
                                                 <div class="mb-3">
                                                     <label for="firstName" class="form-label">Nombre</label>
-                                                    <input type="text" name="firstName" id="editFirstName"
-                                                        th:value="${user.firstName}" class="form-control" required>
+                                                    <input type="text" name="firstName" id="editFirstName" th:value="${user.firstName}" class="form-control" required>
                                                 </div>
                                                 <div class="mb-3">
                                                     <label for="lastName" class="form-label">Apellidos</label>
-                                                    <input type="text" name="lastName" id="editLastName"
-                                                        th:value="${user.lastName}" class="form-control" required>
+                                                    <input type="text" name="lastName" id="editLastName" th:value="${user.lastName}" class="form-control" required>
                                                 </div>
                                                 <div class="mb-3">
                                                     <label for="password" class="form-label">Contraseña</label>
-                                                    <input type="password" name="pass2" id="editPassword"
-                                                        class="form-control" required>
+                                                    <input type="password" name="pass2" id="editPassword" class="form-control" required>
                                                 </div>
-                                                <!-- <div class="mb-3">
-                                                    <label for="availableMoney" class="form-label">Apellidos</label>
-                                                    <input type="number" name="availableMoney" id="editAvailableMoney"
-                                                        th:value="${user.availableMoney + '€' or '0€'}" class="form-control">
-                                                </div> -->
-                                                <mb-3>
-                                                    <button type="submit" class="btn btn-primary w-100">Actualizar
-                                                        perfil</button>
-                                                </mb-3>
+                                                <div class="mb-3">
+                                                    <button type="submit" class="btn btn-primary w-100">Actualizar perfil</button>
+                                                </div>
                                             </form>
                                         </div>
                                         <div class="modal-footer">
-                                            <button type="button" class="btn btn-secondary"
-                                                data-bs-dismiss="modal">Cerrar</button>
-                                            <!-- <button type="button" class="btn btn-primary">Save changes</button> -->
+                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
                                         </div>
                                     </div>
                                 </div>
@@ -100,55 +82,44 @@
                     <div class="card">
                         <div class="card-body text-center">
                             <h5 class="card-title">Saldo Disponible</h5>
-                            <p class="display-4 text-success fw-bold" th:text="${user.availableMoney + '€'}">$1,250.00
-                            </p>
+                            <p class="display-4 text-success fw-bold" th:text="${user.availableMoney + '€'}">$1,250.00</p>
                         </div>
                     </div>
                 </div>
 
-
-                <!-- Información del Usuario -->
-                <div class="col-lg-7">
-                    <div class="card mb-4">
-                        <div class="card-header">
-                            <h5>Resumen de Actividad</h5>
-                        </div>
-                        <div class="card-body">
-                            <table class="table">
-                                <thead>
-                                    <tr>
-                                        <th>Artículo</th>
-                                        <th>Estado</th>
-                                        <th>Precio / Ofertas</th>
-                                        <th>Acciones</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <!-- Objeto Activo -->
-                                    <tr>
-                                        <td>Cámara DSLR - Canon</td>
-                                        <td><span class="badge bg-primary">Activo</span></td>
-                                        <td>Ofertas: 5</td>
-                                        <td><button class="btn btn-info btn-sm">Ver detalles</button></td>
-                                    </tr>
-                                    <!-- Objeto Comprado -->
-                                    <tr>
-                                        <td>Smart TV Samsung</td>
-                                        <td><span class="badge bg-success">Comprado</span></td>
-                                        <td>$750</td>
-                                        <td></td>
-                                    </tr>
-                                    <!-- Objeto en Favoritos -->
-                                    <tr>
-                                        <td>Bicicleta de Montaña</td>
-                                        <td><span class="badge bg-warning">Favorito</span></td>
-                                        <td></td>
-                                        <td><button class="btn btn-danger btn-sm">Quitar de favoritos</button></td>
-                                    </tr>
-                                </tbody>
-                            </table>
+                                <!-- Información del Usuario -->
+                    <div class="col-lg-7">
+                        <div class="card mb-4">
+                            <div class="card-header">
+                                <h5>Resumen de Actividad</h5>
+                            </div>
+                            <div class="card-body">
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <th>Subasta</th>
+                                            <th>Fecha de Fin</th>
+                                            <th>Precio Inicial</th>
+                                            <th>Pujado</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <!-- Itera sobre las subastas -->
+                                        <tr th:each="subastasPujadas : ${subastasPujadas}" th:if="${subastasPujadas != null }">
+                                            <td th:text="${subastasPujadas.nombre}">Nombre de la Subasta</td>
+                                            <td th:text="${subastasPujadas.fechaFin}">Fecha de Fin</td>
+                                            <td th:text="${subastasPujadas.precio}">Precio Inicial</td>
+                                            <td th:text="${subastasPujadas.precioActual}">Pujado</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                     </div>
+
+
+
+
                     <div th:if="${subastas != null}" class="card mb-4">
                         <div class="card-header">
                             <h5>Subastas creadas por mí</h5>
@@ -167,107 +138,66 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-
                                     <th:block th:each="bid : ${subastas}">
                                         <tr>
                                             <td>
-                                                <img th:src="@{/products/{id}/pic(id=${bid.id})}"
-                                                    class="border border-white rounded" alt="Imagen objeto" width="100"
-                                                    height="100">
+                                                <img th:src="@{/products/{id}/pic(id=${bid.id})}" class="border border-white rounded" alt="Imagen objeto" width="100" height="100">
                                             </td>
-                                            <td>
-                                                <p th:text="${bid.nombre}"></p>
-                                            </td>
-                                            <td>
-                                                <p th:text="${bid.descripcion}"></p>
-                                            </td>
+                                            <td><p th:text="${bid.nombre}"></p></td>
+                                            <td><p th:text="${bid.descripcion}"></p></td>
                                             <td>
                                                 <p>Precio inicial: <span th:text="${bid.precio}">0</span>€</p>
                                                 <p>Precio actual: <span th:text="${bid.precioActual}">0</span>€</p>
                                             </td>
                                             <td>
-                                                <p>Fecha de inicio: <span
-                                                        th:text="${#temporals.format(bid.fechaInicio, 'dd/MM/yyyy - HH:mm:ss')}"></span>
-                                                </p>
-                                                <p>Precio de fin: <span
-                                                        th:text="${#temporals.format(bid.fechaFin, 'dd/MM/yyyy - HH:mm:ss')}"></span>
-                                                </p>
+                                                <p>Fecha de inicio: <span th:text="${#temporals.format(bid.fechaInicio, 'dd/MM/yyyy - HH:mm:ss')}"></span></p>
+                                                <p>Precio de fin: <span th:text="${#temporals.format(bid.fechaFin, 'dd/MM/yyyy - HH:mm:ss')}"></span></p>
                                             </td>
                                             <td>
-                                                <p th:if="${bid.enabled == true}"
-                                                    class="badge text-bg-success text-uppercase">Activa</p>
-                                                <p th:if="${bid.enabled == false}"
-                                                    class="badge text-bg-danger text-uppercase">No disponible</p>
+                                                <p th:if="${bid.enabled == true}" class="badge text-bg-success text-uppercase">Activa</p>
+                                                <p th:if="${bid.enabled == false}" class="badge text-bg-danger text-uppercase">No disponible</p>
                                             </td>
                                             <td>
-                                                <button type="button" class="btn btn-info"
-                                                    th:disabled="${bid.enabled == false}" th:data-id="${bid.id}"
-                                                    data-bs-toggle="modal"
-                                                    data-bs-target="#modalEditarSubasta">Editar</button>
+                                                <button type="button" class="btn btn-info" th:disabled="${bid.enabled == false}" th:data-id="${bid.id}" data-bs-toggle="modal" data-bs-target="#modalEditarSubasta">Editar</button>
                                             </td>
                                         </tr>
-                                        <!-- Modal -->
-                                        <div class="modal fade" id="modalEditarSubasta" tabindex="-1"
-                                            aria-labelledby="modalEditarSubastaLabel" aria-hidden="true">
+
+                                        <!-- Modal editar subasta -->
+                                        <div class="modal fade" id="modalEditarSubasta" tabindex="-1" aria-labelledby="modalEditarSubastaLabel" aria-hidden="true">
                                             <div class="modal-dialog">
                                                 <div class="modal-content">
                                                     <div class="modal-header">
-                                                        <h1 class="modal-title fs-5 fw-bold"
-                                                            id="modalEditarSubastaLabel">Editar
-                                                            subasta</h1>
-                                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                                            aria-label="Close"></button>
+                                                        <h1 class="modal-title fs-5 fw-bold" id="modalEditarSubastaLabel">Editar subasta</h1>
+                                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                                     </div>
                                                     <div class="modal-body text-start">
-                                                        <form th:object="${product}"
-                                                            th:action="@{'/products/' + ${bid.id}}" method="post"
-                                                            enctype="multipart/form-data">
+                                                        <form th:object="${product}" th:action="@{'/products/' + ${bid.id}}" method="post" enctype="multipart/form-data">
                                                             <input type="hidden" name="id" th:value="${bid.id}">
                                                             <input type="hidden" name="precio" th:value="${bid.precio}">
                                                             <input type="hidden" name="precioActual" th:value="${bid.precioActual}">
                                                             <div class="mb-3">
-                                                                <label for="photo" class="form-label">Foto de
-                                                                    objeto</label>
-                                                                <input class="form-control" type="file" name="photo"
-                                                                    id="photo">
+                                                                <label for="photo" class="form-label">Foto de objeto</label>
+                                                                <input class="form-control" type="file" name="photo" id="photo">
                                                             </div>
                                                             <div class="mb-3">
                                                                 <label for="nombre" class="form-label">Nombre</label>
-                                                                <input type="text" name="nombre" id="editNombreSubasta"
-                                                                    th:value="${bid.nombre}" class="form-control"
-                                                                    required>
+                                                                <input type="text" name="nombre" id="editNombreSubasta" th:value="${bid.nombre}" class="form-control" required>
                                                             </div>
                                                             <div class="mb-3">
-                                                                <label for="descripcion"
-                                                                    class="form-label">Descripción</label>
-                                                                <input type="text" name="descripcion" id="editdescripcion"
-                                                                    th:value="${bid.descripcion}" class="form-control"
-                                                                    required>
+                                                                <label for="descripcion" class="form-label">Descripción</label>
+                                                                <input type="text" name="descripcion" id="editdescripcion" th:value="${bid.descripcion}" class="form-control" required>
                                                             </div>
                                                             <div class="mb-3">
-                                                                <label for="nuevaFechaFin" class="form-label">Fecha de
-                                                                    fin</label>
-                                                                <input type="date" name="nuevaFechaFin" id="editnuevaFechaFin"
-                                                                th:value="${#temporals.format(bid.fechaFin, 'yyyy-MM-dd')}" class="form-control"
-                                                                    required>
+                                                                <label for="nuevaFechaFin" class="form-label">Fecha de fin</label>
+                                                                <input type="date" name="nuevaFechaFin" id="editnuevaFechaFin" th:value="${#temporals.format(bid.fechaFin, 'yyyy-MM-dd')}" class="form-control" required>
                                                             </div>
-
-                                                            <!-- <div class="mb-3">
-                                                    <label for="availableMoney" class="form-label">Apellidos</label>
-                                                    <input type="number" name="availableMoney" id="editAvailableMoney"
-                                                        th:value="${user.availableMoney + '€' or '0€'}" class="form-control">
-                                                </div> -->
-                                                            <mb-3>
-                                                                <button type="submit"
-                                                                    class="btn btn-primary w-100">Actualizar
-                                                                    perfil</button>
-                                                            </mb-3>
+                                                            <div class="mb-3">
+                                                                <button type="submit" class="btn btn-primary w-100">Actualizar perfil</button>
+                                                            </div>
                                                         </form>
                                                     </div>
                                                     <div class="modal-footer">
-                                                        <button type="button" class="btn btn-secondary"
-                                                            data-bs-dismiss="modal">Cerrar</button>
-                                                        <!-- <button type="button" class="btn btn-primary">Save changes</button> -->
+                                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
                                                     </div>
                                                 </div>
                                             </div>
@@ -278,13 +208,11 @@
                         </div>
                     </div>
                 </div>
-
             </div>
         </div>
     </main>
 
     <th:block th:replace="~{fragments/footer.html :: footer}" />
-
     <script th:src="@{/js/ajax-demo.js}"></script>
 </body>
 

@@ -23,4 +23,7 @@ public class ProductDTO {
     private double precioActual;
     private double precio;
     private String nombre;
+    private double precioInicial;
+    private double dineroPujado; 
+    private boolean usuarioHaPujado; 
 }

@@ -109,4 +109,33 @@ public class ProductServiceImpl implements ProductService {
         subastaRepository.save(subasta);
     }
 
+    @Override
+    public List<ProductDTO> obtenerSubastasPujadasPorUsuario(Long userId) {
+        List<Subasta> subastas = subastaRepository.findSubastasByUserId(userId); // Obtén las subastas en las que el usuario ha pujado
+        
+            return subastas.stream()
+        .map(subasta -> new ProductDTO(
+            subasta.getId(),
+            subasta.getCreador().getId(),
+            subasta.getCreador().getUsername(),
+            subasta.getFechaInicio(),
+            subasta.getFechaFin(),
+            subasta.isEnabled(),
+            subasta.getRutaImagen(),
+            subasta.getDescripcion(),
+            subasta.getPrecio(), // precioActual
+            subasta.getPrecio(), // precio
+            subasta.getNombre(), // nombre (estaba fuera de lugar)
+            subasta.getPrecioInicial(), // ahora en el lugar correcto
+            subasta.getPujas().stream()
+                .filter(puja -> puja.getUser().getId() == userId)
+                .mapToDouble(puja -> puja.getDineroPujado())
+                .sum(),
+            true // usuarioHaPujado
+        ))
+        .collect(Collectors.toList());
+
+    }
+    
+
 }

@@ -133,6 +133,10 @@ public class UserController {
                             || subasta.getFechaFin().isAfter(LocalDateTime.now()));
             subasta.setEnabled(isEnabled);
         });
+
+        //subastas en las que ha pujado
+        List<Subasta> subastasPujadas = subastaRepository.findSubastasByUserId(id);
+        model.addAttribute("subastasPujadas", subastasPujadas.isEmpty() ? null : subastasPujadas);
         model.addAttribute("subastas", listaSubastas.isEmpty() ? null : listaSubastas);
         return "user";
     }
