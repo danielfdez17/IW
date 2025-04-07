@@ -24,7 +24,9 @@ En la vista de perfil, el usuario podrá visualizar:
 
 ### Aún por implementar:
 
--  
+-  Vincular el historial de subastas con la base de datos
+-  Modificar el saldo al editar el perfil
+-  Corregir listado 
 
 # Estructura de Base de datos
 ![Estructura de BBDD](/bd.png)
