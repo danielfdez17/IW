@@ -2,7 +2,7 @@ Feature: hacer una puja
     Scenario: entrar en una subasta y pujar incorrectamente
 
         #Hacemos login para poder pujar
-        Given call read('login.feature@login_a')
+        # Given call read('login.feature@login_a')
         #Nos vamos a la vista de uno de los productos
         And driver baseUrl + '/products/3' 
         #Pujamos con un precio inferior al actual
