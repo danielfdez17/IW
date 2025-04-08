@@ -1,6 +1,10 @@
 package es.ucm.fdi.iw.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
@@ -10,6 +14,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.io.BufferedInputStream;
@@ -22,6 +27,10 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.Objects;
+
+import java.time.format.DateTimeFormatter;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
@@ -86,15 +95,20 @@ public class DetailProductController {
         
 
         if (puja.compareTo(producto.getPrecio()) > 0) {
-
             producto.setPrecioActual(puja);
-            productService.updateProduct(producto);
+            User usuario = (User) session.getAttribute("u");
+            producto.setMaximoPujador(usuario.getUsername());
+            productService.updateProduct(producto); 
             producto.setUsuarioHaPujado(true);
-            // return ResponseEntity.ok("Puja realizada con éxito. Nuevo precio: €" + puja);
-        }
+
+            sendProductUpdateToWebSocket(producto); 
+        } 
         return "redirect:/products/" + id;
-        // return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("La puja debe ser
-        // mayor al precio actual.");
+    }
+    @Autowired
+    private SimpMessagingTemplate messagingTemplate;
+    private void sendProductUpdateToWebSocket(ProductDTO producto) {
+        messagingTemplate.convertAndSend("/topic/product-updates/" + producto.getId(), producto);
     }
 
     @PostMapping("/nueva_subasta")
@@ -106,6 +120,13 @@ public class DetailProductController {
             @RequestParam(required = false) MultipartFile photo) throws Exception {
         User creador = (User) session.getAttribute("u");
 
+        LocalDateTime fechaInicio = LocalDateTime.now();
+        //LocalDateTime fechaFin = LocalDateTime.now().plusMinutes(1); 
+        LocalDateTime fechaFin = LocalDateTime.now().plusSeconds(10);
+        //LocalDateTime fechaInicio = LocalDateTime.parse(product.getFechaInicio(), DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+        //LocalDateTime fechaFin = LocalDateTime.parse(product.getFechaFin(), DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+        // SubastaMapper.INSTANCE.createProductDTOToProductDTO(product);
+        
         ProductDTO productDTO = new ProductDTO();
         productDTO.setFechaInicio(LocalDateTimeMapper.toLocalDateTime(nuevaFechaInicio));
         productDTO.setFechaFin(LocalDateTimeMapper.toLocalDateTime(nuevaFechaFin));
@@ -137,7 +158,7 @@ public class DetailProductController {
 
         return "redirect:/index";
     }
-
+    
     /**
      * Downloads a profile pic for a user id
      * 

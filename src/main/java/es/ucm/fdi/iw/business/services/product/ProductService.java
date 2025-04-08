@@ -14,4 +14,6 @@ public interface ProductService {
     ProductDTO createSubasta(ProductDTO productDTO);
     void toggleProduct(long id, final boolean active);
     public List<ProductDTO> obtenerSubastasPujadasPorUsuario(Long userId) ;
+    void scheduleDeactivation(final long subastaId);
+    boolean isProductActive(long productId);
 }

@@ -37,13 +37,14 @@ public class Subasta {
     private boolean enabled;
 
     private String rutaImagen;
-
-    private double precioActual;
-    private double precio;
     private double precioInicial;
 
     private String descripcion;
     private String nombre;
+
+    private double precioActual;
+    private double precio;
+    private String maximoPujador;
 
     @OneToMany(mappedBy = "subasta")
     private List<Puja> pujas;
@@ -51,5 +52,4 @@ public class Subasta {
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
     private User creador;
-
 }
