@@ -99,9 +99,6 @@
                         </div>
                         <p class="row ps-3 fst-italic" th:text="${'Disponible hasta ' + obj.fechaFin}"></p>
                         <div class="btn-group-vertical w-100" role="group" aria-label="Vertical button group">
-                            <button type="button" class="btn btn-outline-light mb-1">Contactar al comprador
-                                <i class="bi bi-chat-dots text-primary"></i>
-                            </button>
                             <a th:href="@{/products/{id}(id=${obj.id})}"
                                 class="btn btn-danger fw-bolder text-uppercase fs-3">
                                 <i class="bi bi-person-raised-hand"></i>
