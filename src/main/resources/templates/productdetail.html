@@ -1,46 +1,15 @@
 <!DOCTYPE html>
 <html class="h-100" xmlns:th="http://www.thymeleaf.org">
-    
-    <head>
-        <th:block th:replace="~{fragments/head :: header}" />
-        <title>Detalle del Producto | ¡Barato Barato!</title>
-        <link rel="stylesheet" th:href="@{/css/chatvendedor.css}">
-        <script src="https://cdn.jsdelivr.net/npm/stompjs@2.3.3/lib/stomp.min.js"></script>
-    </head>
 
-    <body class="d-flex flex-column h-100">
-        <header th:replace="~{fragments/nav.html :: nav}"></header>
-  
-        <main class="container py-5">
-            <div class="card shadow-sm">
-                <div class="card-header bg-primary text-white">
-                    <h3 class="mb-0 text-center text-uppercase" th:text="${producto.nombre}">Reloj Vintage</h3>
-                </div>
-                <div class="card-body">
-                    <div class="row">
-                        <div class="col-md-6">
-                            <img th:src="@{/img/reloj.jpeg}" class="img-fluid rounded" alt="Producto">
-                        </div>
-                        <div class="col-md-6">
-                            <h5 class="text-muted">Descripción</h5>
-                            <p th:text="${producto.descripcion}">Descripción del producto.</p>
-                            
-                            <h5 class="text-muted">Precio</h5>
-                            <p class="fs-4 text-success fw-bold mb-3">
-                                Inicial: <span th:text="'€' + ${producto.precio}">€0.00</span>
-                            </p>
-                            <p class="fs-4 text-success fw-bold">
-                                Actual: <span id="precio-actual" th:text="'€' + ${producto.precioActual}">€0.00</span>
-                            </p>
+<head>
+    <th:block th:replace="~{fragments/head :: header}" />
+    <title>Detalle del Producto | ¡Barato Barato!</title>
+    <link rel="stylesheet" th:href="@{/css/chatvendedor.css}">
+    <script src="https://cdn.jsdelivr.net/npm/stompjs@2.3.3/lib/stomp.min.js"></script>
+</head>
 
-                            <h5 class="text-muted">Estado de la puja</h5>
-                            <p id="estado-producto" class="fs-4 fw-bold"
-                            th:text="${producto.enabled} ? 'En curso' : 'Finalizada'"
-                            th:classappend="${producto.enabled} ? 'text-success' : 'text-danger'">
-                            </p>
-
-                            <h5 class="text-muted">Mejor postor</h5>
-                            <p id="mejor-postor" class="fs-4 fw-bold" th:text="${producto.maximoPujador} ?: 'Sin pujas aún'">Sin pujas aún</p>
+<body class="d-flex flex-column h-100">
+    <header th:replace="~{fragments/nav.html :: nav}"></header>
 
     <main class="container py-5">
         <div class="card shadow-sm">
@@ -50,42 +19,47 @@
             <div class="card-body">
                 <div class="row">
                     <div class="col-md-6">
-                        <img th:src="@{/products/{id}/pic(id=${producto.id})}" width="500" height="500" class="img-fluid rounded" alt="Producto">
+                        <img th:src="@{/products/{id}/pic(id=${producto.id})}" width="500" height="500"
+                            class="img-fluid rounded" alt="Producto">
                     </div>
                     <div class="col-md-6">
                         <h5 class="text-muted">Descripción</h5>
                         <p th:text="${producto.descripcion}">Descripción del producto.</p>
                         <h5 class="text-muted">Precio inicial</h5>
                         <p class="fs-4 text-success fw-bold" th:text="'€' + ${producto.precio}">€0.00</p>
-                        
+
                         <h5 class="text-muted">Precio actual</h5>
-                        <p id="precio-actual" class="fs-4 text-success fw-bold" th:text="'€' + ${producto.precioActual}">€0.00
+                        <p id="precio-actual" class="fs-4 text-success fw-bold"
+                            th:text="'€' + ${producto.precioActual}">€0.00
                         </p>
                         <!-- Chat con el vendedor -->
-                         <p class="fs-3"> Chat con el vendedor 
-                             <a class="text-decoration-none text-primary" th:href="@{|/chat?userChatNew=${producto.creadorUsername}|} "><i class="bi bi-chat-dots-fill"></i></a>
-                         </p>
-                            <!-- Chat con el vendedor -->
-                            <p class="fs-3"> Chat con el vendedor 
-                                <a class="text-decoration-none text-primary" th:href="@{|/chat?userChatNew=${producto.creadorUsername}|} "><i class="bi bi-chat-dots-fill"></i></a>
-                            </p>
+                        <p class="fs-3"> Chat con el vendedor
+                            <a class="text-decoration-none text-primary"
+                                th:href="@{|/chat?userChatNew=${producto.creadorUsername}|} "><i
+                                    class="bi bi-chat-dots-fill"></i></a>
+                        </p>
 
-                            <div th:if="${producto.enabled}">
-                                <form id="formPujar" th:action="@{'/products/' + ${producto.id} + '/pujar'}" method="post">
-                                    <input type="hidden" name="_csrf" value="${_csrf.token}">
-                                    <div class="mb-3">
-                                        <label for="nuevaPuja" class="form-label">Tu Puja</label>
-                                        <input type="number" class="form-control" id="nuevaPuja" name="puja" step="1.00" min="0" required>
-                                    </div>
-                                    <button type="submit" class="btn btn-success">Pujar</button>
-                                    <button type="button" class="btn btn-outline-primary fw-bolder" onclick="subirPuja(1)">+1 €</button>
-                                    <button type="button" class="btn btn-outline-primary fw-bolder" onclick="subirPuja(5)">+5 €</button>
-                                    <button type="button" class="btn btn-outline-primary fw-bolder" onclick="subirPuja(50)">+50 €</button>
-                                    <button type="button" class="btn btn-outline-primary fw-bolder" onclick="subirPuja(100)">+100 €</button>
-                                </form>
-                            </div>
-                            
-                            <!--/*  
+                        <div th:if="${producto.enabled}">
+                            <form id="formPujar" th:action="@{'/products/' + ${producto.id} + '/pujar'}" method="post">
+                                <input type="hidden" name="_csrf" value="${_csrf.token}">
+                                <div class="mb-3">
+                                    <label for="nuevaPuja" class="form-label">Tu Puja</label>
+                                    <input type="number" th:value="${producto.precioActual}" class="form-control" id="nuevaPuja" name="puja" step="1.00"
+                                        min="0" required>
+                                </div>
+                                <button type="submit" class="btn btn-success">Pujar</button>
+                                <button type="button" class="btn btn-outline-primary fw-bolder"
+                                    onclick="subirPuja(1)">+1 €</button>
+                                <button type="button" class="btn btn-outline-primary fw-bolder"
+                                    onclick="subirPuja(5)">+5 €</button>
+                                <button type="button" class="btn btn-outline-primary fw-bolder"
+                                    onclick="subirPuja(50)">+50 €</button>
+                                <button type="button" class="btn btn-outline-primary fw-bolder"
+                                    onclick="subirPuja(100)">+100 €</button>
+                            </form>
+                        </div>
+
+                        <!--/*  
                             <div th:if="${!producto.enabled}">
                                 <div class="alert alert-warning mt-3">
                                     <h5 class="text-danger mb-3">Puja finalizada</h5>
@@ -97,36 +71,37 @@
                             </div>
                             */-->
 
-                                <div id="mensaje-puja" class="mt-3"></div>
-                            </div>
-                        </div>
+                        <div id="mensaje-puja" class="mt-3"></div>
                     </div>
                 </div>
-        </main>
+            </div>
+        </div>
+    </main>
 
-        <th:block th:replace="~{fragments/footer.html :: footer}" />
-            
-        <script th:src="@{/js/productdetail.js}"></script>
+    <th:block th:replace="~{fragments/footer.html :: footer}" />
 
-        <script>
-            const productoId = window.location.pathname.split("/").pop();
+    <script th:src="@{/js/productdetail.js}"></script>
 
-            function suscribirmeProductoConIntervalo() {
-                const intervalo = setInterval(() => {
-                    if (ws.stompClient && ws.stompClient.connected) {
-                        ws.stompClient.subscribe("/topic/product-updates/" + productoId, function(message) {
-                            location.reload();  // Recarga la página actual
-                        });
-                        clearInterval(intervalo); // Deja de intentar una vez suscrito
-                    }
-                }, 1000);
-            }
+    <script>
+        const productoId = window.location.pathname.split("/").pop();
 
-            document.addEventListener("DOMContentLoaded", function() {
-                suscribirmeProductoConIntervalo();
-            });
-        </script>
+        function suscribirmeProductoConIntervalo () {
+            const intervalo = setInterval(() => {
+                if (ws.stompClient && ws.stompClient.connected) {
+                    ws.stompClient.subscribe("/topic/product-updates/" + productoId, function (message) {
+                        location.reload();  // Recarga la página actual
+                    });
+                    clearInterval(intervalo); // Deja de intentar una vez suscrito
+                }
+            }, 1000);
+        }
 
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    </body>
+        document.addEventListener("DOMContentLoaded", function () {
+            suscribirmeProductoConIntervalo();
+        });
+    </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+
 </html>

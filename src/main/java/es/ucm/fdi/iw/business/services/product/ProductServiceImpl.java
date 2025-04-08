@@ -30,7 +30,7 @@ public class ProductServiceImpl implements ProductService {
     private final SubastaRepository subastaRepository;
     private EntityManager entityManager;
     private final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
-    
+
     @PersistenceContext
     public void setEntityManager(EntityManager em) {
         this.entityManager = em;
@@ -41,13 +41,12 @@ public class ProductServiceImpl implements ProductService {
         this.subastaRepository = subastaRepository;
     }
 
-
     public void programarDesactivacion(Subasta subasta) {
         LocalDateTime ahora = LocalDateTime.now();
         LocalDateTime fechaFin = subasta.getFechaFin();
 
         long delay = Duration.between(ahora, fechaFin).toMillis();
-        if (delay <= 0) { // Si la fecha ya ha pasado desactivar 
+        if (delay <= 0) { // Si la fecha ya ha pasado desactivar
             scheduleDeactivation(subasta.getId());
         } else { // Programar la desactivacion
             scheduler.schedule(() -> scheduleDeactivation(subasta.getId()), delay, TimeUnit.MILLISECONDS);
@@ -87,7 +86,7 @@ public class ProductServiceImpl implements ProductService {
         subasta.setMaximoPujador(producto.getMaximoPujador());
         subasta.setEnabled(producto.isEnabled());
 
-        subastaRepository.save(subasta);  
+        subastaRepository.save(subasta);
     }
 
     @Override
@@ -119,7 +118,7 @@ public class ProductServiceImpl implements ProductService {
 
         this.entityManager.persist(subasta);
         this.entityManager.flush();
-        
+
         programarDesactivacion(subasta);
 
         return SubastaMapper.INSTANCE.subastaToProductDTO(subasta);
@@ -128,18 +127,18 @@ public class ProductServiceImpl implements ProductService {
     @Autowired
     private SimpMessagingTemplate messagingTemplate;
 
-    public  void scheduleDeactivation(long subastaId) {
+    public void scheduleDeactivation(long subastaId) {
         Subasta subasta = subastaRepository.findById(subastaId).orElse(null);
         if (subasta != null && subasta.isEnabled()) {
             subasta.setEnabled(false);
             subastaRepository.save(subasta);
-            //System.out.println("Subasta con ID " + subastaId + " ha sido desactivada automáticamente.");
+            // System.out.println("Subasta con ID " + subastaId + " ha sido desactivada
+            // automáticamente.");
 
             ProductDTO productDTO = SubastaMapper.INSTANCE.subastaToProductDTO(subasta);
             messagingTemplate.convertAndSend("/topic/product-updates/" + subastaId, productDTO);
         }
     }
-    
 
     @Override
     @Transactional
@@ -152,37 +151,37 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public List<ProductDTO> obtenerSubastasPujadasPorUsuario(Long userId) {
-        List<Subasta> subastas = subastaRepository.findSubastasByUserId(userId); // Obtén las subastas en las que el usuario ha pujado
-        
-            return subastas.stream()
-        .map(subasta -> new ProductDTO(
-            subasta.getId(),
-            subasta.getCreador().getId(),
-            subasta.getCreador().getUsername(),
-            subasta.getFechaInicio(),
-            subasta.getFechaFin(),
-            subasta.isEnabled(),
-            subasta.getRutaImagen(),
-            subasta.getDescripcion(),
-            subasta.getPrecio(), // precioActual
-            subasta.getPrecio(), // precio
-            subasta.getNombre(), // nombre (estaba fuera de lugar)
-            subasta.getPrecioInicial(), // ahora en el lugar correcto
-            subasta.getPujas().stream()
-                .filter(puja -> puja.getUser().getId() == userId)
-                .mapToDouble(puja -> puja.getDineroPujado())
-                .sum(),
-            true // usuarioHaPujado
-        ))
-        .collect(Collectors.toList());
+        List<Subasta> subastas = subastaRepository.findSubastasByUserId(userId); // Obtén las subastas en las que el
+                                                                                 // usuario ha pujado
+
+        return subastas.stream()
+                .map(subasta -> ProductDTO.builder()
+                        .id(subasta.getId())
+                        .creadorUserId(subasta.getCreador().getId())
+                        .creadorUsername(subasta.getCreador().getUsername())
+                        .fechaInicio(subasta.getFechaInicio())
+                        .fechaFin(subasta.getFechaFin())
+                        .enabled(subasta.isEnabled())
+                        .rutaImagen(subasta.getRutaImagen())
+                        .descripcion(subasta.getDescripcion())
+                        .precioActual(subasta.getPrecioActual())
+                        .precio(subasta.getPrecio())
+                        .nombre(subasta.getNombre())
+                        .precioInicial(subasta.getPrecioInicial())
+                        .dineroPujado(subasta.getPujas().stream()
+                                .filter(puja -> puja.getUser().getId() == userId)
+                                .mapToDouble(puja -> puja.getDineroPujado())
+                                .sum())
+                        .usuarioHaPujado(true)
+                        .build())
+                .toList();
 
     }
-    
 
     public boolean isProductActive(long subastaId) {
         Subasta subasta = subastaRepository.findById(subastaId).orElse(null);
         if (subasta != null) {
-            return subasta.isEnabled();  // Retorna si la subasta está activa o no
+            return subasta.isEnabled(); // Retorna si la subasta está activa o no
         }
         return false;
     }
