@@ -3,7 +3,6 @@
 <head>
     <th:block th:replace="~{fragments/head :: header}" />
     <title>Dejar Reseña | ¡Barato Barato!</title>
-    <link rel="stylesheet" th:href="@{/css/custom.css}">
     <link rel="stylesheet" th:href="@{/css/reviews.css}">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
@@ -20,13 +19,14 @@
             <div class="card-body">
                 <div class="row">
                     <div class="col-md-6">
-                        <img th:src="@{/img/reloj.jpeg}" class="img-fluid rounded" alt="Producto">
+                        <img th:src="@{/products/{id}/pic(id=${producto.id})}" width="500" height="500"
+                            class="img-fluid rounded" alt="Producto">
                     </div>
                     <div class="col-md-6">
                         <h5 class="text-muted">Descripción</h5>
                         <p th:text="${producto.descripcion}">Descripción del producto.</p>
                         <h5 class="text-muted">Precio</h5>
-                        <p class="fs-4 text-success fw-bold" th:text="'€' + ${producto.precio}">€0.00</p>
+                        <p class="fs-4 text-success fw-bold" th:text="${producto.precio} + '€'">€0.00</p>
 
                         <div class="review-section mt-4">
                             <form method="post"> 
@@ -67,7 +67,6 @@
                 </div>
             </div>
             <div class="card-footer text-end">
-                <a href="#" class="btn btn-success">Pujar</a>
             </div>
         </div>
     </main>
