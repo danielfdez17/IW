@@ -359,4 +359,14 @@ public class UserController {
         messagingTemplate.convertAndSend("/user/" + u.getUsername() + "/queue/updates", json);
         return "{\"result\": \"message sent.\"}";
     }
+
+    @PostMapping("/{id}/addMoney")
+    @Transactional
+    public String addMoney(@PathVariable long id, @RequestParam double amount) {
+        User u = entityManager.find(User.class, id);
+        if (u != null) {
+            u.setAvailableMoney(u.getAvailableMoney() + amount);
+        }
+        return "redirect:/user/" + id;
+    }
 }
