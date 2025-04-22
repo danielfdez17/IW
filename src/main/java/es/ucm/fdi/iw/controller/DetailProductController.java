@@ -96,10 +96,12 @@ public class DetailProductController {
             userService.subtractMoney(userDTO.getId(), puja);
 
             producto.setPrecioActual(puja);
-            
+            User usuario = (User) session.getAttribute("u");
+            producto.setMaximoPujador(usuario.getUsername());
             productService.updateProduct(producto);
             producto.setUsuarioHaPujado(true);
-            // return ResponseEntity.ok("Puja realizada con éxito. Nuevo precio: €" + puja);
+            
+            sendProductUpdateToWebSocket(producto); 
         }
         return "redirect:/products/" + id;
     }
