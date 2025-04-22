@@ -87,22 +87,20 @@ public class DetailProductController {
         UserDTO userDTO = userService.findUserByUsername(u.getUsername());
 
         PujaDTO pujaDTO = new PujaDTO();
-        pujaDTO.setUsuarioId(userDTO.getId());
-        pujaDTO.setSubastaId(id);
-        pujaDTO.setDineroPujado(puja);
-        pujaService.updatePuja(pujaDTO);
-        userService.subtractMoney(userDTO.getId(), puja);
-        
 
         if (puja.compareTo(producto.getPrecio()) > 0) {
-            producto.setPrecioActual(puja);
-            User usuario = (User) session.getAttribute("u");
-            producto.setMaximoPujador(usuario.getUsername());
-            productService.updateProduct(producto); 
-            producto.setUsuarioHaPujado(true);
+            pujaDTO.setUsuarioId(userDTO.getId());
+            pujaDTO.setSubastaId(id);
+            pujaDTO.setDineroPujado(puja);
+            pujaService.updatePuja(pujaDTO);
+            userService.subtractMoney(userDTO.getId(), puja);
 
-            sendProductUpdateToWebSocket(producto); 
-        } 
+            producto.setPrecioActual(puja);
+            
+            productService.updateProduct(producto);
+            producto.setUsuarioHaPujado(true);
+            // return ResponseEntity.ok("Puja realizada con éxito. Nuevo precio: €" + puja);
+        }
         return "redirect:/products/" + id;
     }
     @Autowired
