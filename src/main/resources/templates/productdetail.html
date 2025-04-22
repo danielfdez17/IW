@@ -25,13 +25,24 @@
                     <div class="col-md-6">
                         <h5 class="text-muted">Descripción</h5>
                         <p th:text="${producto.descripcion}">Descripción del producto.</p>
-                        <h5 class="text-muted">Precio inicial</h5>
-                        <p class="fs-4 text-success fw-bold" th:text="${producto.precio} + '€'">€0.00</p>
-
-                        <h5 class="text-muted">Precio actual</h5>
-                        <p id="precio-actual" class="fs-4 text-success fw-bold"
-                            th:text="${producto.precioActual} + '€'">€0.00
+                            
+                        <h5 class="text-muted">Precio</h5>
+                        <p class="fs-4 text-success fw-bold mb-3">
+                            Inicial: <span th:text="'€' + ${producto.precio}">€0.00</span>
                         </p>
+                        <p class="fs-4 text-success fw-bold">
+                            Actual: <span id="precio-actual" th:text="'€' + ${producto.precioActual}">€0.00</span>
+                        </p>
+
+                        <h5 class="text-muted">Estado de la puja</h5>
+                        <p id="estado-producto" class="fs-4 fw-bold"
+                        th:text="${producto.enabled} ? 'En curso' : 'Finalizada'"
+                        th:classappend="${producto.enabled} ? 'text-success' : 'text-danger'">
+                        </p>
+
+                        <h5 class="text-muted">Mejor postor</h5>
+                        <p id="mejor-postor" class="fs-4 fw-bold" th:text="${producto.maximoPujador} ?: 'Sin pujas aún'">Sin pujas aún</p>
+
                         <!-- Chat con el vendedor -->
                         <p class="fs-3"> Chat con el vendedor
                             <a class="text-decoration-none text-primary"
