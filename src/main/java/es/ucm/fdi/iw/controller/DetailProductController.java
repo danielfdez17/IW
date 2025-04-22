@@ -88,7 +88,7 @@ public class DetailProductController {
 
         PujaDTO pujaDTO = new PujaDTO();
 
-        if (puja.compareTo(producto.getPrecio()) > 0) {
+        if (puja.compareTo(producto.getPrecioActual()) > 0) {
             pujaDTO.setUsuarioId(userDTO.getId());
             pujaDTO.setSubastaId(id);
             pujaDTO.setDineroPujado(puja);
