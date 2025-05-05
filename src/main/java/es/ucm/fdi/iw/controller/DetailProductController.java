@@ -95,11 +95,12 @@ public class DetailProductController {
             pujaService.updatePuja(pujaDTO);
             userService.subtractMoney(userDTO.getId(), puja);
 
-            producto.setPrecioActual(puja);
             User usuario = (User) session.getAttribute("u");
+            producto.setDineroPujado(id);
+            producto.setPrecioActual(puja);
             producto.setMaximoPujador(usuario.getUsername());
-            productService.updateProduct(producto);
             producto.setUsuarioHaPujado(true);
+            productService.updateProduct(producto);
             
             sendProductUpdateToWebSocket(producto); 
         }
@@ -125,8 +126,7 @@ public class DetailProductController {
         LocalDateTime fechaFin = LocalDateTime.now().plusSeconds(10);
         //LocalDateTime fechaInicio = LocalDateTime.parse(product.getFechaInicio(), DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
         //LocalDateTime fechaFin = LocalDateTime.parse(product.getFechaFin(), DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
-        // SubastaMapper.INSTANCE.createProductDTOToProductDTO(product);
-        
+       
         ProductDTO productDTO = new ProductDTO();
         productDTO.setFechaInicio(LocalDateTimeMapper.toLocalDateTime(nuevaFechaInicio));
         productDTO.setFechaFin(LocalDateTimeMapper.toLocalDateTime(nuevaFechaFin));
@@ -194,10 +194,9 @@ public class DetailProductController {
                 fout.write(photo.getBytes());
 
                 fout.close();
-
-            } catch (Exception e) {
+            } 
+            catch (Exception e) {
                 e.printStackTrace();
-
             }
         }
     }
