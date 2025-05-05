@@ -88,7 +88,26 @@
             const intervalo = setInterval(() => {
                 if (ws.stompClient && ws.stompClient.connected) {
                     ws.stompClient.subscribe("/topic/product-updates/" + productoId, function (message) {
-                        location.reload();  // Recarga la página actual
+                        console.log("Mensaje recibido:", message);
+                        try {
+                            const data = JSON.parse(message.body);
+                            console.log("Mejor postor:", data.maximoPujador);
+                            console.log("Mejor oferta:", data.precioActual);
+
+                            // Actualizar datos
+                            const precioActualElem = document.getElementById("precio-actual");
+                            if (precioActualElem) {
+                                precioActualElem.textContent = '€' + data.precioActual;
+                            }
+                            const mejorPostorElem = document.getElementById("mejor-postor");
+                            if (mejorPostorElem) {
+                                mejorPostorElem.textContent = data.maximoPujador || 'Sin pujas aún';
+                            }
+                        } 
+                        catch (error) {
+                            console.error("Error al parsear el mensaje:", error);
+                        }
+                        //location.reload();  // Recarga la página actual
                     });
                     clearInterval(intervalo); // Deja de intentar una vez suscrito
                 }
