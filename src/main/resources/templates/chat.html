@@ -10,7 +10,7 @@
 
 <body>
     <header th:replace="~{fragments/nav.html :: nav}"></header>
-    <div id="container">
+    <div id="container" th:if="${listUser.size() > 0}">
         <aside>
             <ul class="scroll"  >
                 <li th:each="user : ${listUser}">
@@ -54,6 +54,9 @@
                 <button id="btnSend" onclick="sendPrivateMessage()">enviar</button>
             </footer>
         </main>
+    </div>
+    <div th:if="${listUser.size() == 0}" class="disabled-chat">
+        <h2 class="text-center">Solo se puede chatear con usuarios que tengan subastas activas</h2>
     </div>
     <th:block th:replace="~{fragments/footer.html :: footer}" />
     <script>
