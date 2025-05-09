@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import javax.swing.text.html.parser.Entity;
+
 import org.springframework.stereotype.Service;
 import jakarta.transaction.Transactional;
 import org.springframework.util.StringUtils;
@@ -12,14 +14,19 @@ import es.ucm.fdi.iw.business.dto.UserDTO;
 import es.ucm.fdi.iw.business.mapper.UserMapper;
 import es.ucm.fdi.iw.business.model.User;
 import es.ucm.fdi.iw.business.repository.UserRepository;
+import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.persistence.PersistenceContext;
+import jakarta.servlet.http.HttpSession;
 import lombok.AllArgsConstructor;
 
 @Service
 @AllArgsConstructor
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
-
+    @PersistenceContext
+    private EntityManager entityManager;
+    
     @Transactional
     @Override
     public boolean disableUser(long id) {
@@ -73,5 +80,11 @@ public class UserServiceImpl implements UserService {
         user.setAvailableMoney(user.getAvailableMoney() - money);
         
         return money;
+    }
+
+    @Override
+    public void refreshSession(long id, HttpSession session) {
+        User updatedUser = entityManager.find(User.class, id);
+        session.setAttribute("u", updatedUser);
     }
 }

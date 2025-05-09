@@ -5623,3 +5623,27 @@ create global temporary table HTE_message(rn_ integer not null, date_read timest
 2025-03-25 13:33:52.563786+01:00 jdbc[15]: exception
 org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "HTE_IWUSER" already exists; SQL statement:
 create global temporary table HTE_iwuser(enabled boolean, rn_ integer not null, available_money float(53), id bigint, first_name varchar(255), last_name varchar(255), password varchar(255), roles varchar(255), username varchar(255), primary key (rn_)) TRANSACTIONAL [42101-232]
+2025-05-09 21:44:53.809503+02:00 jdbc[13]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Tabla "HTE_MESSAGE" ya existe
+Table "HTE_MESSAGE" already exists; SQL statement:
+create global temporary table HTE_message(rn_ integer not null, date_read timestamp(6), date_sent timestamp(6), id bigint, recipient_id bigint, sender_id bigint, text varchar(255), primary key (rn_)) TRANSACTIONAL [42101-232]
+2025-05-09 21:44:53.815517+02:00 jdbc[13]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Tabla "HTE_IWUSER" ya existe
+Table "HTE_IWUSER" already exists; SQL statement:
+create global temporary table HTE_iwuser(enabled boolean, rn_ integer not null, available_money float(53), id bigint, first_name varchar(255), last_name varchar(255), password varchar(255), roles varchar(255), username varchar(255), primary key (rn_)) TRANSACTIONAL [42101-232]
+2025-05-09 21:44:56.920265+02:00 jdbc[23]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Tabla "HTE_MESSAGE" ya existe
+Table "HTE_MESSAGE" already exists; SQL statement:
+create global temporary table HTE_message(rn_ integer not null, date_read timestamp(6), date_sent timestamp(6), id bigint, recipient_id bigint, sender_id bigint, text varchar(255), primary key (rn_)) TRANSACTIONAL [42101-232]
+2025-05-09 21:44:56.923285+02:00 jdbc[23]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Tabla "HTE_IWUSER" ya existe
+Table "HTE_IWUSER" already exists; SQL statement:
+create global temporary table HTE_iwuser(enabled boolean, rn_ integer not null, available_money float(53), id bigint, first_name varchar(255), last_name varchar(255), password varchar(255), roles varchar(255), username varchar(255), primary key (rn_)) TRANSACTIONAL [42101-232]
+2025-05-09 21:46:35.150445+02:00 jdbc[33]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Tabla "HTE_MESSAGE" ya existe
+Table "HTE_MESSAGE" already exists; SQL statement:
+create global temporary table HTE_message(rn_ integer not null, date_read timestamp(6), date_sent timestamp(6), id bigint, recipient_id bigint, sender_id bigint, text varchar(255), primary key (rn_)) TRANSACTIONAL [42101-232]
+2025-05-09 21:46:35.151449+02:00 jdbc[33]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Tabla "HTE_IWUSER" ya existe
+Table "HTE_IWUSER" already exists; SQL statement:
+create global temporary table HTE_iwuser(enabled boolean, rn_ integer not null, available_money float(53), id bigint, first_name varchar(255), last_name varchar(255), password varchar(255), roles varchar(255), username varchar(255), primary key (rn_)) TRANSACTIONAL [42101-232]

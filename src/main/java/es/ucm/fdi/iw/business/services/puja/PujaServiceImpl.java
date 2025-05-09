@@ -86,6 +86,24 @@ public class PujaServiceImpl implements PujaService {
         }
     }
 
+    @Transactional
+    @Override
+    public void updatePuja2(PujaDTO pujaDTO){
+        Optional<Subasta> subastaOpt = subastaRepository.findById(pujaDTO.getSubastaId());
+        if (subastaOpt.isPresent()) {
+            Subasta subasta = subastaOpt.get();
+            List<Puja> pujas = subasta.getPujas();
+            Optional<User> oU = userRepository.findById(pujaDTO.getUsuarioId());
+            if (pujas != null && !pujas.isEmpty() && oU.isPresent() && pujas.getFirst().getDineroPujado() < pujaDTO.getDineroPujado()) {
+                Puja lastPuja = pujas.get(pujas.size() - 1);
+                lastPuja.setUser(oU.get());
+                lastPuja.setDineroPujado(pujaDTO.getDineroPujado());
+            }
+        } else {
+            throw new RuntimeException("Subasta no encontrada");
+        }
+    }
+
     @Override
     @Transactional
     public void updatePuja(PujaDTO pujaDTO) {

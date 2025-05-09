@@ -33,6 +33,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBody;
 
@@ -81,7 +82,8 @@ public class DetailProductController {
     }
 
     @PostMapping("/{id}/pujar")
-    public String realizarPuja(@PathVariable long id, @RequestParam Double puja, HttpSession session) {
+    @ResponseBody
+    public Map<String, String>  realizarPuja(@PathVariable long id, @RequestParam Double puja, HttpSession session) {
         ProductDTO producto = productService.getProduct(id);
         UserDetails u = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         UserDTO userDTO = userService.findUserByUsername(u.getUsername());
@@ -92,7 +94,7 @@ public class DetailProductController {
             pujaDTO.setUsuarioId(userDTO.getId());
             pujaDTO.setSubastaId(id);
             pujaDTO.setDineroPujado(puja);
-            pujaService.updatePuja(pujaDTO);
+            pujaService.updatePuja2(pujaDTO);
             userService.subtractMoney(userDTO.getId(), puja);
 
             User usuario = (User) session.getAttribute("u");
@@ -103,8 +105,13 @@ public class DetailProductController {
             productService.updateProduct(producto);
             
             sendProductUpdateToWebSocket(producto); 
+            userService.refreshSession(userDTO.getId(), session);
         }
-        return "redirect:/products/" + id;
+        Double x = ((User) session.getAttribute("u")).getAvailableMoney();
+        return Map.of(
+            "username", u.getUsername(),
+            "availableMoney", String.valueOf(x)
+        );
     }
     @Autowired
     private SimpMessagingTemplate messagingTemplate;

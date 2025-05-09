@@ -107,13 +107,20 @@
                         "X-CSRF-TOKEN": csrfToken
                     },
                     body: `puja=${encodeURIComponent(valorPuja)}`
-                }).then(response => {
-                    if (response.ok) {
-                        mensajePuja.innerText = "¡Puja realizada con éxito!";
-                        mensajePuja.className = "text-success";
-                    } else {
-                        mensajePuja.innerText = "No tienes suficiente saldo";
-                        mensajePuja.className = "text-danger";
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error("Error en la respuesta del servidor");
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    mensajePuja.innerText = "¡Puja realizada con éxito!";
+                    mensajePuja.className = "text-success";
+
+                    const saldoUsuario = document.getElementById("saldo-usuario");
+                    if (saldoUsuario) {
+                        saldoUsuario.textContent = 'Saldo: €' + data.availableMoney;
                     }
                 }).catch(err => {
                     console.error("Error al pujar:", err);
