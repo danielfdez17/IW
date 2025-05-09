@@ -31,6 +31,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 
 import jakarta.servlet.http.HttpSession;
 import lombok.AllArgsConstructor;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+
 
 @Controller
 @RequestMapping("chat")
@@ -65,8 +68,9 @@ public class ChatController {
     }
     
 
-    @MessageMapping("/private")
-    public void handlePrivateMessage(Principal principal, @Payload ChatMessage chatMessage) {
+    @PostMapping("/private")
+    @ResponseBody
+    public void handlePrivateMessage(@RequestBody ChatMessage chatMessage) {
         System.out.println("Received message: " + chatMessage.getContent() + " from " + chatMessage.getFrom() + " to " + chatMessage.getRecipient());
         MessageDTO m = messageService.saveMessage(chatMessage);
         messagingTemplate.convertAndSendToUser( 
@@ -75,5 +79,5 @@ public class ChatController {
             m
         );
     }
-
+    
 }

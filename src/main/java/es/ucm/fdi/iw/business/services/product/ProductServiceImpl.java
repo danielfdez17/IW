@@ -20,18 +20,15 @@ import es.ucm.fdi.iw.business.model.Subasta;
 import es.ucm.fdi.iw.business.model.User;
 import es.ucm.fdi.iw.business.repository.SubastaRepository;
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
 
 @Service
 public class ProductServiceImpl implements ProductService {
 
     private final SubastaRepository subastaRepository;
+    @PersistenceContext
     private EntityManager entityManager;
     private final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
-
-    
-    public void setEntityManager(EntityManager em) {
-        entityManager = em;
-    }
 
     @Autowired
     public ProductServiceImpl(SubastaRepository subastaRepository) {

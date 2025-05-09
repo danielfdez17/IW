@@ -57,7 +57,7 @@ public class SecurityConfig {
 
     http
 			.csrf(csrf -> csrf
-				.ignoringRequestMatchers("/api/**")
+				.ignoringRequestMatchers("/api/**", "/chat/private")
 			)
       .authorizeHttpRequests(authorize -> authorize
 				.requestMatchers("/css/**", "/js/**", "/img/**", "/", "/error").permitAll()
