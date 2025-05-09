@@ -60,26 +60,26 @@ public class AdminController {
     @PostMapping("/user/disable/{id}")
     public String disableUser(@PathVariable long id) {
         log.info("Admin deshabilita " + id);
-        this.userService.disableUser(id);
+        userService.disableUser(id);
         return "redirect:/admin/";
     }
 
     @PostMapping("/user/enable/{id}")
     public String enableUser(@PathVariable long id) {
         log.info("Admin deshabilita " + id);
-        this.userService.enableUser(id);
+        userService.enableUser(id);
         return "redirect:/admin/";
     }
 
     @PostMapping("/subasta/toggle/{id}")
     public String toggleSubasta(@PathVariable long id, @RequestParam boolean enabled) {
-        this.productService.toggleProduct(id, enabled);
+        productService.toggleProduct(id, enabled);
         return "redirect:/admin/subasta";
     }
 
     @PostMapping("/subasta/update")
     public String updateSubasta(ProductDTO product) {
-        this.productService.updateAdminProduct(product);
+        productService.updateAdminProduct(product);
         return "redirect:/admin/subasta";
     }
 }

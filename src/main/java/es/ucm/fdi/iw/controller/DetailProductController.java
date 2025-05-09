@@ -139,7 +139,7 @@ public class DetailProductController {
         productDTO.setUsuarioHaPujado(false);
         ProductDTO subasta = productService.createSubasta(productDTO);
 
-        this.updatePicture(photo, subasta.getId());
+        updatePicture(photo, subasta.getId());
 
         return "redirect:/index";
     }
@@ -154,7 +154,7 @@ public class DetailProductController {
             Model model, HttpSession session) throws Exception {
         product.setFechaFin(LocalDateTimeMapper.toLocalDateTime(nuevaFechaFin));
         productService.updateProduct(product);
-        this.updatePicture(photo, id);
+        updatePicture(photo, id);
 
         return "redirect:/index";
     }

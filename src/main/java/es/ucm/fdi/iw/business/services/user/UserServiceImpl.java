@@ -23,29 +23,29 @@ public class UserServiceImpl implements UserService {
     @Transactional
     @Override
     public boolean disableUser(long id) {
-        return this.userRepository.findById(id).map(user -> {
+        return userRepository.findById(id).map(user -> {
             user.setEnabled(false);
-            return this.userRepository.save(user) != null;
+            return userRepository.save(user) != null;
         }).orElse(false);
     }
 
     @Override
     @Transactional
     public boolean enableUser(long id) {
-        return this.userRepository.findById(id).map(user -> {
+        return userRepository.findById(id).map(user -> {
             user.setEnabled(true);
-            return this.userRepository.save(user) != null;
+            return userRepository.save(user) != null;
         }).orElse(false);
     }
 
     @Override
     public List<UserDTO> findChatUsersByUsername(final String username, final String userChatNew) {
-        User user = this.userRepository.findByUsername(username).orElseThrow();
+        User user = userRepository.findByUsername(username).orElseThrow();
         List<UserDTO> users = new ArrayList<>(
-                this.userRepository.findChatPartners(user.getId()).stream().map(UserMapper.INSTANCE::entityToDto)
+                userRepository.findChatPartners(user.getId()).stream().map(UserMapper.INSTANCE::entityToDto)
                         .toList());
         if (StringUtils.hasText(userChatNew) && users.stream().noneMatch(u -> u.getUsername().equals(userChatNew))) {
-            Optional<User> userOpt = this.userRepository.findByUsername(userChatNew);
+            Optional<User> userOpt = userRepository.findByUsername(userChatNew);
             if (userOpt.isPresent() && !username.equals(userChatNew)) {
                 UserDTO userDto = UserMapper.INSTANCE.entityToDto(userOpt.get());
                 users.addFirst(userDto);
@@ -56,7 +56,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDTO findUserByUsername(String username) {
-        User u = this.userRepository.findByUsername(username).orElseThrow(() -> new RuntimeException("User not found"));
+        User u = userRepository.findByUsername(username).orElseThrow(() -> new RuntimeException("User not found"));
         return UserMapper.INSTANCE.entityToDto(u);
     }
 

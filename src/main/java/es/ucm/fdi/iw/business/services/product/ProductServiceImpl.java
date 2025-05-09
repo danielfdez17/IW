@@ -1,7 +1,6 @@
 package es.ucm.fdi.iw.business.services.product;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.time.Duration;
@@ -12,7 +11,6 @@ import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -22,7 +20,6 @@ import es.ucm.fdi.iw.business.model.Subasta;
 import es.ucm.fdi.iw.business.model.User;
 import es.ucm.fdi.iw.business.repository.SubastaRepository;
 import jakarta.persistence.EntityManager;
-import jakarta.persistence.PersistenceContext;
 
 @Service
 public class ProductServiceImpl implements ProductService {
@@ -31,9 +28,9 @@ public class ProductServiceImpl implements ProductService {
     private EntityManager entityManager;
     private final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
 
-    @PersistenceContext
+    
     public void setEntityManager(EntityManager em) {
-        this.entityManager = em;
+        entityManager = em;
     }
 
     @Autowired
@@ -110,14 +107,14 @@ public class ProductServiceImpl implements ProductService {
         subasta.setNombre(productDTO.getNombre());
         subasta.setDescripcion(productDTO.getDescripcion());
         subasta.setEnabled(productDTO.isEnabled());
-        User creador = this.entityManager.find(User.class, productDTO.getCreadorUserId());
+        User creador = entityManager.find(User.class, productDTO.getCreadorUserId());
         if (creador == null) {
             return null;
         }
         subasta.setCreador(creador);
 
-        this.entityManager.persist(subasta);
-        this.entityManager.flush();
+        entityManager.persist(subasta);
+        entityManager.flush();
 
         programarDesactivacion(subasta);
 
