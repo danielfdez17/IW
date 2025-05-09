@@ -13,7 +13,7 @@ public interface ProductService {
     void updateAdminProduct(ProductDTO productDTO);
     ProductDTO createSubasta(ProductDTO productDTO);
     void toggleProduct(long id, final boolean active);
-    public List<ProductDTO> obtenerSubastasPujadasPorUsuario(Long userId) ;
+    List<ProductDTO> obtenerSubastasPujadasPorUsuario(Long userId) ;
     void scheduleDeactivation(final long subastaId);
     boolean isProductActive(long productId);
 }
