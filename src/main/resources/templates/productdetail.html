@@ -51,7 +51,7 @@
                         </p>
 
                         <div th:if="${producto.enabled}">
-                            <form id="formPujar" th:action="@{'/products/' + ${producto.id} + '/pujar'}" method="post">
+                            <form id="formPujar">
                                 <input type="hidden" name="_csrf" value="${_csrf.token}">
                                 <div class="mb-3">
                                     <label for="nuevaPuja" class="form-label">Tu Puja</label>
@@ -83,6 +83,45 @@
 
     <script>
         const productoId = window.location.pathname.split("/").pop();
+
+        function sendPuja(){
+            const form = document.getElementById("formPujar");
+            const input = document.getElementById("nuevaPuja");
+            const mensajePuja = document.getElementById("mensaje-puja");
+            const csrfToken = document.querySelector('input[name="_csrf"]').value;
+        
+            form.addEventListener("submit", function (event) {
+                event.preventDefault(); 
+        
+                const valorPuja = parseFloat(input.value);
+                if (isNaN(valorPuja) || valorPuja <= 0) {
+                    mensajePuja.innerText = "Introduce una puja válida";
+                    mensajePuja.className = "text-danger";
+                    return;
+                }
+        
+                fetch(`/products/${productoId}/pujar`, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/x-www-form-urlencoded",
+                        "X-CSRF-TOKEN": csrfToken
+                    },
+                    body: `puja=${encodeURIComponent(valorPuja)}`
+                }).then(response => {
+                    if (response.ok) {
+                        mensajePuja.innerText = "¡Puja realizada con éxito!";
+                        mensajePuja.className = "text-success";
+                    } else {
+                        mensajePuja.innerText = "No tienes suficiente saldo";
+                        mensajePuja.className = "text-danger";
+                    }
+                }).catch(err => {
+                    console.error("Error al pujar:", err);
+                    mensajePuja.innerText = "Error inesperado";
+                    mensajePuja.className = "text-danger";
+                });
+            });
+        }
 
         function suscribirmeProductoConIntervalo () {
             const intervalo = setInterval(() => {
@@ -116,6 +155,7 @@
 
         document.addEventListener("DOMContentLoaded", function () {
             suscribirmeProductoConIntervalo();
+            sendPuja();
         });
     </script>
 
