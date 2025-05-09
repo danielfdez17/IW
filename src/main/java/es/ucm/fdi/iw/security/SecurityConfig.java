@@ -66,6 +66,7 @@ public class SecurityConfig {
 				.requestMatchers("/admin/**").hasRole("ADMIN")	   // <-- administration
 				.requestMatchers("/user/**").hasRole("USER")	     // <-- logged-in users
 				.requestMatchers("/subastas/**").hasRole("USER")	     // <-- logged-in users
+				.requestMatchers("/products/*/pic").permitAll()
 				.requestMatchers("/products/**").hasRole("USER")	     // <-- logged-in users
 				.anyRequest().authenticated()
             )
