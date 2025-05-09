@@ -127,16 +127,15 @@ public class DetailProductController {
             @RequestParam(required = true) LocalDate nuevaFechaFin,
             @RequestParam(required = false) MultipartFile photo) throws Exception {
         User creador = (User) session.getAttribute("u");
+        LocalDateTime newDateInit = LocalDateTimeMapper.toLocalDateTime(nuevaFechaInicio);
+        LocalDateTime newDateEnd = LocalDateTimeMapper.toLocalDateTime(nuevaFechaFin);
+        if (newDateInit.isAfter(newDateEnd)) {
+            throw new IllegalArgumentException("La fecha de inicio no puede ser posterior a la fecha de fin");
+        }
 
-        LocalDateTime fechaInicio = LocalDateTime.now();
-        //LocalDateTime fechaFin = LocalDateTime.now().plusMinutes(1); 
-        LocalDateTime fechaFin = LocalDateTime.now().plusSeconds(10);
-        //LocalDateTime fechaInicio = LocalDateTime.parse(product.getFechaInicio(), DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
-        //LocalDateTime fechaFin = LocalDateTime.parse(product.getFechaFin(), DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
-       
         ProductDTO productDTO = new ProductDTO();
-        productDTO.setFechaInicio(LocalDateTimeMapper.toLocalDateTime(nuevaFechaInicio));
-        productDTO.setFechaFin(LocalDateTimeMapper.toLocalDateTime(nuevaFechaFin));
+        productDTO.setFechaInicio(newDateInit);
+        productDTO.setFechaFin(newDateEnd);
         productDTO.setPrecio(product.getPrecio());
         productDTO.setPrecioActual(product.getPrecio());
         productDTO.setNombre(product.getNombre());
