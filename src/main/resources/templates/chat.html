@@ -10,7 +10,7 @@
 
 <body>
     <header th:replace="~{fragments/nav.html :: nav}"></header>
-    <div id="container">
+    <div id="container" th:if="${listUser.size() > 0}">
         <aside>
             <ul class="scroll"  >
                 <li th:each="user : ${listUser}">
@@ -55,6 +55,9 @@
             </footer>
         </main>
     </div>
+    <div th:if="${listUser.size() == 0}" class="disabled-chat">
+        <h2 class="text-center">Solo se puede chatear con usuarios que tengan subastas activas</h2>
+    </div>
     <th:block th:replace="~{fragments/footer.html :: footer}" />
     <script>
         function suscribirmeConIntervalo() {
@@ -86,17 +89,21 @@
                 content: document.getElementById("txtSend").value
             };        
             document.getElementById("txtSend").value = "";
-            if (ws.stompClient && ws.stompClient.connected) {
-                ws.stompClient.send("/private", ws.headers, JSON.stringify(msg));
-                const msgDto = {
-                    senderId: "[[${u.id}]]",
-                    text: msg.content,
-                    dateSent: new Date().toISOString()
-                };
-                addElement(msg.from, "[[${u.id}]]", document.getElementById("chat"), msgDto);
-                const chat = document.getElementById("chat");
-                chat.scrollTop = chat.scrollHeight;
-            }
+            fetch('/chat/private', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(msg)
+            });
+            const msgDto = {
+                senderId: "[[${u.id}]]",
+                text: msg.content,
+                dateSent: new Date().toISOString()
+            };
+            addElement(msg.from, "[[${u.id}]]", document.getElementById("chat"), msgDto);
+            const chat = document.getElementById("chat");
+            chat.scrollTop = chat.scrollHeight;
         };
 
         document.addEventListener("DOMContentLoaded", function () {

@@ -8,6 +8,7 @@ import java.util.Map;
 public interface PujaService {
     Map<Long, PujaDTO> getPujas();
     List<PujaDTO> getAllPujas();
+    List<PujaDTO> getPujasBySubastaId(long subastaId);
     PujaDTO getPuja(long usuarioId, long subastaId);
     void savePuja(PujaDTO pujaDTO);
     void updatePuja(PujaDTO pujaDTO);

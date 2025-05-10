@@ -8,7 +8,6 @@ function pujar() {
     mostrarMensaje("Introduce un valor válido.", "danger");
     return;
   }
-  stompClient.send(`/app/pujar/${productoId}`, {}, JSON.stringify(nuevaPuja));
   
   // fetch(`/products/${productoId}/pujar`, {
   //     method: "POST",

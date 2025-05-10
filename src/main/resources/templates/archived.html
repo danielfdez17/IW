@@ -3,7 +3,7 @@
 
 <head>
     <th:block th:replace="fragments/head :: header" />
-    <link rel="stylesheet" th:href="@{/css/historical.css}">
+    <link rel="stylesheet" th:href="@{/css/archived.css}">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
 </head>
 
@@ -26,7 +26,7 @@
     </thead>
 
     <tbody>
-        <tr th:each="bid : ${historicalBids}">
+        <tr th:each="bid : ${archivedBids}">
             <td th:text="${bid.id}"></td>
             <td th:text="${bid.nombreProducto}"></td>
             <td><img th:src="@{/products/{id}/pic(id=${bid.id})}" alt="Imagen del objeto" width="50" height="50" class="img-fluid rounded"></td>
@@ -34,14 +34,14 @@
             <td th:text="${bid.usuario}"></td>
             <td th:text="${bid.fecha}"></td>
             <td>
-                <a th:href="@{/historical/reviews/{id}(id=${bid.id})}" class="btn btn-primary btn-sm">Dejar Reseña</a>
+                <a th:href="@{/archived/reviews/{id}(id=${bid.id})}" class="btn btn-primary btn-sm">Dejar Reseña</a>
             </td>
         </tr>
     </tbody>
 </table>
 
 <th:block th:replace="fragments/footer.html :: footer" />
-<script src="/js/historical.js"></script>
+<script src="/js/archived.js"></script>
 
 </body>
 </html>

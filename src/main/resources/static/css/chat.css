@@ -5,6 +5,12 @@ body {
   background-color: #abd9e9;
   /* font-family:Arial; */
 }
+.disabled-chat {
+  height: 100vh; 
+  display: flex; 
+  align-items: center; 
+  justify-content: center;
+}
 #container {
   width: 80vw;
   height: 800px;

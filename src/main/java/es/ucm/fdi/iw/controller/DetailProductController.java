@@ -33,6 +33,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBody;
 
@@ -40,6 +41,8 @@ import es.ucm.fdi.iw.business.dto.CreateProductDTO;
 import es.ucm.fdi.iw.business.dto.ProductDTO;
 import es.ucm.fdi.iw.business.dto.PujaDTO;
 import es.ucm.fdi.iw.business.dto.UserDTO;
+import es.ucm.fdi.iw.business.enums.EstadoSubasta;
+import es.ucm.fdi.iw.business.enums.RepartoSubasta;
 import es.ucm.fdi.iw.business.fileconfiglocal.LocalData;
 import es.ucm.fdi.iw.business.mapper.LocalDateTimeMapper;
 import es.ucm.fdi.iw.business.model.User;
@@ -77,11 +80,20 @@ public class DetailProductController {
     public String product(@PathVariable int id, Model model) {
         ProductDTO producto = productService.getProduct(id);
         model.addAttribute("producto", producto);
+        model.addAttribute("estado", EstadoSubasta.getTxt(producto.getEstadoSubasta()));
+        User session = (User) model.getAttribute("u");
+        String winner = "";
+        if(producto.getMaximoPujador() != null && EstadoSubasta.FINALIZADA.equals(producto.getEstadoSubasta())) 
+            winner = producto.getMaximoPujador();   
+        
+        model.addAttribute("canAddComment", winner.equals(session.getUsername()) && RepartoSubasta.ENTREGADO.equals(producto.getRepartoSubasta()));
+        model.addAttribute("isGanador", winner.equals(session.getUsername()));
         return "productdetail";
     }
 
     @PostMapping("/{id}/pujar")
-    public String realizarPuja(@PathVariable long id, @RequestParam Double puja, HttpSession session) {
+    @ResponseBody
+    public Map<String, String>  realizarPuja(@PathVariable long id, @RequestParam Double puja, HttpSession session) {
         ProductDTO producto = productService.getProduct(id);
         UserDetails u = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         UserDTO userDTO = userService.findUserByUsername(u.getUsername());
@@ -93,7 +105,6 @@ public class DetailProductController {
             pujaDTO.setSubastaId(id);
             pujaDTO.setDineroPujado(puja);
             pujaService.updatePuja(pujaDTO);
-            userService.subtractMoney(userDTO.getId(), puja);
 
             User usuario = (User) session.getAttribute("u");
             producto.setDineroPujado(id);
@@ -104,7 +115,11 @@ public class DetailProductController {
             
             sendProductUpdateToWebSocket(producto); 
         }
-        return "redirect:/products/" + id;
+        Double x = ((User) session.getAttribute("u")).getAvailableMoney();
+        return Map.of(
+            "username", u.getUsername(),
+            "availableMoney", String.valueOf(x)
+        );
     }
     @Autowired
     private SimpMessagingTemplate messagingTemplate;
@@ -120,16 +135,19 @@ public class DetailProductController {
             @RequestParam(required = true) LocalDate nuevaFechaFin,
             @RequestParam(required = false) MultipartFile photo) throws Exception {
         User creador = (User) session.getAttribute("u");
+        LocalDateTime newDateInit = LocalDateTimeMapper.toLocalDateTime(nuevaFechaInicio);
+        LocalDateTime newDateEnd = LocalDateTimeMapper.toLocalDateTime(nuevaFechaFin);
+        if (newDateInit.isAfter(newDateEnd)) {
+            throw new IllegalArgumentException("La fecha de inicio no puede ser posterior a la fecha de fin");
+        }
+        LocalDateTime now = LocalDateTime.now();
+        EstadoSubasta estadoSubasta = EstadoSubasta.PENDIENTE;
+        if (now.isAfter(newDateInit) || now.isEqual(newDateInit)) 
+            estadoSubasta = EstadoSubasta.EN_CURSO;
 
-        LocalDateTime fechaInicio = LocalDateTime.now();
-        //LocalDateTime fechaFin = LocalDateTime.now().plusMinutes(1); 
-        LocalDateTime fechaFin = LocalDateTime.now().plusSeconds(10);
-        //LocalDateTime fechaInicio = LocalDateTime.parse(product.getFechaInicio(), DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
-        //LocalDateTime fechaFin = LocalDateTime.parse(product.getFechaFin(), DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
-       
         ProductDTO productDTO = new ProductDTO();
-        productDTO.setFechaInicio(LocalDateTimeMapper.toLocalDateTime(nuevaFechaInicio));
-        productDTO.setFechaFin(LocalDateTimeMapper.toLocalDateTime(nuevaFechaFin));
+        productDTO.setFechaInicio(newDateInit);
+        productDTO.setFechaFin(newDateEnd);
         productDTO.setPrecio(product.getPrecio());
         productDTO.setPrecioActual(product.getPrecio());
         productDTO.setNombre(product.getNombre());
@@ -137,9 +155,10 @@ public class DetailProductController {
         productDTO.setCreadorUserId(creador.getId());
         productDTO.setEnabled(true);
         productDTO.setUsuarioHaPujado(false);
+        productDTO.setEstadoSubasta(estadoSubasta);
         ProductDTO subasta = productService.createSubasta(productDTO);
 
-        this.updatePicture(photo, subasta.getId());
+        updatePicture(photo, subasta.getId());
 
         return "redirect:/index";
     }
@@ -154,7 +173,7 @@ public class DetailProductController {
             Model model, HttpSession session) throws Exception {
         product.setFechaFin(LocalDateTimeMapper.toLocalDateTime(nuevaFechaFin));
         productService.updateProduct(product);
-        this.updatePicture(photo, id);
+        updatePicture(photo, id);
 
         return "redirect:/index";
     }
@@ -172,6 +191,14 @@ public class DetailProductController {
         InputStream in = new BufferedInputStream(
                 f.exists() ? new FileInputStream(f) : DetailProductController.defaultPic());
         return os -> FileCopyUtils.copy(in, os);
+    }
+
+    @PostMapping("{id}/comentar")
+    public String comentarProducto(@PathVariable Long id,
+                                @RequestParam String comentario,
+                                @RequestParam byte valoracion) {
+        productService.addComentarioYValoracion(id, comentario, valoracion);
+        return "redirect:/products/" + id;
     }
 
     /**
