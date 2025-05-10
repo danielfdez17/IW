@@ -57,7 +57,7 @@
                                 </button>
                             </li>
                             <li class="nav-item mx-3 align-self-center">
-                                <span id="saldo-usuario" th:text="'Saldo: €' + ${u.availableMoney}">Saldo: €0.00</span>
+                                <span id="saldo-usuario" th:text="'Saldo: €' + ${saldo}">Saldo: €0.00</span>
                             </li>
                             <li class="nav-item align-self-center">
                                 <form th:action="@{/logout}" method="post">

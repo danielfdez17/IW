@@ -33,7 +33,7 @@ public class SubastaServicesImpl implements SubastasServices {
     @Override
     public SubastaDTO updateSubasta(SubastaDTO subastaDTO) {
         Optional<Subasta> subastaOpt = this.subastaRepository.findById(subastaDTO.getId());
-        if (subastaOpt.isEmpty() || EstadoSubasta.FINALIZADA.equals(subastaDTO.getEstado()))
+        if (subastaOpt.isEmpty() || EstadoSubasta.FINALIZADA.equals(subastaOpt.get().getEstado()))
             return null;  
         User user = userRepository.findById(subastaDTO.getIdUserGanador()).orElse(null);
         Subasta subasta = subastaOpt.get();

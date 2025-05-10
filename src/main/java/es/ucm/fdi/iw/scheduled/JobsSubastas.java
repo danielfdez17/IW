@@ -60,10 +60,9 @@ public class JobsSubastas {
                 maxPujaOpt.ifPresent(maxPuja -> {
                     subasta.setIdUserGanador(maxPuja.getUsuarioId());
                     userService.addMoney(subasta.getIdUserCreator(), maxPuja.getDineroPujado());
-                    listPujas.remove(maxPuja);
+                    listPujas.stream().filter(p -> !p.equals(maxPuja)).forEach(puja -> userService.addMoney(puja.getUsuarioId(), puja.getDineroPujado()));
                 });
                 SubastaDTO s = subastasServices.updateSubasta(subasta);
-                listPujas.stream().forEach(puja -> userService.addMoney(puja.getUsuarioId(), puja.getDineroPujado()));
                 log.info("Subasta {} con nombre {} finalizada", s.getId(), s.getNombre());
             }
         });

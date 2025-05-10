@@ -66,28 +66,7 @@ public class UserServiceImpl implements UserService {
         User u = userRepository.findByUsername(username).orElseThrow(() -> new RuntimeException("User not found"));
         return UserMapper.INSTANCE.entityToDto(u);
     }
-
-    @Override
-    @Transactional
-    public Double subtractMoney(long userId, Double money) {
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new EntityNotFoundException("No existe el usuario con id " + userId));
-
-        if (user.getAvailableMoney() < money) {
-            throw new RuntimeException("El usuario con id " + userId + " no tiene dinero suficiente para pujar");
-        }
-
-        user.setAvailableMoney(user.getAvailableMoney() - money);
-        
-        return money;
-    }
-
-    @Override
-    public void refreshSession(long id, HttpSession session) {
-        User updatedUser = entityManager.find(User.class, id);
-        session.setAttribute("u", updatedUser);
-    }
-
+   
     @Override
     public double addMoney(long userId, double money) {
         Optional<User> user = userRepository.findById(userId);

@@ -96,7 +96,6 @@ public class DetailProductController {
             pujaDTO.setSubastaId(id);
             pujaDTO.setDineroPujado(puja);
             pujaService.updatePuja2(pujaDTO);
-            userService.subtractMoney(userDTO.getId(), puja);
 
             User usuario = (User) session.getAttribute("u");
             producto.setDineroPujado(id);
@@ -106,7 +105,6 @@ public class DetailProductController {
             productService.updateProduct(producto);
             
             sendProductUpdateToWebSocket(producto); 
-            userService.refreshSession(userDTO.getId(), session);
         }
         Double x = ((User) session.getAttribute("u")).getAvailableMoney();
         return Map.of(

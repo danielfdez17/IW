@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -89,18 +90,42 @@ public class PujaServiceImpl implements PujaService {
     @Transactional
     @Override
     public void updatePuja2(PujaDTO pujaDTO){
-        Optional<Subasta> subastaOpt = subastaRepository.findById(pujaDTO.getSubastaId());
-        if (subastaOpt.isPresent()) {
-            Subasta subasta = subastaOpt.get();
-            List<Puja> pujas = subasta.getPujas();
-            Optional<User> oU = userRepository.findById(pujaDTO.getUsuarioId());
-            if (pujas != null && !pujas.isEmpty() && oU.isPresent() && pujas.getFirst().getDineroPujado() < pujaDTO.getDineroPujado()) {
-                Puja lastPuja = pujas.get(pujas.size() - 1);
-                lastPuja.setUser(oU.get());
-                lastPuja.setDineroPujado(pujaDTO.getDineroPujado());
-            }
+        List<PujaDTO> listPujas = getPujasBySubastaId(pujaDTO.getSubastaId());
+        Optional<PujaDTO> maxPujaOpt = listPujas.stream().max(Comparator.comparingDouble(PujaDTO::getDineroPujado));
+        if (maxPujaOpt.isPresent() && maxPujaOpt.get().getDineroPujado() >= pujaDTO.getDineroPujado())
+            return;
+        
+        Optional<Puja> existingPuja = pujaRepository.findById(new PujaEmbed(pujaDTO.getUsuarioId(), pujaDTO.getSubastaId()));
+        if (existingPuja.isPresent()) {
+            Puja puja = existingPuja.get();
+            User user = puja.getUser();
+            if (user.getAvailableMoney() + puja.getDineroPujado() < pujaDTO.getDineroPujado()) 
+                throw new RuntimeException("El usuario no tiene suficiente dinero para pujar");   
+            
+            user.setAvailableMoney((user.getAvailableMoney() + puja.getDineroPujado())  - pujaDTO.getDineroPujado());
+            puja.setFecha(LocalDateTime.now());
+            puja.setDineroPujado(pujaDTO.getDineroPujado());
+            puja.setPuntuacion(pujaDTO.getPuntuacion());
+            puja.setComentario(pujaDTO.getComentario());
+            puja.setFecha(pujaDTO.getFecha());
         } else {
-            throw new RuntimeException("Subasta no encontrada");
+            Subasta existingSubasta = subastaRepository.findById(pujaDTO.getSubastaId())
+                    .orElseThrow(() -> new RuntimeException("No existe la subasta con id " + pujaDTO.getSubastaId()));
+            User existingUser = userRepository.findById(pujaDTO.getUsuarioId())
+                    .orElseThrow(() -> new RuntimeException("No existe el usuario con id " + pujaDTO.getUsuarioId()));
+            Puja puja = new Puja();
+            if (existingUser.getAvailableMoney() < pujaDTO.getDineroPujado()) 
+                throw new RuntimeException("El usuario no tiene suficiente dinero para pujar");   
+            puja.setId(new PujaEmbed(pujaDTO.getUsuarioId(), pujaDTO.getSubastaId()));
+            puja.setFecha(LocalDateTime.now());
+            puja.setDineroPujado(pujaDTO.getDineroPujado());
+            puja.setPuntuacion(pujaDTO.getPuntuacion());
+            puja.setComentario(pujaDTO.getComentario());
+            puja.setFecha(pujaDTO.getFecha());
+            puja.setSubasta(existingSubasta);
+            puja.setUser(existingUser);
+            existingUser.setAvailableMoney(existingUser.getAvailableMoney() - pujaDTO.getDineroPujado());
+            pujaRepository.save(puja);
         }
     }
 
@@ -142,13 +167,12 @@ public class PujaServiceImpl implements PujaService {
             puja.setSubasta(existingSubasta);
             puja.setUser(existingUser);
             pujaRepository.save(puja);
-            // throw new RuntimeException("Puja no encontrada");
         }
     }
 
     @Override
     public List<PujaDTO> getPujasBySubastaId(long subastaId) {
-        Optional<Puja> puja = pujaRepository.findBySubastaId(subastaId);
+        List<Puja> puja = pujaRepository.findBySubastaId(subastaId);
         if (puja.isEmpty()) 
             return List.of();
         

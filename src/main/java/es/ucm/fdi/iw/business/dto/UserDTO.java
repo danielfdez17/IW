@@ -11,4 +11,5 @@ public class UserDTO {
     private String lastName;
     private boolean enabled;
     private String roles;
+    private double availableMoney;
 }
