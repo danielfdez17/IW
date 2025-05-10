@@ -5,7 +5,7 @@ import lombok.Data;
 
 @Data
 @AllArgsConstructor
-public class HistoricalDTO {
+public class ArchivedDTO {
     private String id;
     private String nombreProducto;
     private String imagenUrl;

@@ -1,25 +1,24 @@
-package es.ucm.fdi.iw.business.services.historical;
+package es.ucm.fdi.iw.business.services.archived;
 
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import es.ucm.fdi.iw.business.dto.HistoricalDTO;
+import es.ucm.fdi.iw.business.dto.ArchivedDTO;
 import es.ucm.fdi.iw.business.model.Subasta;
 import es.ucm.fdi.iw.business.repository.SubastaRepository;
 
 @Service
-public class HistoricalServiceImpl implements HistoricalServices {
+public class ArchivedServiceImpl implements ArchivedServices {
 
     @Autowired
     private SubastaRepository subastaRepository;
 
     @Override
-    public List<HistoricalDTO> getHistorical() {
+    public List<ArchivedDTO> getArchived() {
         // Obtener todas las subastas
         List<Subasta> subastas = subastaRepository.getAllSubastas();
     
@@ -31,7 +30,7 @@ public class HistoricalServiceImpl implements HistoricalServices {
     
                 String fecha = subasta.getFechaFin().format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
     
-                return new HistoricalDTO(
+                return new ArchivedDTO(
                     String.valueOf(subasta.getId()),
                     subasta.getNombre(),
                     subasta.getRutaImagen(),

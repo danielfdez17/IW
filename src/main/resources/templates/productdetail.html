@@ -36,22 +36,27 @@
 
                         <h5 class="text-muted">Estado de la puja</h5>
                         <p id="estado-producto" class="fs-4 fw-bold"
-                        th:text="${producto.enabled} ? 'En curso' : 'Finalizada'"
+                        th:text="${estado}"
                         th:classappend="${producto.enabled} ? 'text-success' : 'text-danger'">
                         </p>
 
                         <h5 class="text-muted">Mejor postor</h5>
                         <p id="mejor-postor" class="fs-4 fw-bold" th:text="${producto.maximoPujador} ?: 'Sin pujas aún'">Sin pujas aún</p>
 
+                        <div th:if="${producto.comentarioGanador != null AND !producto.enabled}">
+                            <h5 class="text-muted mt-4">Comentario del ganador</h5>
+                            <p th:text="${producto.comentarioGanador}">Este es el comentario del ganador.</p>
+                            <p><strong>Valoración:</strong> <span th:text="${producto.valoracionGanador}">5</span>/5</p>
+                        </div>
                         <!-- Chat con el vendedor -->
-                        <p class="fs-3"> Chat con el vendedor
+                        <p class="fs-3" th:if="${isGanador} or ${producto.enabled}"> Chat con el vendedor
                             <a class="text-decoration-none text-primary"
                                 th:href="@{|/chat?userChatNew=${producto.creadorUsername}|} "><i
                                     class="bi bi-chat-dots-fill"></i></a>
                         </p>
 
                         <div th:if="${producto.enabled}">
-                            <form id="formPujar" th:action="@{'/products/' + ${producto.id} + '/pujar'}" method="post">
+                            <form id="formPujar">
                                 <input type="hidden" name="_csrf" value="${_csrf.token}">
                                 <div class="mb-3">
                                     <label for="nuevaPuja" class="form-label">Tu Puja</label>
@@ -69,8 +74,25 @@
                                     onclick="subirPuja(100)">+100 €</button>
                             </form>
                         </div>
-
                         <div id="mensaje-puja" class="mt-3"></div>
+                    </div>
+                    <div th:if="${canAddComment}" class="mt-5">
+                        <h5 class="text-muted">Deja un comentario y valoración</h5>
+                        <form th:action="@{/products/{id}/comentar(id=${producto.id})}" method="post">
+                            <input type="hidden" name="_csrf" th:value="${_csrf.token}">
+                            
+                            <div class="mb-3">
+                                <label for="comentario" class="form-label">Comentario</label>
+                                <textarea class="form-control" id="comentario" name="comentario" rows="3" required th:text="${producto.comentarioGanador} ?: ''"></textarea>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="valoracion" class="form-label">Valoración (1-5)</label>
+                                <input type="number" class="form-control" id="valoracion" name="valoracion" min="1" max="5" required th:value="${producto.valoracionGanador} ?: ''">
+                            </div>
+
+                            <button type="submit" class="btn btn-success">Enviar valoración</button>
+                        </form>
                     </div>
                 </div>
             </div>
@@ -83,6 +105,52 @@
 
     <script>
         const productoId = window.location.pathname.split("/").pop();
+
+        function sendPuja(){
+            const form = document.getElementById("formPujar");
+            const input = document.getElementById("nuevaPuja");
+            const mensajePuja = document.getElementById("mensaje-puja");
+            const csrfToken = document.querySelector('input[name="_csrf"]').value;
+        
+            form.addEventListener("submit", function (event) {
+                event.preventDefault(); 
+        
+                const valorPuja = parseFloat(input.value);
+                if (isNaN(valorPuja) || valorPuja <= 0) {
+                    mensajePuja.innerText = "Introduce una puja válida";
+                    mensajePuja.className = "text-danger";
+                    return;
+                }
+        
+                fetch(`/products/${productoId}/pujar`, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/x-www-form-urlencoded",
+                        "X-CSRF-TOKEN": csrfToken
+                    },
+                    body: `puja=${encodeURIComponent(valorPuja)}`
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error("Error en la respuesta del servidor");
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    mensajePuja.innerText = "¡Puja realizada con éxito!";
+                    mensajePuja.className = "text-success";
+
+                    const saldoUsuario = document.getElementById("saldo-usuario");
+                    if (saldoUsuario) {
+                        saldoUsuario.textContent = 'Saldo: €' + data.availableMoney;
+                    }
+                }).catch(err => {
+                    console.error("Error al pujar:", err);
+                    mensajePuja.innerText = "Error inesperado";
+                    mensajePuja.className = "text-danger";
+                });
+            });
+        }
 
         function suscribirmeProductoConIntervalo () {
             const intervalo = setInterval(() => {
@@ -116,6 +184,7 @@
 
         document.addEventListener("DOMContentLoaded", function () {
             suscribirmeProductoConIntervalo();
+            sendPuja();
         });
     </script>
 

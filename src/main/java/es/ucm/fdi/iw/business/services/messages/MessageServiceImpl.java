@@ -21,15 +21,15 @@ public class MessageServiceImpl implements MessageService {
 
     @Override
     public List<MessageDTO> getMessagesOfUser(long userId1, long userId2) {
-       return this.messageRepository.findMessagesByUserId(userId1, userId2).stream().map(MessageMapper.INSTANCE::entityToDto).toList();
+       return messageRepository.findMessagesByUserId(userId1, userId2).stream().map(MessageMapper.INSTANCE::entityToDto).toList();
     }
 
     @Override
     public MessageDTO saveMessage(ChatMessage message) {
-        User sender = this.userRepository.findByUsername(message.getFrom()).orElseThrow(() -> new IllegalArgumentException("User not found"));
-        User recipient = this.userRepository.findByUsername(message.getRecipient()).orElseThrow(() -> new IllegalArgumentException("User not found"));
-        Message newMessage = this.messageRepository.save(new Message(sender, recipient, message.getContent()));
-        return MessageMapper.INSTANCE.entityToDto(this.messageRepository.save(newMessage));
+        User sender = userRepository.findByUsername(message.getFrom()).orElseThrow(() -> new IllegalArgumentException("User not found"));
+        User recipient = userRepository.findByUsername(message.getRecipient()).orElseThrow(() -> new IllegalArgumentException("User not found"));
+        Message newMessage = messageRepository.save(new Message(sender, recipient, message.getContent()));
+        return MessageMapper.INSTANCE.entityToDto(messageRepository.save(newMessage));
     }
     
 }

@@ -32,7 +32,7 @@
                                 </div>
                                 <div class="modal-body">
                                     <form th:action="@{/products/nueva_subasta}" method="post"
-                                        enctype="multipart/form-data">
+                                        enctype="multipart/form-data" onsubmit="return validarFormulario()">
                                         <div class="mb-3">
                                             <label for="photo" class="form-label">Foto del objeto</label>
                                             <input class="form-control" type="file" name="photo" id="photo">
@@ -112,6 +112,18 @@
     </main>
 
     <th:block th:replace="~{fragments/footer.html :: footer}" />
+    <script>
+        function validarFormulario() {
+            const fechaInicio = document.getElementById("nuevaFechaInicio").value;
+            const fechaFin = document.getElementById("nuevaFechaFin").value;
+
+            if (fechaInicio >= fechaFin) {
+                alert("La fecha de inicio no puede ser posterior a la fecha de fin.");
+                return false; 
+            }
+            return true;
+        }
+    </script>
 </body>
 
 </html>

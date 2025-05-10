@@ -11,6 +11,7 @@
             color: #070000;
         }
     </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 </head>
 
 <body class="d-flex flex-column h-100">
@@ -27,7 +28,15 @@
                             <img th:src="@{/user/{id}/pic(id=${u.id})}" class="rounded-circle mb-3" alt="Foto de perfil"
                                 width="150">
                             <h5 class="card-title" th:text="${user.firstName + ' ' + user.lastName}">Juan Pérez</h5>
-                            <p><strong>Calificación:</strong> ⭐⭐⭐⭐☆</p>
+                            <p>
+                                <strong>Calificación:</strong>
+                                <span th:if="${valoracion > 0}" th:each="i : ${#numbers.sequence(1,5)}">
+                                    <i th:class="${i <= valoracion} ?
+                                                'fa-solid fa-star text-warning' :
+                                                'fa-regular fa-star text-muted'"></i>
+                                </span>
+                                <span th:unless="${valoracion > 0}">Sin valoraciones</span>
+                            </p>
 
                             <!-- Botón para abrir modal -->
                             <button id="btnEditPerfil" type="button" class="btn btn-primary" data-bs-toggle="modal"
@@ -121,12 +130,22 @@
                                                         crédito</label>
                                                     <input type="text" name="creditCard" id="creditCard"
                                                         class="form-control" pattern="[0-9]{16}"
-                                                        placeholder="16 dígitos" maxlength="16" minlength="16" required>
+                                                        placeholder="16 dígitos" maxlength="16" minlength="16" required value="0000000000000000">
                                                 </div>
                                                 <div class="mb-3">
                                                     <label for="amount" class="form-label">Cantidad</label>
                                                     <input type="number" name="amount" id="amount" class="form-control"
                                                         min="0" required>
+                                                </div>
+                                                <div class="mb-3">
+                                                    <label for="cvv" class="form-label">CVV</label>
+                                                    <input type="text" id="cvv" name="cvv" class="form-control" required 
+                                                           minlength="3" maxlength="3" value="000">
+                                                </div>
+                                                <div class="mb-3">
+                                                    <label for="expiryDate" class="form-label">Fecha de caducidad</label>
+                                                    <input type="month" id="expiryDate" name="expiryDate" class="form-control" required 
+                                                           value="2030-12">
                                                 </div>
                                                 <div class="mb-3">
                                                     <button type="submit" class="btn btn-primary w-100">Añadir
@@ -225,16 +244,15 @@
                                                             th:text="${#temporals.format(bid.fechaFin, 'dd/MM/yyyy - HH:mm:ss')}"></span>
                                                     </p>
                                                 </td>
-                                                <td>
-                                                    <p th:if="${bid.enabled == true}"
-                                                        class="badge text-bg-success text-uppercase">Activa</p>
-                                                    <p th:if="${bid.enabled == false}"
-                                                        class="badge text-bg-danger text-uppercase">No disponible
-                                                    </p>
+                                                <td th:switch="${bid.estado.name()}">
+                                                    <p th:case="'PENDIENTE'" class="badge text-bg-secondary text-uppercase">Pendiente</p>
+                                                    <p th:case="'EN_CURSO'" class="badge text-bg-success text-uppercase">En curso</p>
+                                                    <p th:case="'FINALIZADA'" class="badge text-bg-primary text-uppercase">Finalizada</p>
+                                                    <p th:case="'CANCELADA'" class="badge text-bg-danger  text-uppercase">Pendiente</p>
                                                 </td>
                                                 <td>
                                                     <button type="button" class="btn btn-info"
-                                                        th:disabled="${bid.enabled == false}" th:data-id="${bid.id}"
+                                                        th:disabled="${bid.estado.name() == 'CANCELADA' OR bid.estado.name() == 'FINALIZADA'}" th:data-id="${bid.id}"
                                                         data-bs-toggle="modal"
                                                         data-bs-target="#modalEditarSubasta">Editar</button>
                                                 </td>

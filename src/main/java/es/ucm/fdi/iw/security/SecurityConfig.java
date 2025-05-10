@@ -9,6 +9,8 @@ import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.core.session.SessionRegistry;
+import org.springframework.security.core.session.SessionRegistryImpl;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -25,8 +27,12 @@ import org.springframework.security.web.SecurityFilterChain;
 @EnableWebSecurity
 public class SecurityConfig {
 
+
+
 	@Autowired
 	private Environment env;
+
+ 
 
 	/**
 	 * Main security configuration.
@@ -38,6 +44,11 @@ public class SecurityConfig {
 	 * as a first rule. Note that this may break an application that expects to have
 	 * login information available.
 	 */
+
+	@Bean
+	public SessionRegistry sessionRegistry(){
+		return new SessionRegistryImpl();
+	}
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -54,11 +65,16 @@ public class SecurityConfig {
 			);
       http.headers(header->header.frameOptions(frameOptions->frameOptions.sameOrigin()));
 		}
-
+	  http
+        .sessionManagement(session -> session
+            .maximumSessions(-1)
+            .sessionRegistry(sessionRegistry())
+        );
     http
 			.csrf(csrf -> csrf
-				.ignoringRequestMatchers("/api/**")
+				.ignoringRequestMatchers("/api/**", "/chat/private")
 			)
+			
       .authorizeHttpRequests(authorize -> authorize
 				.requestMatchers("/css/**", "/js/**", "/img/**", "/", "/error").permitAll()
 				.requestMatchers("/api/**").permitAll()            // <-- public api access
@@ -66,6 +82,7 @@ public class SecurityConfig {
 				.requestMatchers("/admin/**").hasRole("ADMIN")	   // <-- administration
 				.requestMatchers("/user/**").hasRole("USER")	     // <-- logged-in users
 				.requestMatchers("/subastas/**").hasRole("USER")	     // <-- logged-in users
+				.requestMatchers("/products/*/pic").permitAll()
 				.requestMatchers("/products/**").hasRole("USER")	     // <-- logged-in users
 				.anyRequest().authenticated()
             )

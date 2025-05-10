@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 
 @Repository
@@ -18,4 +19,7 @@ public interface PujaRepository extends JpaRepository<Puja, PujaEmbed> {
             """)
     Optional<Puja> findById_UsuarioIdAndId_SubastaId(@Param("usuarioId") Long usuarioId,
             @Param("subastaId") Long subastaId);
+
+    @Query("SELECT p FROM Puja p WHERE p.subasta.id = :subastaId")
+    List<Puja> findBySubastaId(@Param("subastaId") Long subastaId);
 }

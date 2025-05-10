@@ -9,24 +9,21 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import es.ucm.fdi.iw.business.model.Puja;
 import es.ucm.fdi.iw.business.model.User;
 import es.ucm.fdi.iw.business.dto.PujaDTO;
 import es.ucm.fdi.iw.business.dto.ProductDTO;
-
-import es.ucm.fdi.iw.business.services.historical.HistoricalServices;
+import es.ucm.fdi.iw.business.services.archived.ArchivedServices;
 import es.ucm.fdi.iw.business.services.product.ProductService;
 import es.ucm.fdi.iw.business.services.puja.PujaService;
-import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.AllArgsConstructor;
 
-@RequestMapping("historical")
+@RequestMapping("archived")
 @Controller
 @AllArgsConstructor
-public class HistoricalController {
+public class ArchivedController {
 
-    private final HistoricalServices historicalService;
+    private final ArchivedServices archivedService;
     private final ProductService productService;
     private final PujaService pujaService; 
     
@@ -38,9 +35,9 @@ public class HistoricalController {
     }
 
     @GetMapping("/")
-    public String historical(Model model) {
-        model.addAttribute("historicalBids", historicalService.getHistorical());
-        return "historical";
+    public String archived(Model model) {
+        model.addAttribute("archivedBids", archivedService.getArchived());
+        return "archived";
     }
 
     @GetMapping("/reviews/{id}")
@@ -50,7 +47,7 @@ public class HistoricalController {
         Long userId = usuario.getId();
         
         if (producto == null) {
-            return "redirect:/historical";  
+            return "redirect:/archived";  
         }
 
         // Obtener la puja asociada al usuario y subasta
@@ -83,7 +80,7 @@ public class HistoricalController {
         ProductDTO producto = productService.getProduct(id);
         
         if (producto == null || userId == null) {
-            return "redirect:/historical";  
+            return "redirect:/archived";  
         }
 
         // Crear el DTO para la puja/reseña
@@ -92,6 +89,6 @@ public class HistoricalController {
         // Guardar la reseña en la base de datos
         pujaService.savePuja(pujaDTO);
 
-        return "redirect:/historical/reviews/" + id;
+        return "redirect:/archived/reviews/" + id;
     }
 }

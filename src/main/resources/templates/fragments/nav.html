@@ -28,7 +28,7 @@
                                 <a class="nav-link active" th:href="@{/}">Subastas</a>
                             </li>
                             <li class="nav-item mx-3">
-                                <a class="nav-link active" th:href="@{/historical/}">Historial</a>
+                                <a class="nav-link active" th:href="@{/archived/}">Historial</a>
                             </li>
                             <li class="nav-item mx-3">
                                 <a class="nav-link active" th:href="@{/chat}">Chats</a>
@@ -55,6 +55,9 @@
                                         class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-secondary">+99
                                         <span class="visually-hidden">unread messages</span></span>
                                 </button>
+                            </li>
+                            <li class="nav-item mx-3 align-self-center">
+                                <span id="saldo-usuario" th:text="'Saldo: €' + ${saldo}">Saldo: €0.00</span>
                             </li>
                             <li class="nav-item align-self-center">
                                 <form th:action="@{/logout}" method="post">

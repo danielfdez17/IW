@@ -136,6 +136,13 @@ public class UserController {
 
         //subastas en las que ha pujado
         List<Subasta> subastasPujadas = subastaRepository.findSubastasByUserId(id);
+        int valoracion = (int) Math.round(subastasPujadas.stream()
+                                        .map(Subasta::getValoracionGanador)
+                                        .filter(Objects::nonNull)
+                                        .mapToInt(Byte::intValue)
+                                        .average()
+                                        .orElse(0));
+        model.addAttribute("valoracion", valoracion);
         model.addAttribute("subastasPujadas", subastasPujadas.isEmpty() ? null : subastasPujadas);
         model.addAttribute("subastas", listaSubastas.isEmpty() ? null : listaSubastas);
         return "user";
