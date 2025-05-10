@@ -1,16 +1,10 @@
 package es.ucm.fdi.iw.business.services.product;
 
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
-import java.time.Duration;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -28,23 +22,10 @@ public class ProductServiceImpl implements ProductService {
     private final SubastaRepository subastaRepository;
     @PersistenceContext
     private EntityManager entityManager;
-    private final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
 
     @Autowired
     public ProductServiceImpl(SubastaRepository subastaRepository) {
         this.subastaRepository = subastaRepository;
-    }
-
-    public void programarDesactivacion(Subasta subasta) {
-        LocalDateTime ahora = LocalDateTime.now();
-        LocalDateTime fechaFin = subasta.getFechaFin();
-
-        long delay = Duration.between(ahora, fechaFin).toMillis();
-        if (delay <= 0) { // Si la fecha ya ha pasado desactivar
-            scheduleDeactivation(subasta.getId());
-        } else { // Programar la desactivacion
-            scheduler.schedule(() -> scheduleDeactivation(subasta.getId()), delay, TimeUnit.MILLISECONDS);
-        }
     }
 
     @Override
@@ -114,25 +95,7 @@ public class ProductServiceImpl implements ProductService {
         entityManager.persist(subasta);
         entityManager.flush();
 
-        programarDesactivacion(subasta);
-
         return SubastaMapper.INSTANCE.subastaToProductDTO(subasta);
-    }
-
-    @Autowired
-    private SimpMessagingTemplate messagingTemplate;
-
-    public void scheduleDeactivation(long subastaId) {
-        Subasta subasta = subastaRepository.findById(subastaId).orElse(null);
-        if (subasta != null && subasta.isEnabled()) {
-            subasta.setEnabled(false);
-            subastaRepository.save(subasta);
-            // System.out.println("Subasta con ID " + subastaId + " ha sido desactivada
-            // automáticamente.");
-
-            ProductDTO productDTO = SubastaMapper.INSTANCE.subastaToProductDTO(subasta);
-            messagingTemplate.convertAndSend("/topic/product-updates/" + subastaId, productDTO);
-        }
     }
 
     @Override
