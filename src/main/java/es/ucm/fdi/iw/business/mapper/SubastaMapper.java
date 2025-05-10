@@ -23,5 +23,6 @@ public interface SubastaMapper {
     ProductDTO createProductDTOToProductDTO(CreateProductDTO productDTO);
 
     @Mapping(target = "idUserCreator", source = "creador.id")
+    @Mapping(target = "idUserGanador", source = "ganador.id")
     SubastaDTO entityToDto(Subasta subasta);
 }

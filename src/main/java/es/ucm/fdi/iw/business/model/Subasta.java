@@ -64,7 +64,14 @@ public class Subasta {
     @JoinColumn(name = "user_id", nullable = false)
     private User creador;
     
+    @ManyToOne
+    @JoinColumn(name = "ganador_id", nullable = true)
+    private User ganador;
+
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private RepartoSubasta repartoSubasta = RepartoSubasta.PENDIENTE_DE_TERMINAR_SUBASTA;
+
+    private String comentarioGanador;
+    private Byte valoracionGanador;
 }

@@ -2,11 +2,9 @@ package es.ucm.fdi.iw.scheduled;
 
 import java.time.LocalDateTime;
 import java.util.Comparator;
-import java.util.HashSet;
+
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
-
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
@@ -48,32 +46,27 @@ public class JobsSubastas {
     @Transactional
     public void finishSubastas() {
         List<SubastaDTO> listSubastasPending = subastasServices.getSubastasByStatus(EstadoSubasta.EN_CURSO);
-        final LocalDateTime now = LocalDateTime.now();
-        final Set<SubastaDTO> setSubastasEnd = new HashSet<>();
-        
+        final LocalDateTime now = LocalDateTime.now();        
         //Finalizamos las subastas
         listSubastasPending.stream().forEach(subasta -> {
             if (subasta.getFechaFin().isBefore(now)) {
+                List<PujaDTO> listPujas = pujaService.getPujasBySubastaId(subasta.getId());
+                Optional<PujaDTO> maxPujaOpt = listPujas.stream().max(Comparator.comparingDouble(PujaDTO::getDineroPujado));
+                final EstadoSubasta estado = (listPujas.isEmpty()) ? EstadoSubasta.CANCELADA : EstadoSubasta.FINALIZADA;
+                final RepartoSubasta reparto = (listPujas.isEmpty()) ? RepartoSubasta.CANCELADO : RepartoSubasta.REPARTO;
                 subasta.setEnabled(false);
-                subasta.setEstado(EstadoSubasta.FINALIZADA);
-                subasta.setRepartoSubasta(RepartoSubasta.REPARTO);
+                subasta.setEstado(estado);
+                subasta.setRepartoSubasta(reparto);
+                maxPujaOpt.ifPresent(maxPuja -> {
+                    subasta.setIdUserGanador(maxPuja.getUsuarioId());
+                    userService.addMoney(subasta.getIdUserCreator(), maxPuja.getDineroPujado());
+                    listPujas.remove(maxPuja);
+                });
                 SubastaDTO s = subastasServices.updateSubasta(subasta);
-                setSubastasEnd.add(s);                
+                listPujas.stream().forEach(puja -> userService.addMoney(puja.getUsuarioId(), puja.getDineroPujado()));
                 log.info("Subasta {} con nombre {} finalizada", s.getId(), s.getNombre());
             }
         });
-
-        //Iniciamos el proceso de pago
-        setSubastasEnd.stream().forEach(subasta -> {
-            List<PujaDTO> listPujas = pujaService.getPujasBySubastaId(subasta.getId());
-            Optional<PujaDTO> maxPujaOpt = listPujas.stream().max(Comparator.comparingDouble(PujaDTO::getDineroPujado));
-            maxPujaOpt.ifPresent(maxPuja -> {
-                userService.addMoney(subasta.getIdUserCreator(), maxPuja.getDineroPujado());
-                listPujas.remove(maxPuja);
-            });
-            listPujas.stream().forEach(puja -> userService.addMoney(puja.getUsuarioId(), puja.getDineroPujado()));
-        });
-
     }
 
 }

@@ -21,5 +21,8 @@ public class SubastaDTO {
     private String maximoPujador;
     private EstadoSubasta estado;
     private Long idUserCreator;
+    private Long idUserGanador;
     private RepartoSubasta repartoSubasta;
+    private String comentarioGanador;
+    private Byte valoracionGanador;
 }
