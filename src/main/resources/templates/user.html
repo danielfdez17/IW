@@ -244,16 +244,15 @@
                                                             th:text="${#temporals.format(bid.fechaFin, 'dd/MM/yyyy - HH:mm:ss')}"></span>
                                                     </p>
                                                 </td>
-                                                <td>
-                                                    <p th:if="${bid.enabled == true}"
-                                                        class="badge text-bg-success text-uppercase">Activa</p>
-                                                    <p th:if="${bid.enabled == false}"
-                                                        class="badge text-bg-danger text-uppercase">No disponible
-                                                    </p>
+                                                <td th:switch="${bid.estado.name()}">
+                                                    <p th:case="'PENDIENTE'" class="badge text-bg-secondary text-uppercase">Pendiente</p>
+                                                    <p th:case="'EN_CURSO'" class="badge text-bg-success text-uppercase">En curso</p>
+                                                    <p th:case="'FINALIZADA'" class="badge text-bg-primary text-uppercase">Finalizada</p>
+                                                    <p th:case="'CANCELADA'" class="badge text-bg-danger  text-uppercase">Pendiente</p>
                                                 </td>
                                                 <td>
                                                     <button type="button" class="btn btn-info"
-                                                        th:disabled="${bid.enabled == false}" th:data-id="${bid.id}"
+                                                        th:disabled="${bid.estado.name() == 'CANCELADA' OR bid.estado.name() == 'FINALIZADA'}" th:data-id="${bid.id}"
                                                         data-bs-toggle="modal"
                                                         data-bs-target="#modalEditarSubasta">Editar</button>
                                                 </td>
