@@ -1,18 +1,22 @@
 package es.ucm.fdi.iw.business.model;
 
-import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import es.ucm.fdi.iw.business.dto.ProductDTO;
+import es.ucm.fdi.iw.business.enums.EstadoSubasta;
+import es.ucm.fdi.iw.business.enums.RepartoSubasta;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.Index;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -25,6 +29,9 @@ import lombok.ToString;
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
+@Table(indexes = {
+    @Index(name = "idx_subasta_estado", columnList = "estado")
+})
 public class Subasta {
 
     @Id
@@ -49,7 +56,15 @@ public class Subasta {
     @OneToMany(mappedBy = "subasta")
     private List<Puja> pujas;
 
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private EstadoSubasta estado;
+
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
     private User creador;
+    
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private RepartoSubasta repartoSubasta = RepartoSubasta.PENDIENTE_DE_TERMINAR_SUBASTA;
 }

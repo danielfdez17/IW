@@ -145,4 +145,15 @@ public class PujaServiceImpl implements PujaService {
             // throw new RuntimeException("Puja no encontrada");
         }
     }
+
+    @Override
+    public List<PujaDTO> getPujasBySubastaId(long subastaId) {
+        Optional<Puja> puja = pujaRepository.findBySubastaId(subastaId);
+        if (puja.isEmpty()) 
+            return List.of();
+        
+        return puja.stream()
+                .map(PujaMapper.INSTANCE::pujaToPujaDTO)
+                .toList();
+    }
 }

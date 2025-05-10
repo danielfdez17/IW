@@ -87,4 +87,15 @@ public class UserServiceImpl implements UserService {
         User updatedUser = entityManager.find(User.class, id);
         session.setAttribute("u", updatedUser);
     }
+
+    @Override
+    public double addMoney(long userId, double money) {
+        Optional<User> user = userRepository.findById(userId);
+        if(user.isEmpty()) 
+            return 0;
+        User u = user.get();
+        u.setAvailableMoney(u.getAvailableMoney() + money);
+        userRepository.save(u);
+        return u.getAvailableMoney();   
+    }
 }

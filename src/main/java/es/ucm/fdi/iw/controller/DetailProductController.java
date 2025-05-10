@@ -41,6 +41,7 @@ import es.ucm.fdi.iw.business.dto.CreateProductDTO;
 import es.ucm.fdi.iw.business.dto.ProductDTO;
 import es.ucm.fdi.iw.business.dto.PujaDTO;
 import es.ucm.fdi.iw.business.dto.UserDTO;
+import es.ucm.fdi.iw.business.enums.EstadoSubasta;
 import es.ucm.fdi.iw.business.fileconfiglocal.LocalData;
 import es.ucm.fdi.iw.business.mapper.LocalDateTimeMapper;
 import es.ucm.fdi.iw.business.model.User;
@@ -132,6 +133,10 @@ public class DetailProductController {
         if (newDateInit.isAfter(newDateEnd)) {
             throw new IllegalArgumentException("La fecha de inicio no puede ser posterior a la fecha de fin");
         }
+        LocalDateTime now = LocalDateTime.now();
+        EstadoSubasta estadoSubasta = EstadoSubasta.PENDIENTE;
+        if (now.isAfter(newDateInit) || now.isEqual(newDateInit)) 
+            estadoSubasta = EstadoSubasta.EN_CURSO;
 
         ProductDTO productDTO = new ProductDTO();
         productDTO.setFechaInicio(newDateInit);
@@ -143,6 +148,7 @@ public class DetailProductController {
         productDTO.setCreadorUserId(creador.getId());
         productDTO.setEnabled(true);
         productDTO.setUsuarioHaPujado(false);
+        productDTO.setEstadoSubasta(estadoSubasta);
         ProductDTO subasta = productService.createSubasta(productDTO);
 
         updatePicture(photo, subasta.getId());

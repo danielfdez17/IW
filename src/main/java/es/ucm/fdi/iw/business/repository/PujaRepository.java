@@ -18,4 +18,7 @@ public interface PujaRepository extends JpaRepository<Puja, PujaEmbed> {
             """)
     Optional<Puja> findById_UsuarioIdAndId_SubastaId(@Param("usuarioId") Long usuarioId,
             @Param("subastaId") Long subastaId);
+
+    @Query("SELECT p FROM Puja p WHERE p.subasta.id = :subastaId")
+    Optional<Puja> findBySubastaId(@Param("subastaId") Long subastaId);
 }

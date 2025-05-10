@@ -104,6 +104,7 @@ public class ProductServiceImpl implements ProductService {
         subasta.setNombre(productDTO.getNombre());
         subasta.setDescripcion(productDTO.getDescripcion());
         subasta.setEnabled(productDTO.isEnabled());
+        subasta.setEstado(productDTO.getEstadoSubasta());
         User creador = entityManager.find(User.class, productDTO.getCreadorUserId());
         if (creador == null) {
             return null;
