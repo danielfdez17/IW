@@ -11,6 +11,7 @@
             color: #070000;
         }
     </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 </head>
 
 <body class="d-flex flex-column h-100">
@@ -27,7 +28,17 @@
                             <img th:src="@{/user/{id}/pic(id=${u.id})}" class="rounded-circle mb-3" alt="Foto de perfil"
                                 width="150">
                             <h5 class="card-title" th:text="${user.firstName + ' ' + user.lastName}">Juan Pérez</h5>
-                            <p><strong>Calificación:</strong> ⭐⭐⭐⭐☆</p>
+                            <p>
+                                <strong>Calificación:</strong>
+
+                                <!-- ★ / ☆ con Font Awesome (o cualquier icono) -->
+                                <span th:each="i : ${#numbers.sequence(1,5)}">
+                                    <i th:class="${i <= valoracion} ?
+                                                'fa-solid fa-star text-warning' :
+                                                'fa-regular fa-star text-muted'"></i>
+                                </span>
+                                <span th:unless="${valoracion > 0}">Sin valoraciones</span>
+                            </p>
 
                             <!-- Botón para abrir modal -->
                             <button id="btnEditPerfil" type="button" class="btn btn-primary" data-bs-toggle="modal"
