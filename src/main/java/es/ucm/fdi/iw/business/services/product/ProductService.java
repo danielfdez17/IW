@@ -16,4 +16,5 @@ public interface ProductService {
     List<ProductDTO> obtenerSubastasPujadasPorUsuario(Long userId) ;
     void scheduleDeactivation(final long subastaId);
     boolean isProductActive(long productId);
+    void addComentarioYValoracion(long id, String comentario, byte valoracion);
 }

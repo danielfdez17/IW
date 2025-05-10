@@ -42,6 +42,7 @@ import es.ucm.fdi.iw.business.dto.ProductDTO;
 import es.ucm.fdi.iw.business.dto.PujaDTO;
 import es.ucm.fdi.iw.business.dto.UserDTO;
 import es.ucm.fdi.iw.business.enums.EstadoSubasta;
+import es.ucm.fdi.iw.business.enums.RepartoSubasta;
 import es.ucm.fdi.iw.business.fileconfiglocal.LocalData;
 import es.ucm.fdi.iw.business.mapper.LocalDateTimeMapper;
 import es.ucm.fdi.iw.business.model.User;
@@ -79,6 +80,14 @@ public class DetailProductController {
     public String product(@PathVariable int id, Model model) {
         ProductDTO producto = productService.getProduct(id);
         model.addAttribute("producto", producto);
+        model.addAttribute("estado", EstadoSubasta.getTxt(producto.getEstadoSubasta()));
+        User session = (User) model.getAttribute("u");
+        String winner = "";
+        if(producto.getMaximoPujador() != null && EstadoSubasta.FINALIZADA.equals(producto.getEstadoSubasta())) 
+            winner = producto.getMaximoPujador();   
+        
+        model.addAttribute("canAddComment", winner.equals(session.getUsername()) && RepartoSubasta.ENTREGADO.equals(producto.getRepartoSubasta()));
+        model.addAttribute("isGanador", winner.equals(session.getUsername()));
         return "productdetail";
     }
 
@@ -95,7 +104,7 @@ public class DetailProductController {
             pujaDTO.setUsuarioId(userDTO.getId());
             pujaDTO.setSubastaId(id);
             pujaDTO.setDineroPujado(puja);
-            pujaService.updatePuja2(pujaDTO);
+            pujaService.updatePuja(pujaDTO);
 
             User usuario = (User) session.getAttribute("u");
             producto.setDineroPujado(id);
@@ -182,6 +191,14 @@ public class DetailProductController {
         InputStream in = new BufferedInputStream(
                 f.exists() ? new FileInputStream(f) : DetailProductController.defaultPic());
         return os -> FileCopyUtils.copy(in, os);
+    }
+
+    @PostMapping("{id}/comentar")
+    public String comentarProducto(@PathVariable Long id,
+                                @RequestParam String comentario,
+                                @RequestParam byte valoracion) {
+        productService.addComentarioYValoracion(id, comentario, valoracion);
+        return "redirect:/products/" + id;
     }
 
     /**

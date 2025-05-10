@@ -36,15 +36,20 @@
 
                         <h5 class="text-muted">Estado de la puja</h5>
                         <p id="estado-producto" class="fs-4 fw-bold"
-                        th:text="${producto.enabled} ? 'En curso' : 'Finalizada'"
+                        th:text="${estado}"
                         th:classappend="${producto.enabled} ? 'text-success' : 'text-danger'">
                         </p>
 
                         <h5 class="text-muted">Mejor postor</h5>
                         <p id="mejor-postor" class="fs-4 fw-bold" th:text="${producto.maximoPujador} ?: 'Sin pujas aún'">Sin pujas aún</p>
 
+                        <div th:if="${producto.comentarioGanador != null AND !producto.enabled}">
+                            <h5 class="text-muted mt-4">Comentario del ganador</h5>
+                            <p th:text="${producto.comentarioGanador}">Este es el comentario del ganador.</p>
+                            <p><strong>Valoración:</strong> <span th:text="${producto.valoracionGanador}">5</span>/5</p>
+                        </div>
                         <!-- Chat con el vendedor -->
-                        <p class="fs-3"> Chat con el vendedor
+                        <p class="fs-3" th:if="${isGanador} or ${producto.enabled}"> Chat con el vendedor
                             <a class="text-decoration-none text-primary"
                                 th:href="@{|/chat?userChatNew=${producto.creadorUsername}|} "><i
                                     class="bi bi-chat-dots-fill"></i></a>
@@ -69,8 +74,25 @@
                                     onclick="subirPuja(100)">+100 €</button>
                             </form>
                         </div>
-
                         <div id="mensaje-puja" class="mt-3"></div>
+                    </div>
+                    <div th:if="${canAddComment}" class="mt-5">
+                        <h5 class="text-muted">Deja un comentario y valoración</h5>
+                        <form th:action="@{/products/{id}/comentar(id=${producto.id})}" method="post">
+                            <input type="hidden" name="_csrf" th:value="${_csrf.token}">
+                            
+                            <div class="mb-3">
+                                <label for="comentario" class="form-label">Comentario</label>
+                                <textarea class="form-control" id="comentario" name="comentario" rows="3" required th:text="${producto.comentarioGanador} ?: ''"></textarea>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="valoracion" class="form-label">Valoración (1-5)</label>
+                                <input type="number" class="form-control" id="valoracion" name="valoracion" min="1" max="5" required th:value="${producto.valoracionGanador} ?: ''">
+                            </div>
+
+                            <button type="submit" class="btn btn-success">Enviar valoración</button>
+                        </form>
                     </div>
                 </div>
             </div>

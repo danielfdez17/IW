@@ -40,6 +40,7 @@ public class SubastaServicesImpl implements SubastasServices {
         subasta.setEstado(subastaDTO.getEstado());
         subasta.setEnabled(subastaDTO.isEnabled());
         subasta.setGanador(user);
+        subasta.setRepartoSubasta(subastaDTO.getRepartoSubasta());
         subastaRepository.save(subasta);
         return SubastaMapper.INSTANCE.entityToDto(subasta);
     }

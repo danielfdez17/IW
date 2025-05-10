@@ -180,4 +180,13 @@ public class ProductServiceImpl implements ProductService {
         }
         return false;
     }
+
+    @Override
+    public void addComentarioYValoracion(long id, String comentario, byte valoracion) {
+        Subasta subasta = subastaRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Subasta no encontrada"));
+        subasta.setComentarioGanador(comentario);
+        subasta.setValoracionGanador(valoracion);
+        subastaRepository.save(subasta);
+    }
 }

@@ -3,6 +3,7 @@ package es.ucm.fdi.iw.business.dto;
 import java.time.LocalDateTime;
 
 import es.ucm.fdi.iw.business.enums.EstadoSubasta;
+import es.ucm.fdi.iw.business.enums.RepartoSubasta;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -28,5 +29,8 @@ public class ProductDTO {
     private double precioInicial;
     private double dineroPujado; 
     private EstadoSubasta estadoSubasta;
-    private boolean usuarioHaPujado; 
+    private boolean usuarioHaPujado;
+    private RepartoSubasta repartoSubasta;
+    private String comentarioGanador;
+    private Byte valoracionGanador;
 }

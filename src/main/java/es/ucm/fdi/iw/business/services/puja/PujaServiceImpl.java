@@ -89,7 +89,7 @@ public class PujaServiceImpl implements PujaService {
 
     @Transactional
     @Override
-    public void updatePuja2(PujaDTO pujaDTO){
+    public void updatePuja(PujaDTO pujaDTO){
         List<PujaDTO> listPujas = getPujasBySubastaId(pujaDTO.getSubastaId());
         Optional<PujaDTO> maxPujaOpt = listPujas.stream().max(Comparator.comparingDouble(PujaDTO::getDineroPujado));
         if (maxPujaOpt.isPresent() && maxPujaOpt.get().getDineroPujado() >= pujaDTO.getDineroPujado())
@@ -128,48 +128,7 @@ public class PujaServiceImpl implements PujaService {
             pujaRepository.save(puja);
         }
     }
-
-    @Override
-    @Transactional
-    public void updatePuja(PujaDTO pujaDTO) {
-        // Verificar si la puja existe
-        Optional<Puja> existingPuja = pujaRepository
-                .findById(new PujaEmbed(pujaDTO.getUsuarioId(), pujaDTO.getSubastaId()));
-        if (existingPuja.isPresent()) {
-            Puja puja = existingPuja.get();
-            puja.setFecha(LocalDateTime.now());
-            puja.setDineroPujado(pujaDTO.getDineroPujado());
-            puja.setPuntuacion(pujaDTO.getPuntuacion());
-            puja.setComentario(pujaDTO.getComentario());
-            puja.setFecha(pujaDTO.getFecha());
-            User lastUser = puja.getSubasta().getPujas().getLast().getUser();
-            double lastValue = puja.getSubasta().getPujas().getLast().getDineroPujado();
-            lastUser.setAvailableMoney(lastUser.getAvailableMoney() + lastValue);
-
-            // Guardar la puja actualizada
-        } else {
-            Subasta existingSubasta = subastaRepository.findById(pujaDTO.getSubastaId())
-                    .orElseThrow(() -> new RuntimeException("No existe la subasta con id " + pujaDTO.getSubastaId()));
-            User existingUser = userRepository.findById(pujaDTO.getUsuarioId())
-                    .orElseThrow(() -> new RuntimeException("No existe el usuario con id " + pujaDTO.getUsuarioId()));
-            if (existingSubasta.getPujas() != null && !existingSubasta.getPujas().isEmpty()) {
-                User lastUser = existingSubasta.getPujas().getLast().getUser();
-                double lastValue = existingSubasta.getPujas().getLast().getDineroPujado();
-                lastUser.setAvailableMoney(lastUser.getAvailableMoney() + lastValue);
-            }
-            Puja puja = new Puja();
-            puja.setId(new PujaEmbed(pujaDTO.getUsuarioId(), pujaDTO.getSubastaId()));
-            puja.setFecha(LocalDateTime.now());
-            puja.setDineroPujado(pujaDTO.getDineroPujado());
-            puja.setPuntuacion(pujaDTO.getPuntuacion());
-            puja.setComentario(pujaDTO.getComentario());
-            puja.setFecha(pujaDTO.getFecha());
-            puja.setSubasta(existingSubasta);
-            puja.setUser(existingUser);
-            pujaRepository.save(puja);
-        }
-    }
-
+    
     @Override
     public List<PujaDTO> getPujasBySubastaId(long subastaId) {
         List<Puja> puja = pujaRepository.findBySubastaId(subastaId);

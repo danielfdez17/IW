@@ -12,6 +12,5 @@ public interface PujaService {
     PujaDTO getPuja(long usuarioId, long subastaId);
     void savePuja(PujaDTO pujaDTO);
     void updatePuja(PujaDTO pujaDTO);
-    void updatePuja2(PujaDTO pujaDTO);
 }
 
