@@ -79,9 +79,11 @@
                                                         th:value="${user.lastName}" class="form-control" required>
                                                 </div>
                                                 <div class="mb-3">
-                                                    <label for="deliveryAddress" class="form-label">Dirección de entrega</label>
+                                                    <label for="deliveryAddress" class="form-label">Dirección de
+                                                        entrega</label>
                                                     <input type="text" name="deliveryAddress" id="editDeliveryAddress"
-                                                        th:value="${user.deliveryAddress}" class="form-control" required>
+                                                        th:value="${user.deliveryAddress}" class="form-control"
+                                                        required>
                                                 </div>
                                                 <div class="mb-3">
                                                     <label for="password" class="form-label">Contraseña</label>
@@ -135,7 +137,8 @@
                                                         crédito</label>
                                                     <input type="text" name="creditCard" id="creditCard"
                                                         class="form-control" pattern="[0-9]{16}"
-                                                        placeholder="16 dígitos" maxlength="16" minlength="16" required value="0000000000000000">
+                                                        placeholder="16 dígitos" maxlength="16" minlength="16" required
+                                                        value="0000000000000000">
                                                 </div>
                                                 <div class="mb-3">
                                                     <label for="amount" class="form-label">Cantidad</label>
@@ -144,13 +147,14 @@
                                                 </div>
                                                 <div class="mb-3">
                                                     <label for="cvv" class="form-label">CVV</label>
-                                                    <input type="text" id="cvv" name="cvv" class="form-control" required 
-                                                           minlength="3" maxlength="3" value="000">
+                                                    <input type="text" id="cvv" name="cvv" class="form-control" required
+                                                        minlength="3" maxlength="3" value="000">
                                                 </div>
                                                 <div class="mb-3">
-                                                    <label for="expiryDate" class="form-label">Fecha de caducidad</label>
-                                                    <input type="month" id="expiryDate" name="expiryDate" class="form-control" required 
-                                                           value="2030-12">
+                                                    <label for="expiryDate" class="form-label">Fecha de
+                                                        caducidad</label>
+                                                    <input type="month" id="expiryDate" name="expiryDate"
+                                                        class="form-control" required value="2030-12">
                                                 </div>
                                                 <div class="mb-3">
                                                     <button type="submit" class="btn btn-primary w-100">Añadir
@@ -219,7 +223,8 @@
                                             <th>Precios</th>
                                             <th>Plazos</th>
                                             <th>Estado</th>
-                                            <th>Acciones</th>
+                                            <th>Editar</th>
+                                            <th>Envío</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -250,16 +255,56 @@
                                                     </p>
                                                 </td>
                                                 <td th:switch="${bid.estado.name()}">
-                                                    <p th:case="'PENDIENTE'" class="badge text-bg-secondary text-uppercase">Pendiente</p>
-                                                    <p th:case="'EN_CURSO'" class="badge text-bg-success text-uppercase">En curso</p>
-                                                    <p th:case="'FINALIZADA'" class="badge text-bg-primary text-uppercase">Finalizada</p>
-                                                    <p th:case="'CANCELADA'" class="badge text-bg-danger  text-uppercase">Pendiente</p>
+                                                    <p th:case="'PENDIENTE'"
+                                                        class="badge text-bg-secondary text-uppercase">Pendiente</p>
+                                                    <p th:case="'EN_CURSO'"
+                                                        class="badge text-bg-success text-uppercase">En curso</p>
+                                                    <p th:case="'FINALIZADA'"
+                                                        class="badge text-bg-primary text-uppercase">Finalizada</p>
+                                                    <p th:case="'CANCELADA'"
+                                                        class="badge text-bg-danger  text-uppercase">Pendiente</p>
                                                 </td>
                                                 <td>
                                                     <button type="button" class="btn btn-info"
-                                                        th:disabled="${bid.estado.name() == 'CANCELADA' OR bid.estado.name() == 'FINALIZADA'}" th:data-id="${bid.id}"
-                                                        data-bs-toggle="modal"
+                                                        th:disabled="${bid.estado.name() == 'CANCELADA' OR bid.estado.name() == 'FINALIZADA'}"
+                                                        th:data-id="${bid.id}" data-bs-toggle="modal"
                                                         data-bs-target="#modalEditarSubasta">Editar</button>
+                                                </td>
+                                                <td>
+                                                    <th:block th:switch="${bid.repartoSubasta.name()}">
+                                                        <form th:case="'PENDIENTE_DE_TERMINAR_SUBASTA'"
+                                                            th:action="@{/products/send_product/{id}(id=${bid.id})}"
+                                                            method="post">
+                                                            <input type="hidden" name="reparto"
+                                                                value="REPARTO">
+                                                            <button type="submit"
+                                                                class="badge text-bg-secondary text-uppercase">Subasta
+                                                                no acabada</button>
+                                                        </form>
+                                                        <form th:case="'REPARTO'"
+                                                            th:action="@{/products/send_product/{id}(id=${bid.id})}"
+                                                            method="post">
+                                                            <input type="hidden" name="reparto" value="ENTREGADO">
+                                                            <button type="submit"
+                                                                class="badge text-bg-success text-uppercase">En
+                                                                tránsito</button>
+                                                        </form>
+                                                        <form th:case="'ENTREGADO'"
+                                                            th:action="@{/products/send_product/{id}(id=${bid.id})}"
+                                                            method="post">
+                                                            <input type="hidden" name="reparto" value="CANCELADO">
+                                                            <button type="submit"
+                                                                class="badge text-bg-primary text-uppercase">Entregado</button>
+                                                        </form>
+                                                        <form th:case="'CANCELADO'"
+                                                            th:action="@{/products/send_product/{id}(id=${bid.id})}"
+                                                            method="post">
+                                                            <input type="hidden" name="reparto" value="PENDIENTE_DE_TERMINAR_SUBASTA">
+                                                            <button type="submit"
+                                                                class="badge text-bg-danger text-uppercase">Cancelado</button>
+                                                        </form>
+                                                    </th:block>
+
                                                 </td>
                                             </tr>
 

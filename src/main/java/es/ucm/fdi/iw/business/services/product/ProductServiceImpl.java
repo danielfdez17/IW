@@ -4,33 +4,30 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import es.ucm.fdi.iw.business.dto.ProductDTO;
+import es.ucm.fdi.iw.business.enums.RepartoSubasta;
 import es.ucm.fdi.iw.business.mapper.SubastaMapper;
 import es.ucm.fdi.iw.business.model.Subasta;
 import es.ucm.fdi.iw.business.model.User;
 import es.ucm.fdi.iw.business.repository.SubastaRepository;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
+import lombok.RequiredArgsConstructor;
 
 @Service
+@RequiredArgsConstructor
 public class ProductServiceImpl implements ProductService {
 
     private final SubastaRepository subastaRepository;
+
     @PersistenceContext
     private EntityManager entityManager;
 
-    @Autowired
-    public ProductServiceImpl(SubastaRepository subastaRepository) {
-        this.subastaRepository = subastaRepository;
-    }
-
     @Override
     public List<ProductDTO> getAllProducts() {
-        // Mapear Subastas a ProductDTO
         return subastaRepository.findAll().stream()
                 .map(SubastaMapper.INSTANCE::subastaToProductDTO)
                 .collect(Collectors.toList());
@@ -50,6 +47,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
+    @Transactional
     public void updateProduct(ProductDTO producto) {
         Subasta subasta = subastaRepository.findById(producto.getId())
                 .orElseThrow(() -> new RuntimeException("Subasta no encontrada"));
@@ -61,7 +59,6 @@ public class ProductServiceImpl implements ProductService {
         subasta.setMaximoPujador(producto.getMaximoPujador());
         subasta.setEnabled(producto.isEnabled());
 
-        subastaRepository.save(subasta);
     }
 
     @Override
@@ -72,7 +69,6 @@ public class ProductServiceImpl implements ProductService {
         subasta.setNombre(p.getNombre());
         subasta.setDescripcion(p.getDescripcion());
         subasta.setEnabled(true);
-        subastaRepository.save(subasta);
     }
 
     @Override
@@ -104,7 +100,6 @@ public class ProductServiceImpl implements ProductService {
         Subasta subasta = subastaRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Subasta no encontrada"));
         subasta.setEnabled(active);
-        subastaRepository.save(subasta);
     }
 
     @Override
@@ -136,6 +131,7 @@ public class ProductServiceImpl implements ProductService {
 
     }
 
+    @Override
     public boolean isProductActive(long subastaId) {
         Subasta subasta = subastaRepository.findById(subastaId).orElse(null);
         if (subasta != null) {
@@ -145,11 +141,19 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
+    @Transactional
     public void addComentarioYValoracion(long id, String comentario, byte valoracion) {
         Subasta subasta = subastaRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Subasta no encontrada"));
         subasta.setComentarioGanador(comentario);
         subasta.setValoracionGanador(valoracion);
-        subastaRepository.save(subasta);
+    }
+
+    @Override
+    @Transactional
+    public void updateSendProduct(long id, String reparto) {
+        Subasta subasta = subastaRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Subasta no encontrada"));
+        subasta.setRepartoSubasta(RepartoSubasta.valueOf(reparto));
     }
 }

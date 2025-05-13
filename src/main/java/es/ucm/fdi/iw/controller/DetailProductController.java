@@ -1,9 +1,17 @@
 package es.ucm.fdi.iw.controller;
 
+import java.io.BufferedInputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.Map;
+import java.util.Objects;
+
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -14,24 +22,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-
-import java.io.BufferedInputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
-import java.util.Objects;
-
-import java.time.format.DateTimeFormatter;
-import java.util.HashMap;
-import java.util.Map;
-
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
@@ -83,17 +74,18 @@ public class DetailProductController {
         model.addAttribute("estado", EstadoSubasta.getTxt(producto.getEstadoSubasta()));
         User session = (User) model.getAttribute("u");
         String winner = "";
-        if(producto.getMaximoPujador() != null && EstadoSubasta.FINALIZADA.equals(producto.getEstadoSubasta())) 
-            winner = producto.getMaximoPujador();   
-        
-        model.addAttribute("canAddComment", winner.equals(session.getUsername()) && RepartoSubasta.ENTREGADO.equals(producto.getRepartoSubasta()));
+        if (producto.getMaximoPujador() != null && EstadoSubasta.FINALIZADA.equals(producto.getEstadoSubasta()))
+            winner = producto.getMaximoPujador();
+
+        model.addAttribute("canAddComment",
+                winner.equals(session.getUsername()) && RepartoSubasta.ENTREGADO.equals(producto.getRepartoSubasta()));
         model.addAttribute("isGanador", winner.equals(session.getUsername()));
         return "productdetail";
     }
 
     @PostMapping("/{id}/pujar")
     @ResponseBody
-    public Map<String, String>  realizarPuja(@PathVariable long id, @RequestParam Double puja, HttpSession session) {
+    public Map<String, String> realizarPuja(@PathVariable long id, @RequestParam Double puja, HttpSession session) {
         ProductDTO producto = productService.getProduct(id);
         UserDetails u = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         UserDTO userDTO = userService.findUserByUsername(u.getUsername());
@@ -112,17 +104,25 @@ public class DetailProductController {
             producto.setMaximoPujador(usuario.getUsername());
             producto.setUsuarioHaPujado(true);
             productService.updateProduct(producto);
-            
-            sendProductUpdateToWebSocket(producto); 
+
+            sendProductUpdateToWebSocket(producto);
         }
         Double x = ((User) session.getAttribute("u")).getAvailableMoney();
         return Map.of(
-            "username", u.getUsername(),
-            "availableMoney", String.valueOf(x)
-        );
+                "username", u.getUsername(),
+                "availableMoney", String.valueOf(x));
     }
+
+    @PostMapping("/send_product/{id}")
+    public String updateSendProduct(@PathVariable long id, @RequestParam String reparto, HttpSession session) {
+        productService.updateSendProduct(id, reparto);
+        User usuario = (User) session.getAttribute("u");
+        return "redirect:/user/" + usuario.getId();
+    }
+
     @Autowired
     private SimpMessagingTemplate messagingTemplate;
+
     private void sendProductUpdateToWebSocket(ProductDTO producto) {
         messagingTemplate.convertAndSend("/topic/product-updates/" + producto.getId(), producto);
     }
@@ -142,7 +142,7 @@ public class DetailProductController {
         }
         LocalDateTime now = LocalDateTime.now();
         EstadoSubasta estadoSubasta = EstadoSubasta.PENDIENTE;
-        if (now.isAfter(newDateInit) || now.isEqual(newDateInit)) 
+        if (now.isAfter(newDateInit) || now.isEqual(newDateInit))
             estadoSubasta = EstadoSubasta.EN_CURSO;
 
         ProductDTO productDTO = new ProductDTO();
@@ -177,7 +177,7 @@ public class DetailProductController {
 
         return "redirect:/index";
     }
-    
+
     /**
      * Downloads a profile pic for a user id
      * 
@@ -195,8 +195,8 @@ public class DetailProductController {
 
     @PostMapping("{id}/comentar")
     public String comentarProducto(@PathVariable Long id,
-                                @RequestParam String comentario,
-                                @RequestParam byte valoracion) {
+            @RequestParam String comentario,
+            @RequestParam byte valoracion) {
         productService.addComentarioYValoracion(id, comentario, valoracion);
         return "redirect:/products/" + id;
     }
@@ -221,8 +221,7 @@ public class DetailProductController {
                 fout.write(photo.getBytes());
 
                 fout.close();
-            } 
-            catch (Exception e) {
+            } catch (Exception e) {
                 e.printStackTrace();
             }
         }
