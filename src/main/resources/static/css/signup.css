@@ -1,0 +1,41 @@
+/* body {
+    background-color: #BBDEFB;
+    color: #070000;
+    
+} */
+
+.container {
+    max-width: 400px;
+    margin-top: 100px;
+}
+
+.form-signup {
+    background-color: #ffffff;
+    padding: 20px;
+}
+
+.form-signup h2 {
+    font-size: 24px;
+    color: #000000;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.form-control {
+    margin-bottom: 15px;
+    padding: 10px;
+    font-size: 16px;
+}
+
+.btn-primary {
+    border: 2px solid #000;
+    background-color: #37a0f6;
+    font-size: 16px;
+    border-radius: 4px;
+    width: 100%;
+}
+
+.error {
+    color: #f44336;
+    text-align: center;
+}

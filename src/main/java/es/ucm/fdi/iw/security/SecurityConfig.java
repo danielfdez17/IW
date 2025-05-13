@@ -76,7 +76,7 @@ public class SecurityConfig {
 			)
 			
       .authorizeHttpRequests(authorize -> authorize
-				.requestMatchers("/css/**", "/js/**", "/img/**", "/", "/error").permitAll()
+				.requestMatchers("/css/**", "/js/**", "/img/**", "/", "/error", "/signup").permitAll()
 				.requestMatchers("/api/**").permitAll()            // <-- public api access
 				.requestMatchers("/chat", "/chat/**").hasAnyRole("ADMIN", "USER")       // <-- logged-in users
 				.requestMatchers("/admin/**").hasRole("ADMIN")	   // <-- administration
