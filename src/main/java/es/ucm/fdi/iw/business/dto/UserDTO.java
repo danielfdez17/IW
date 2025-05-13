@@ -11,6 +11,7 @@ public class UserDTO {
     private String password;
     private String firstName;
     private String lastName;
+    private String deliveryAddress;
     private boolean enabled;
     private String roles;
     private double availableMoney;

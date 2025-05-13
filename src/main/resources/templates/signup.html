@@ -18,26 +18,31 @@
                     <!-- Error en nombre de usuario o contraseña -->
                 </p>
                 <p th:if="${existingUsername != null}" th:text="${existingUsername}" class="error">Error </p>
-                <p>
-                    <label for="first_name" class="visually-hidden">Nombre</label>
+                <div class="form-floating mb-3">
                     <input type="text" id="first_name" name="first_name" class="form-control" placeholder="Nombre"
                         required="required">
-                </p>
-                <p>
-                    <label for="last_name" class="visually-hidden">Apellido(s)</label>
+                    <label for="first_name" class="text-dark">Nombre</label>
+                </div>
+                <div class="form-floating mb-3">
                     <input type="text" id="last_name" name="last_name" class="form-control" placeholder="Apellido(s)"
                         required="required">
-                </p>
-                <p>
-                    <label for="username" class="visually-hidden">Usuario</label>
+                    <label for="last_name" class="text-dark">Apellido(s)</label>
+                </div>
+                <div class="form-floating mb-3">
+                    <input type="text" id="delivery_address" name="delivery_address" class="form-control"
+                        placeholder="C/ Mirador de Montepinar 7" required="required">
+                    <label for="delivery_address" class="text-dark">Dirección de entrega</label>
+                </div>
+                <div class="form-floating mb-3">
                     <input type="text" id="username" name="username" class="form-control" placeholder="Usuario"
                         required="required">
-                </p>
-                <p>
-                    <label for="password" class="visually-hidden">Contraseña</label>
+                    <label for="username" class="text-dark">Usuario</label>
+                </div>
+                <div class="form-floating mb-3">
                     <input type="password" id="password" name="password" class="form-control" placeholder="Contraseña"
                         required="required">
-                </p>
+                    <label for="password" class="text-dark">Contraseña</label>
+                </div>
                 <button class="btn btn-lg btn-primary btn-block" type="submit">Registrarse</button>
             </form>
         </div>

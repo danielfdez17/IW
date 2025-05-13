@@ -79,6 +79,11 @@
                                                         th:value="${user.lastName}" class="form-control" required>
                                                 </div>
                                                 <div class="mb-3">
+                                                    <label for="deliveryAddress" class="form-label">Dirección de entrega</label>
+                                                    <input type="text" name="deliveryAddress" id="editDeliveryAddress"
+                                                        th:value="${user.deliveryAddress}" class="form-control" required>
+                                                </div>
+                                                <div class="mb-3">
                                                     <label for="password" class="form-label">Contraseña</label>
                                                     <input type="password" name="pass2" id="editPassword"
                                                         class="form-control" required>

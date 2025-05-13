@@ -57,12 +57,14 @@ public class RootController {
     public String postSignup(Model model, HttpServletRequest request,
             @RequestParam("first_name") String firstName,
             @RequestParam("last_name") String lastName,
+            @RequestParam("delivery_address") String deliveryAddress,
             @RequestParam("username") String username,
             @RequestParam("password") String password) {
         UserDTO userDTO = UserDTO.builder()
                 .firstName(firstName)
                 .lastName(lastName)
                 .username(username)
+                .deliveryAddress(deliveryAddress)
                 .password(passwordEncoder.encode(password))
                 .build();
         try {
