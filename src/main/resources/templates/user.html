@@ -281,7 +281,7 @@
                                                             method="post">
                                                             <input type="hidden" name="reparto"
                                                                 value="REPARTO">
-                                                            <button type="button"
+                                                            <button type="button" disabled
                                                                 class="badge text-bg-secondary text-uppercase cursor-none">Subasta
                                                                 no acabada</button>
                                                         </form>
@@ -289,7 +289,7 @@
                                                             th:action="@{/products/send_product/{id}(id=${bid.id})}"
                                                             method="post">
                                                             <input type="hidden" name="reparto" value="ENTREGADO">
-                                                            <button type="submit" disabled
+                                                            <button type="submit"
                                                                 class="badge text-bg-success text-uppercase">En
                                                                 tránsito</button>
                                                         </form>
@@ -359,6 +359,7 @@
                                                                         fin</label>
                                                                     <input type="date" name="nuevaFechaFin"
                                                                         id="editnuevaFechaFin"
+                                                                        th:min="${#temporals.format(bid.fechaInicio, 'yyyy-MM-dd')}"
                                                                         th:value="${#temporals.format(bid.fechaFin, 'yyyy-MM-dd')}"
                                                                         class="form-control" required>
                                                                 </div>
