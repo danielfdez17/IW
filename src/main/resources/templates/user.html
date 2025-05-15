@@ -199,7 +199,7 @@
                                         <!-- Itera sobre las subastas -->
                                         <tr th:each="subastasPujadas : ${subastasPujadas}">
                                             <td th:text="${subastasPujadas.nombre}">Nombre de la Subasta</td>
-                                            <td th:text="${subastasPujadas.fechaFin}">Fecha de Fin</td>
+                                            <td th:text="${#temporals.format(subastasPujadas.fechaFin, 'dd/MM/yyyy - HH:mm:ss')}">Fecha de Fin</td>
                                             <td th:text="${subastasPujadas.precio}">Precio Inicial</td>
                                             <td th:text="${subastasPujadas.precioActual}">Pujado</td>
                                         </tr>
