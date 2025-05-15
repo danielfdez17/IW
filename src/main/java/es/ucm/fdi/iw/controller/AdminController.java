@@ -71,9 +71,9 @@ public class AdminController {
         return "redirect:/admin/";
     }
 
-    @PostMapping("/subasta/toggle/{id}")
-    public String toggleSubasta(@PathVariable long id, @RequestParam boolean enabled) {
-        productService.toggleProduct(id, enabled);
+    @PostMapping("/subasta/disabled/{id}")
+    public String disabledSubasta(@PathVariable long id) {
+        productService.disabledProduct(id);
         return "redirect:/admin/subasta";
     }
 

@@ -55,11 +55,17 @@
                             </button>
                         </td>
                         <td>
-                            <form th:action="@{'/admin/subasta/toggle/' + ${p.id}}"
+                             <div th:if="${p.estadoSubasta.name()} == 'CANCELADA'">
+                                <span class="text-danger">Subasta cancelada</span>
+                            </div>
+                            <div th:if="${p.estadoSubasta.name()} != 'CANCELADA'">
+                                <form th:action="@{'/admin/subasta/disabled/' + ${p.id}}"
+                                      onsubmit="return confirm('¿Estás seguro de que quieres cancelar esta subasta? Esta acción no se puede deshacer.');"
                                 th:method="post">
-                                <input type="hidden" name="enabled" th:value="${!p.enabled}" />
-                                <button type="submit" class="toggle btn" th:classappend="${p.enabled} ? 'btn-danger' : 'btn-success'" th:text="${p.enabled ? 'Desactivar' : 'Activar'}"></button> 
-                            </form>
+                                    <button type="submit" class="toggle btn" th:classappend="${p.enabled} ? 'btn-danger' : 'btn-success'">Cancelar subasta</button> 
+                                </form>
+                            </div>
+                            
                         </td>
                     </tr>
                 </tbody>

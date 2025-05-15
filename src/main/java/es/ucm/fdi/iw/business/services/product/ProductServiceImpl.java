@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import es.ucm.fdi.iw.business.dto.ProductDTO;
+import es.ucm.fdi.iw.business.enums.EstadoSubasta;
 import es.ucm.fdi.iw.business.enums.RepartoSubasta;
 import es.ucm.fdi.iw.business.mapper.SubastaMapper;
 import es.ucm.fdi.iw.business.model.Subasta;
@@ -96,10 +97,29 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     @Transactional
-    public void toggleProduct(long id, final boolean active) {
+    public void disabledProduct(long id) {
         Subasta subasta = subastaRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Subasta no encontrada"));
-        subasta.setEnabled(active);
+        subasta.setEnabled(false);
+        subasta.setEstado(EstadoSubasta.CANCELADA);
+        subasta.setComentarioGanador(null);
+        subasta.setValoracionGanador(null);
+        subasta.setRepartoSubasta(RepartoSubasta.CANCELADO);
+        final User creador = subasta.getCreador();
+        final User ganador = subasta.getGanador();
+        if (ganador != null && ganador.getId() != creador.getId()) {
+            creador.setAvailableMoney(creador.getAvailableMoney() - subasta.getPrecioActual());
+            subasta.getPujas().stream().filter(puja -> puja.getUser().getId() != creador.getId())
+                    .forEach(puja -> {
+                        final User user = puja.getUser();
+                        user.setAvailableMoney(user.getAvailableMoney() + puja.getDineroPujado());
+                    });
+        } else {
+             subasta.getPujas().forEach(puja -> {
+                final User user = puja.getUser();
+                user.setAvailableMoney(user.getAvailableMoney() + puja.getDineroPujado());
+            });
+        }      
     }
 
     @Override
