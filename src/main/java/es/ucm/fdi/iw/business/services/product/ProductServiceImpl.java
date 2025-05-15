@@ -161,4 +161,11 @@ public class ProductServiceImpl implements ProductService {
     public Subasta getSubasta(long id) {
         return subastaRepository.findById(id).orElse(null);
     }
+
+    @Override
+    public List<ProductDTO> getAllProductsWithSaleActive() {
+        return subastaRepository.findBySaleInProgressOrPending().stream()
+                .map(SubastaMapper.INSTANCE::subastaToProductDTO)
+                .toList();
+    }
 }

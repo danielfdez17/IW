@@ -34,7 +34,16 @@
             <td th:text="${bid.usuario}"></td>
             <td th:text="${bid.fecha}"></td>
             <td>
-                <a th:href="@{/archived/reviews/{id}(id=${bid.id})}" class="btn btn-primary btn-sm">Dejar Reseña</a>
+                <div th:if="${bid.estadoSubasta.name()} == 'FINALIZADA'">
+                    <span th:if="${bid.comentarioGanador != null}" th:text="${bid.comentarioGanador}" class="text-success">Reseñada</span>
+                    <span th:unless="${bid.comentarioGanador != null}" class="text-muted">Sin comentario</span>
+                    <br>
+                    <span th:if="${bid.valoracionGanador != null}" th:text="${bid.valoracionGanador} + '/5'" class="text-success">Valoracion</span>
+                    <span th:unless="${bid.valoracionGanador != null}" class="text-muted">Sin valoracion</span>
+                </div>
+                <div th:if="${bid.estadoSubasta.name()} != 'FINALIZADA'">
+                    <span class="text-muted">Sin reseña</span>
+                </div>
             </td>
         </tr>
     </tbody>

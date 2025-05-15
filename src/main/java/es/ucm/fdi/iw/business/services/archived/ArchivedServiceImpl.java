@@ -23,9 +23,8 @@ public class ArchivedServiceImpl implements ArchivedServices {
         List<Subasta> subastas = subastaRepository.getAllSubastas();
     
         return subastas.stream()
-            .filter(subasta -> subasta.isEnabled())
             .map(subasta -> {
-                String usuario = subasta.getPujas().isEmpty() ? "No hay pujas" :
+                String usuario = subasta.getPujas().isEmpty() ? "No hay ganador" :
                     subasta.getPujas().get(subasta.getPujas().size() - 1).getUser().getUsername();
     
                 String fecha = subasta.getFechaFin().format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
@@ -36,10 +35,13 @@ public class ArchivedServiceImpl implements ArchivedServices {
                     subasta.getRutaImagen(),
                     subasta.getPrecioActual() + " €",
                     usuario,
-                    fecha
+                    fecha,
+                    subasta.getValoracionGanador(),
+                    subasta.getComentarioGanador(),
+                    subasta.getEstado()
                 );
             })
-            .collect(Collectors.toList());
+            .toList();
     }
     
 }

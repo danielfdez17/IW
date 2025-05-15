@@ -24,4 +24,7 @@ public interface SubastaRepository extends JpaRepository<Subasta, Long> {
 
     @Query("SELECT s FROM Subasta s WHERE s.estado = :estado")
     List<Subasta> findByEstado(@Param("estado") EstadoSubasta estado);
+
+    @Query("SELECT s FROM Subasta s WHERE s.enabled = true AND (s.estado = EstadoSubasta.EN_CURSO OR s.estado = EstadoSubasta.PENDIENTE)")
+    List<Subasta> findBySaleInProgressOrPending();
 }

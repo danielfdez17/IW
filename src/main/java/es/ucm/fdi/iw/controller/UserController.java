@@ -109,6 +109,10 @@ public class UserController {
         return passwordEncoder.encode(rawPassword);
     }
 
+    public boolean comparePassword(String rawPassword, String encodedPassword) {
+        return passwordEncoder.matches(rawPassword, encodedPassword);
+    }
+
     /**
      * Generates random tokens. From https://stackoverflow.com/a/44227131/15472
      * 
@@ -213,7 +217,12 @@ public class UserController {
         target.setUsername(edited.getUsername());
         target.setFirstName(edited.getFirstName());
         target.setLastName(edited.getLastName());
-
+        target.setDeliveryAddress(edited.getDeliveryAddress());
+        if (!comparePassword(pass2, target.getPassword())) {
+            target.setPassword(encodePassword(pass2));
+            session.invalidate();
+            return "redirect:/login";
+        }
         // update user session so that changes are persisted in the session, too
         if (requester.getId() == target.getId()) {
             session.setAttribute("u", target);

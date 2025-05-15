@@ -11,6 +11,8 @@ public interface ProductService {
 
     List<ProductDTO> getAllProducts();
 
+    List<ProductDTO> getAllProductsWithSaleActive();
+
     ProductDTO getProduct(final long id);
 
     void updateProduct(ProductDTO productDTO);
