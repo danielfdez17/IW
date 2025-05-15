@@ -146,7 +146,7 @@
                     }
                 }).catch(err => {
                     console.error("Error al pujar:", err);
-                    mensajePuja.innerText = "Error inesperado";
+                    mensajePuja.innerText = "No tienes dinero suficiente";
                     mensajePuja.className = "text-danger";
                 });
             });

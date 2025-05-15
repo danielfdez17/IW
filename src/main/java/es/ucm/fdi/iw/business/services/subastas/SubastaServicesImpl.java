@@ -34,8 +34,10 @@ public class SubastaServicesImpl implements SubastasServices {
     public SubastaDTO updateSubasta(SubastaDTO subastaDTO) {
         Optional<Subasta> subastaOpt = this.subastaRepository.findById(subastaDTO.getId());
         if (subastaOpt.isEmpty() || EstadoSubasta.FINALIZADA.equals(subastaOpt.get().getEstado()))
-            return null;  
-        User user = userRepository.findById(subastaDTO.getIdUserGanador()).orElse(null);
+            return null;
+        User user = null;
+        if(subastaDTO.getIdUserGanador() != null) 
+            user = userRepository.findById(subastaDTO.getIdUserGanador()).orElse(null);
         Subasta subasta = subastaOpt.get();
         subasta.setEstado(subastaDTO.getEstado());
         subasta.setEnabled(subastaDTO.isEnabled());

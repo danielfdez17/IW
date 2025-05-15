@@ -33,4 +33,5 @@ public class ProductDTO {
     private RepartoSubasta repartoSubasta;
     private String comentarioGanador;
     private Byte valoracionGanador;
+    private Long idUserGanador;
 }

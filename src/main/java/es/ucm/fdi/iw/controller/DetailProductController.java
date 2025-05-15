@@ -73,13 +73,13 @@ public class DetailProductController {
         model.addAttribute("producto", producto);
         model.addAttribute("estado", EstadoSubasta.getTxt(producto.getEstadoSubasta()));
         User session = (User) model.getAttribute("u");
-        String winner = "";
-        if (producto.getMaximoPujador() != null && EstadoSubasta.FINALIZADA.equals(producto.getEstadoSubasta()))
-            winner = producto.getMaximoPujador();
+        Long winner = -1L;
+        if (producto.getIdUserGanador() != null && EstadoSubasta.FINALIZADA.equals(producto.getEstadoSubasta()))
+            winner = producto.getIdUserGanador();
 
         model.addAttribute("canAddComment",
-                winner.equals(session.getUsername()) && RepartoSubasta.ENTREGADO.equals(producto.getRepartoSubasta()));
-        model.addAttribute("isGanador", winner.equals(session.getUsername()));
+                winner == session.getId() && RepartoSubasta.ENTREGADO.equals(producto.getRepartoSubasta()));
+        model.addAttribute("isGanador", winner == session.getId());
         return "productdetail";
     }
 

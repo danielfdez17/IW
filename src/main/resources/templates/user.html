@@ -10,6 +10,10 @@
             background-color: #BBDEFB;
             color: #070000;
         }
+        button:disabled {
+            cursor: not-allowed;
+            pointer-events: all !important;
+            }
     </style>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 </head>
@@ -262,13 +266,13 @@
                                                     <p th:case="'FINALIZADA'"
                                                         class="badge text-bg-primary text-uppercase">Finalizada</p>
                                                     <p th:case="'CANCELADA'"
-                                                        class="badge text-bg-danger  text-uppercase">Pendiente</p>
+                                                        class="badge text-bg-danger  text-uppercase">Cancelada</p>
                                                 </td>
                                                 <td>
                                                     <button type="button" class="btn btn-info"
                                                         th:disabled="${bid.estado.name() == 'CANCELADA' OR bid.estado.name() == 'FINALIZADA'}"
                                                         th:data-id="${bid.id}" data-bs-toggle="modal"
-                                                        data-bs-target="#modalEditarSubasta">Editar</button>
+                                                         th:data-bs-target="'#modalEditarSubasta' + ${bid.id}">Editar</button>
                                                 </td>
                                                 <td>
                                                     <th:block th:switch="${bid.repartoSubasta.name()}">
@@ -277,15 +281,15 @@
                                                             method="post">
                                                             <input type="hidden" name="reparto"
                                                                 value="REPARTO">
-                                                            <button type="submit"
-                                                                class="badge text-bg-secondary text-uppercase">Subasta
+                                                            <button type="button"
+                                                                class="badge text-bg-secondary text-uppercase cursor-none">Subasta
                                                                 no acabada</button>
                                                         </form>
                                                         <form th:case="'REPARTO'"
                                                             th:action="@{/products/send_product/{id}(id=${bid.id})}"
                                                             method="post">
                                                             <input type="hidden" name="reparto" value="ENTREGADO">
-                                                            <button type="submit"
+                                                            <button type="submit" disabled
                                                                 class="badge text-bg-success text-uppercase">En
                                                                 tránsito</button>
                                                         </form>
@@ -293,14 +297,14 @@
                                                             th:action="@{/products/send_product/{id}(id=${bid.id})}"
                                                             method="post">
                                                             <input type="hidden" name="reparto" value="CANCELADO">
-                                                            <button type="submit"
+                                                            <button type="button" disabled
                                                                 class="badge text-bg-primary text-uppercase">Entregado</button>
                                                         </form>
                                                         <form th:case="'CANCELADO'"
                                                             th:action="@{/products/send_product/{id}(id=${bid.id})}"
                                                             method="post">
                                                             <input type="hidden" name="reparto" value="PENDIENTE_DE_TERMINAR_SUBASTA">
-                                                            <button type="submit"
+                                                            <button type="button" disabled
                                                                 class="badge text-bg-danger text-uppercase">Cancelado</button>
                                                         </form>
                                                     </th:block>
@@ -309,13 +313,13 @@
                                             </tr>
 
                                             <!-- Modal editar subasta -->
-                                            <div class="modal fade" id="modalEditarSubasta" tabindex="-1"
-                                                aria-labelledby="modalEditarSubastaLabel" aria-hidden="true">
+                                            <div class="modal fade" th:id="${'modalEditarSubasta' + bid.id}" tabindex="-1"
+                                                th:aria-labelledby="${'modalEditarSubastaLabel' + bid.id}" aria-hidden="true">
                                                 <div class="modal-dialog">
                                                     <div class="modal-content">
                                                         <div class="modal-header">
                                                             <h1 class="modal-title fs-5 fw-bold"
-                                                                id="modalEditarSubastaLabel">Editar subasta</h1>
+                                                                th:id="${'modalEditarSubastaLabel' + bid.id}">Editar subasta</h1>
                                                             <button type="button" class="btn-close"
                                                                 data-bs-dismiss="modal" aria-label="Close"></button>
                                                         </div>
@@ -361,7 +365,7 @@
                                                                 <div class="mb-3">
                                                                     <button type="submit"
                                                                         class="btn btn-primary w-100">Actualizar
-                                                                        perfil</button>
+                                                                        Subasta</button>
                                                                 </div>
                                                             </form>
                                                         </div>
