@@ -28,7 +28,7 @@ public class JobsSubastas {
     private final PujaService pujaService;
     private final UserService userService;
 
-    @Scheduled(fixedRate = 1000 * 01) // 1 minute
+    @Scheduled(fixedRate = 1000 * 01) // 1 second
     @Transactional
     public void initSubastas() {
         List<SubastaDTO> listSubastasPending = subastasServices.getSubastasByStatus(EstadoSubasta.PENDIENTE);
@@ -42,7 +42,7 @@ public class JobsSubastas {
         });
     }
 
-    @Scheduled(fixedRate = 1000 * 01) // 1 minute
+    @Scheduled(fixedRate = 1000 * 01) // 1 second
     @Transactional
     public void finishSubastas() {
         List<SubastaDTO> listSubastasPending = subastasServices.getSubastasByStatus(EstadoSubasta.EN_CURSO);
