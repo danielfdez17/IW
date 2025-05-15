@@ -75,7 +75,7 @@ public class RootController {
         }
         boolean error = request.getQueryString() != null && request.getQueryString().indexOf("error") != -1;
         model.addAttribute("signupError", error);
-        return "login";
+        return "redirect:/login";
     }
 
     @GetMapping({ "/", "/index" })
