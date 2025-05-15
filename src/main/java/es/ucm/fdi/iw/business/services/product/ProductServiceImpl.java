@@ -156,4 +156,9 @@ public class ProductServiceImpl implements ProductService {
                 .orElseThrow(() -> new RuntimeException("Subasta no encontrada"));
         subasta.setRepartoSubasta(RepartoSubasta.valueOf(reparto));
     }
+
+    @Override
+    public Subasta getSubasta(long id) {
+        return subastaRepository.findById(id).orElse(null);
+    }
 }

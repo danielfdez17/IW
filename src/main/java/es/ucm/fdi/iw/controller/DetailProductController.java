@@ -36,6 +36,7 @@ import es.ucm.fdi.iw.business.enums.EstadoSubasta;
 import es.ucm.fdi.iw.business.enums.RepartoSubasta;
 import es.ucm.fdi.iw.business.fileconfiglocal.LocalData;
 import es.ucm.fdi.iw.business.mapper.LocalDateTimeMapper;
+import es.ucm.fdi.iw.business.model.Subasta;
 import es.ucm.fdi.iw.business.model.User;
 import es.ucm.fdi.iw.business.services.product.ProductService;
 import es.ucm.fdi.iw.business.services.puja.PujaService;
@@ -89,10 +90,10 @@ public class DetailProductController {
         ProductDTO producto = productService.getProduct(id);
         UserDetails u = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         UserDTO userDTO = userService.findUserByUsername(u.getUsername());
-
+        Subasta subasta = productService.getSubasta(id);
         PujaDTO pujaDTO = new PujaDTO();
 
-        if (puja.compareTo(producto.getPrecioActual()) > 0) {
+        if (puja.compareTo(producto.getPrecioActual()) > 0 || subasta.getPujas().isEmpty()) {
             pujaDTO.setUsuarioId(userDTO.getId());
             pujaDTO.setSubastaId(id);
             pujaDTO.setDineroPujado(puja);

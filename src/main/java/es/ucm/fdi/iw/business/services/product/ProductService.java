@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import es.ucm.fdi.iw.business.dto.ProductDTO;
+import es.ucm.fdi.iw.business.model.Subasta;
 
 public interface ProductService {
     Map<Long, ProductDTO> getProducts();
@@ -27,4 +28,6 @@ public interface ProductService {
     void addComentarioYValoracion(long id, String comentario, byte valoracion);
 
     void updateSendProduct(long id, String reparto);
+
+    Subasta getSubasta(long id);
 }
