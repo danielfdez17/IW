@@ -25,7 +25,7 @@
                     <div class="col-md-6">
                         <h5 class="text-muted">Descripción</h5>
                         <p th:text="${producto.descripcion}">Descripción del producto.</p>
-                            
+
                         <h5 class="text-muted">Precio</h5>
                         <p class="fs-4 text-success fw-bold mb-3">
                             Inicial: <span th:text="'€' + ${producto.precio}">€0.00</span>
@@ -35,13 +35,13 @@
                         </p>
 
                         <h5 class="text-muted">Estado de la puja</h5>
-                        <p id="estado-producto" class="fs-4 fw-bold"
-                        th:text="${estado}"
-                        th:classappend="${producto.enabled} ? 'text-success' : 'text-danger'">
+                        <p id="estado-producto" class="fs-4 fw-bold" th:text="${estado}"
+                            th:classappend="${producto.enabled} ? 'text-success' : 'text-danger'">
                         </p>
 
                         <h5 class="text-muted">Mejor postor</h5>
-                        <p id="mejor-postor" class="fs-4 fw-bold" th:text="${producto.maximoPujador} ?: 'Sin pujas aún'">Sin pujas aún</p>
+                        <p id="mejor-postor" class="fs-4 fw-bold"
+                            th:text="${producto.maximoPujador} ?: 'Sin pujas aún'">Sin pujas aún</p>
 
                         <div th:if="${producto.comentarioGanador != null AND !producto.enabled}">
                             <h5 class="text-muted mt-4">Comentario del ganador</h5>
@@ -60,8 +60,8 @@
                                 <input type="hidden" name="_csrf" value="${_csrf.token}">
                                 <div class="mb-3">
                                     <label for="nuevaPuja" class="form-label">Tu Puja</label>
-                                    <input type="number" th:value="${producto.precioActual}" class="form-control" id="nuevaPuja" name="puja" step="1.00"
-                                        min="0" required>
+                                    <input type="number" th:value="${producto.precioActual}" class="form-control"
+                                        id="nuevaPuja" name="puja" step="1.00" min="0" required>
                                 </div>
                                 <button type="submit" class="btn btn-success">Pujar</button>
                                 <button type="button" class="btn btn-outline-primary fw-bolder"
@@ -80,15 +80,17 @@
                         <h5 class="text-muted">Deja un comentario y valoración</h5>
                         <form th:action="@{/products/{id}/comentar(id=${producto.id})}" method="post">
                             <input type="hidden" name="_csrf" th:value="${_csrf.token}">
-                            
+
                             <div class="mb-3">
                                 <label for="comentario" class="form-label">Comentario</label>
-                                <textarea class="form-control" id="comentario" name="comentario" rows="3" required th:text="${producto.comentarioGanador} ?: ''"></textarea>
+                                <textarea class="form-control" id="comentario" name="comentario" rows="3" required
+                                    th:text="${producto.comentarioGanador} ?: ''"></textarea>
                             </div>
 
                             <div class="mb-3">
                                 <label for="valoracion" class="form-label">Valoración (1-5)</label>
-                                <input type="number" class="form-control" id="valoracion" name="valoracion" min="1" max="5" required th:value="${producto.valoracionGanador} ?: ''">
+                                <input type="number" class="form-control" id="valoracion" name="valoracion" min="1"
+                                    max="5" required th:value="${producto.valoracionGanador} ?: ''">
                             </div>
 
                             <button type="submit" class="btn btn-success">Enviar valoración</button>
@@ -99,29 +101,30 @@
         </div>
     </main>
 
-    <th:block th:replace="~{fragments/footer.html :: footer}" />
 
-    <script th:src="@{/js/productdetail.js}"></script>
 
     <script>
         const productoId = window.location.pathname.split("/").pop();
 
-        function sendPuja(){
+        function sendPuja () {
+            const estadoProducto = document.getElementById("estado-producto")
+            if (estadoProducto.innerText.includes("Finalizada") || estadoProducto.innerText.includes("Cancelada"))
+                return;
             const form = document.getElementById("formPujar");
             const input = document.getElementById("nuevaPuja");
             const mensajePuja = document.getElementById("mensaje-puja");
             const csrfToken = document.querySelector('input[name="_csrf"]').value;
-        
+
             form.addEventListener("submit", function (event) {
-                event.preventDefault(); 
-        
+                event.preventDefault();
+
                 const valorPuja = parseFloat(input.value);
                 if (isNaN(valorPuja) || valorPuja <= 0) {
                     mensajePuja.innerText = "Introduce una puja válida";
                     mensajePuja.className = "text-danger";
                     return;
                 }
-        
+
                 fetch(`/products/${productoId}/pujar`, {
                     method: "POST",
                     headers: {
@@ -130,25 +133,25 @@
                     },
                     body: `puja=${encodeURIComponent(valorPuja)}`
                 })
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error("Error en la respuesta del servidor");
-                    }
-                    return response.json();
-                })
-                .then(data => {
-                    mensajePuja.innerText = "¡Puja realizada con éxito!";
-                    mensajePuja.className = "text-success";
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error("Error en la respuesta del servidor");
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        mensajePuja.innerText = "¡Puja realizada con éxito!";
+                        mensajePuja.className = "text-success";
 
-                    const saldoUsuario = document.getElementById("saldo-usuario");
-                    if (saldoUsuario) {
-                        saldoUsuario.textContent = 'Saldo: €' + data.availableMoney;
-                    }
-                }).catch(err => {
-                    console.error("Error al pujar:", err);
-                    mensajePuja.innerText = "No tienes dinero suficiente";
-                    mensajePuja.className = "text-danger";
-                });
+                        const saldoUsuario = document.getElementById("saldo-usuario");
+                        if (saldoUsuario) {
+                            saldoUsuario.textContent = 'Saldo: €' + data.availableMoney;
+                        }
+                    }).catch(err => {
+                        console.error("Error al pujar:", err);
+                        mensajePuja.innerText = "No tienes dinero suficiente";
+                        mensajePuja.className = "text-danger";
+                    });
             });
         }
 
@@ -171,7 +174,7 @@
                             if (mejorPostorElem) {
                                 mejorPostorElem.textContent = data.maximoPujador || 'Sin pujas aún';
                             }
-                        } 
+                        }
                         catch (error) {
                             console.error("Error al parsear el mensaje:", error);
                         }
@@ -188,7 +191,10 @@
         });
     </script>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <th:block th:replace="~{fragments/footer.html :: footer}" />
+
+    <script th:src="@{/js/productdetail.js}"></script>
 </body>
 
 </html>
