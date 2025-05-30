@@ -178,36 +178,34 @@
                 </div>
                 <div class="col-lg-auto">
                     <!-- Información del Usuario -->
-                    <h2 th:if="${subastasPujadas == null}" class="col-lg-auto">No he pujado en ninguna subasta todavía
-                    </h2>
-                    <div th:if="${subastasPujadas != null}" class="">
-                        <div class="card mb-4">
-                            <div class="card-header">
-                                <h5>Resumen de Actividad</h5>
-                            </div>
-                            <div class="card-body">
-                                <table class="table">
-                                    <thead>
-                                        <tr>
-                                            <th>Subasta</th>
-                                            <th>Fecha de Fin</th>
-                                            <th>Precio Inicial</th>
-                                            <th>Pujado</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <!-- Itera sobre las subastas -->
-                                        <tr th:each="subastasPujadas : ${subastasPujadas}">
-                                            <td th:text="${subastasPujadas.nombre}">Nombre de la Subasta</td>
-                                            <td th:text="${#temporals.format(subastasPujadas.fechaFin, 'dd/MM/yyyy - HH:mm:ss')}">Fecha de Fin</td>
-                                            <td th:text="${subastasPujadas.precio}">Precio Inicial</td>
-                                            <td th:text="${subastasPujadas.precioActual}">Pujado</td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                            <th>Subasta</th>
+                            <th>Fin</th>
+                            <th>Mi puja (€)</th>
+                            <th>Puja máx actual (€)</th>
+                            <th>Estado</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr th:each="b : ${dash.detalle}">
+                            <td>
+                                <a th:href="@{/products/{id}(id=${b.subastaId})}"
+                                th:text="${b.nombre}">ver</a>
+                            </td>
+                            <td th:text="${#temporals.format(b.fechaFin,'dd/MM HH:mm')}"></td>
+                            <td th:text="${b.miPujaMax}"></td>
+                            <td th:text="${b.pujaMaxActual}"></td>
+                            <td>
+                                <span th:if="${b.voyGanando}"
+                                    class="badge text-bg-success">Vas ganando</span>
+                                <span th:unless="${b.voyGanando}"
+                                    class="badge text-bg-warning">Superado</span>
+                            </td>
+                            </tr>
+                        </tbody>
+                        </table>
 
 
                     <!-- Subastas creadas por el usuario -->

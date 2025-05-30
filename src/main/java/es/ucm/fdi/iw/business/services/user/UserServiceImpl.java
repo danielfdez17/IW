@@ -1,5 +1,6 @@
 package es.ucm.fdi.iw.business.services.user;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -7,9 +8,12 @@ import java.util.Optional;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
+import es.ucm.fdi.iw.business.dto.Dashboard;
 import es.ucm.fdi.iw.business.dto.UserDTO;
+import es.ucm.fdi.iw.business.dto.UserDashboardDTO;
 import es.ucm.fdi.iw.business.mapper.UserMapper;
 import es.ucm.fdi.iw.business.model.User;
+import es.ucm.fdi.iw.business.repository.SubastaRepository;
 import es.ucm.fdi.iw.business.repository.UserRepository;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityNotFoundException;
@@ -21,6 +25,7 @@ import lombok.AllArgsConstructor;
 @AllArgsConstructor
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
+    private final SubastaRepository subastaRepository;
     @PersistenceContext
     private EntityManager entityManager;
 
@@ -107,5 +112,25 @@ public class UserServiceImpl implements UserService {
         user.setAvailableMoney(user.getAvailableMoney() - money);
 
         return money;
+    }
+
+    @Override
+    public UserDashboardDTO getUserDashboardDTO(long userId) {
+        List<Dashboard> bids = subastaRepository.resumenPujasDeUsuario(userId);
+
+        double totalComprometido = bids.stream()
+                .filter(Dashboard::isVoyGanando)
+                .mapToDouble(Dashboard::getPujaMaxActual)
+                .sum();
+
+        long activas = bids.stream()
+                .filter(b -> b.getFechaFin().isAfter(LocalDateTime.now()))
+                .count();
+
+        long ganando = bids.stream()
+                .filter(Dashboard::isVoyGanando)
+                .count();
+
+        return new UserDashboardDTO(totalComprometido, activas, ganando, bids);
     }
 }

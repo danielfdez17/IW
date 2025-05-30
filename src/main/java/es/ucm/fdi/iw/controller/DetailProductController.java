@@ -84,7 +84,7 @@ public class DetailProductController {
         Long winner = -1L;
         if (producto.getIdUserGanador() != null && EstadoSubasta.FINALIZADA.equals(producto.getEstadoSubasta()))
             winner = producto.getIdUserGanador();
-
+        
         model.addAttribute("canAddComment",
                 winner == session.getId() && RepartoSubasta.ENTREGADO.equals(producto.getRepartoSubasta()));
         model.addAttribute("isGanador", winner == session.getId());

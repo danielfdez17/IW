@@ -16,9 +16,13 @@
 
 * haber perfiles más detallados, al menos de cara a que un usuario sepa cuál es su posición global (cuánto pujado dónde, cuándo se acaba cada puja, en cuáles voy ganando)
   - Solucion: 
+    - Se hace crea un nuevo en SubastaRepository para agrupar las  subastas y calcularlo en BD.
+    - Modificamos la vista html para tener el Dashboard creado, y ver el resumen de las Subastas del Usuario.
+    
 
 * cualquier cambio que mejore la usabilidad/seguridad (ver por ejemplo preguntas de examen)
   - Solucion:
+    
 
 ## Entrega final Examen
 ### ¿Qué hace?

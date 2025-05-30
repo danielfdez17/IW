@@ -40,6 +40,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import es.ucm.fdi.iw.business.dto.ProductDTO;
+import es.ucm.fdi.iw.business.dto.UserDashboardDTO;
 import es.ucm.fdi.iw.business.fileconfiglocal.LocalData;
 import es.ucm.fdi.iw.business.model.Message;
 import es.ucm.fdi.iw.business.model.Subasta;
@@ -48,6 +49,7 @@ import es.ucm.fdi.iw.business.model.User;
 import es.ucm.fdi.iw.business.model.User.Role;
 import es.ucm.fdi.iw.business.repository.SubastaRepository;
 import es.ucm.fdi.iw.business.services.product.ProductService;
+import es.ucm.fdi.iw.business.services.user.UserService;
 import es.ucm.fdi.iw.config.Markdown;
 import jakarta.persistence.EntityManager;
 import jakarta.servlet.http.HttpServletRequest;
@@ -82,6 +84,7 @@ public class UserController {
     private final SubastaRepository subastaRepository;
     private final ProductService productService;
     private final Markdown markdown;
+    private final UserService userService;
 
 
 
@@ -156,6 +159,9 @@ public class UserController {
                                         .mapToInt(Byte::intValue)
                                         .average()
                                         .orElse(0));
+
+        UserDashboardDTO dash = userService.getUserDashboardDTO(id);
+        model.addAttribute("dash", dash);
         model.addAttribute("valoracion", valoracion);
         model.addAttribute("subastasPujadas", subastasPujadas.isEmpty() ? null : subastasPujadas);
         model.addAttribute("subastas", listaSubastas.isEmpty() ? null : listaSubastas);

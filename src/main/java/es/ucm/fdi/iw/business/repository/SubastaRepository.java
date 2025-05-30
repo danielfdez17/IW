@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import es.ucm.fdi.iw.business.dto.Dashboard;
 import es.ucm.fdi.iw.business.enums.EstadoSubasta;
 import es.ucm.fdi.iw.business.model.Subasta;
 
@@ -27,4 +28,20 @@ public interface SubastaRepository extends JpaRepository<Subasta, Long> {
 
     @Query("SELECT s FROM Subasta s WHERE s.enabled = true AND (s.estado = EstadoSubasta.EN_CURSO OR s.estado = EstadoSubasta.PENDIENTE)")
     List<Subasta> findBySaleInProgressOrPending();
+
+    @Query("""
+    SELECT new es.ucm.fdi.iw.business.dto.Dashboard(
+            s.id,
+            s.nombre,
+            s.fechaFin,
+            MAX(CASE WHEN p.user.id = :uid THEN p.dineroPujado ELSE 0 END),
+            MAX(p.dineroPujado),
+            MAX(CASE WHEN p.user.id = :uid THEN p.dineroPujado ELSE 0 END) =
+            MAX(p.dineroPujado)
+    )
+    FROM Puja p JOIN p.subasta s
+    WHERE p.user.id = :uid
+    GROUP BY s
+    """)
+    List<Dashboard> resumenPujasDeUsuario(long uid);
 }
