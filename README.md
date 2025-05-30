@@ -1,6 +1,19 @@
 
 # IW 24/25
 
+## Entrega Post Examen
+* ser posible subir imágenes de producto, independientemente de plataforma (con sólo ésto llegáis al 8). Mejor si es posibl subir varias imágenes de un mismo producto (esto lo podéis hacer subiéndolas a una carpeta `subasta/<id>/<nombre>.jpg`).
+  - Solucion: 
+
+* tener descripciones de producto algo mejores que un campo de texto sin formato. Mirad https://github.com/commonmark/commonmark-java - la idea es que el creador de la subasta escriba la descripción en markdown, y en la vista de usuario que quiere pujar, se vea renderizado como html.
+  - Solucion: 
+
+* haber perfiles más detallados, al menos de cara a que un usuario sepa cuál es su posición global (cuánto pujado dónde, cuándo se acaba cada puja, en cuáles voy ganando)
+  - Solucion: 
+
+* cualquier cambio que mejore la usabilidad/seguridad (ver por ejemplo preguntas de examen)
+  - Solucion:
+
 ## Entrega final Examen
 ### ¿Qué hace?
 Nuestra aplicación es una plataforma de subastas en línea que, tras un sencillo proceso de registro y autenticación, permite a cualquier usuario crear subastas y pujar en las de otros. En la página principal se muestran siempre las subastas «En curso» y las que están «Pendientes» de comenzar, para que los visitantes identifiquen rápidamente las oportunidades activas.
