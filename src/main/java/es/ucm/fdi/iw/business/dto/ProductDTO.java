@@ -1,6 +1,8 @@
 package es.ucm.fdi.iw.business.dto;
 
+import java.io.File;
 import java.time.LocalDateTime;
+import java.util.List;
 
 import es.ucm.fdi.iw.business.enums.EstadoSubasta;
 import es.ucm.fdi.iw.business.enums.RepartoSubasta;
@@ -34,4 +36,5 @@ public class ProductDTO {
     private String comentarioGanador;
     private Byte valoracionGanador;
     private Long idUserGanador;
+    private List<String> pics;
 }

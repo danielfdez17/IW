@@ -16,6 +16,7 @@ import java.util.stream.Collectors;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -67,7 +68,7 @@ public class UserController {
     // @Autowired
     private final EntityManager entityManager;
 
-    // @Autowired
+    @Autowired
     private final LocalData localData;
 
     // @Autowired
@@ -182,15 +183,10 @@ public class UserController {
         if (!photo.getOriginalFilename().isBlank()) {
 
             try {
-                String filePath = System.getProperty("user.dir") + "\\iwdata\\users\\" + id + ".jpg";
-                FileOutputStream fout = new FileOutputStream(filePath);
-                fout.write(photo.getBytes());
-
-                fout.close();
-
+                File destino = localData.getFile("user", id + ".jpg");
+                photo.transferTo(destino);
             } catch (Exception e) {
                 e.printStackTrace();
-
             }
         }
 
@@ -251,7 +247,7 @@ public class UserController {
      */
     @GetMapping("{id}/pic")
     public StreamingResponseBody getPic(@PathVariable long id) throws IOException {
-        File f = localData.getFile("users", "" + id + ".jpg");
+        File f = localData.getFile("user", id + ".jpg");
         InputStream in = new BufferedInputStream(f.exists() ? new FileInputStream(f) : UserController.defaultPic());
         return os -> FileCopyUtils.copy(in, os);
     }
@@ -279,7 +275,7 @@ public class UserController {
         }
 
         log.info("Updating photo for user {}", id);
-        File f = localData.getFile("user", "" + id + ".jpg");
+        File f = localData.getFile("user", id + ".jpg");
         if (photo.isEmpty()) {
             log.info("failed to upload photo: emtpy file?");
         } else {

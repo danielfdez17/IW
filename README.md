@@ -3,7 +3,8 @@
 
 ## Entrega Post Examen
 * ser posible subir imágenes de producto, independientemente de plataforma (con sólo ésto llegáis al 8). Mejor si es posibl subir varias imágenes de un mismo producto (esto lo podéis hacer subiéndolas a una carpeta `subasta/<id>/<nombre>.jpg`).
-  - Solucion: 
+  - Solucion:
+    - Se arregla el problema con Linux, se cambia a un LocalData y se modifica el application.properties para que utilice el dir del proyecto.
 
 * tener descripciones de producto algo mejores que un campo de texto sin formato. Mirad https://github.com/commonmark/commonmark-java - la idea es que el creador de la subasta escriba la descripción en markdown, y en la vista de usuario que quiere pujar, se vea renderizado como html.
   - Solucion: 

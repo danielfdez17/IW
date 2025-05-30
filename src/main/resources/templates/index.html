@@ -42,7 +42,7 @@
                                         enctype="multipart/form-data" onsubmit="return validarFormulario()">
                                         <div class="mb-3">
                                             <label for="photo" class="form-label">Foto del objeto</label>
-                                            <input class="form-control" type="file" name="photo" id="photo">
+                                            <input class="form-control" type="file" name="photo" id="photo" multiple>
                                         </div>
                                         <div class="mb-3">
                                             <label class="form-label" for="nuevaFechaInicio">Fecha de inicio</label>
@@ -97,8 +97,35 @@
             <div class="row mt-3">
                 <div class="col-auto" th:each="obj: ${productos}">
                     <div class="detalles-card p-1">
-                        <img th:src="@{/products/{id}/pic(id=${obj.id})}" class="border border-white rounded"
-                            alt="Imagen objeto" width="400" height="500">
+                        <!-- INIT CAROUSEL -->
+                        <div th:id="'carousel-' + ${obj.id}" class="carousel slide" data-bs-ride="carousel">
+                            <div class="carousel-inner">
+
+                            <div th:each="pic, it : ${obj.pics}"
+                                th:class="'carousel-item' + (${it.index}==0 ? ' active' : '')">
+                                <img class="d-block w-100 border border-white rounded"
+                                    th:src="@{/products/{id}/pic/{file}(id=${obj.id},file=${pic})}"
+                                    alt="Imagen subasta-[[${obj.nombre}]]"
+                                    width="400" height="500">
+                            </div>
+
+                            <!-- SI NO HAY FOTO -->
+                            <div th:if="${#lists.isEmpty(obj.pics)}" class="carousel-item active">
+                                <img class="d-block w-100 border border-white rounded"
+                                    src="/img/BARATO.png" width="400" height="500">
+                            </div>
+
+                            </div>
+                            <button class="carousel-control-prev" type="button"
+                                    th:data-bs-target="'#carousel-' + ${obj.id}" data-bs-slide="prev">
+                            <span class="carousel-control-prev-icon"></span>
+                            </button>
+                            <button class="carousel-control-next" type="button"
+                                    th:data-bs-target="'#carousel-' + ${obj.id}" data-bs-slide="next">
+                            <span class="carousel-control-next-icon"></span>
+                            </button>
+                        </div>
+                        <!--END CAROUSEL -->
                         <div class="row details mt-2 justify-content-between align-items-center">
                             <h3 class="text-uppercase fw-bold col-auto" th:text="${obj.nombre}">Reloj de Muñeca</h3>
                             <h4 class="fw-bold col-auto text-success" th:text="${obj.precioActual + ' €'}"></h4>

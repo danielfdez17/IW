@@ -1,5 +1,7 @@
 package es.ucm.fdi.iw.business.services.product;
 
+import java.io.File;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -10,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 import es.ucm.fdi.iw.business.dto.ProductDTO;
 import es.ucm.fdi.iw.business.enums.EstadoSubasta;
 import es.ucm.fdi.iw.business.enums.RepartoSubasta;
+import es.ucm.fdi.iw.business.fileconfiglocal.LocalData;
 import es.ucm.fdi.iw.business.mapper.SubastaMapper;
 import es.ucm.fdi.iw.business.model.Subasta;
 import es.ucm.fdi.iw.business.model.User;
@@ -23,6 +26,7 @@ import lombok.RequiredArgsConstructor;
 public class ProductServiceImpl implements ProductService {
 
     private final SubastaRepository subastaRepository;
+    private final LocalData localData;
 
     @PersistenceContext
     private EntityManager entityManager;
@@ -43,7 +47,13 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public ProductDTO getProduct(long id) {
         return subastaRepository.findById(Long.valueOf(id)) // Convertimos id a Long
-                .map(SubastaMapper.INSTANCE::subastaToProductDTO)
+                .map(p -> {
+                    ProductDTO dto = SubastaMapper.INSTANCE.subastaToProductDTO(p);
+                    File[] f = localData.getFolder("subasta/" + dto.getId()).listFiles();
+                    List<String> namesPics = Arrays.asList(f).stream().map(File::getName).toList();
+                    dto.setPics(namesPics);
+                    return dto;
+                })
                 .orElse(null);
     }
 
@@ -185,7 +195,13 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public List<ProductDTO> getAllProductsWithSaleActive() {
         return subastaRepository.findBySaleInProgressOrPending().stream()
-                .map(SubastaMapper.INSTANCE::subastaToProductDTO)
+                .map(p -> {
+                    ProductDTO dto = SubastaMapper.INSTANCE.subastaToProductDTO(p);
+                    File[] f = localData.getFolder("subasta/" + dto.getId()).listFiles();
+                    List<String> namesPics = Arrays.asList(f).stream().map(File::getName).toList();
+                    dto.setPics(namesPics);
+                    return dto;
+                })
                 .toList();
     }
 }

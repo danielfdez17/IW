@@ -6,18 +6,25 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.MalformedURLException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Map;
 import java.util.Objects;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.UrlResource;
+import org.springframework.http.MediaType;
+import org.springframework.http.MediaTypeFactory;
+import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.FileCopyUtils;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -44,10 +51,13 @@ import es.ucm.fdi.iw.business.services.user.UserService;
 import jakarta.servlet.http.HttpSession;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
+import lombok.extern.log4j.Log4j2;
+
 
 @Controller
 @RequestMapping("products")
 @AllArgsConstructor
+@Log4j2
 public class DetailProductController {
 
     private final ProductService productService;
@@ -134,7 +144,7 @@ public class DetailProductController {
             @ModelAttribute("product") CreateProductDTO product,
             @RequestParam(required = true) LocalDate nuevaFechaInicio,
             @RequestParam(required = true) LocalDate nuevaFechaFin,
-            @RequestParam(required = false) MultipartFile photo) throws Exception {
+            @RequestParam(required = false) MultipartFile[] photo) throws Exception {
         User creador = (User) session.getAttribute("u");
         LocalDateTime newDateInit = LocalDateTimeMapper.toLocalDateTime(nuevaFechaInicio);
         LocalDateTime newDateEnd = LocalDateTimeMapper.toLocalDateTime(nuevaFechaFin);
@@ -169,7 +179,7 @@ public class DetailProductController {
     public String editarSubasta(
             @PathVariable long id,
             @ModelAttribute("product") ProductDTO product,
-            @RequestParam(required = false) MultipartFile photo,
+            @RequestParam(required = false) MultipartFile[] photo,
             @RequestParam(required = true) LocalDate nuevaFechaFin,
             Model model, HttpSession session) throws Exception {
         product.setFechaFin(LocalDateTimeMapper.toLocalDateTime(nuevaFechaFin));
@@ -186,12 +196,20 @@ public class DetailProductController {
      * @return
      * @throws IOException
      */
-    @GetMapping("{id}/pic")
-    public StreamingResponseBody getPic(@PathVariable long id) throws IOException {
-        File f = localData.getFile("subastas", "" + id + ".jpg");
-        InputStream in = new BufferedInputStream(
-                f.exists() ? new FileInputStream(f) : DetailProductController.defaultPic());
-        return os -> FileCopyUtils.copy(in, os);
+    @GetMapping("{id}/pic/{fileName:.+}")
+    public ResponseEntity<Resource> getPic(
+        @PathVariable long id,
+        @PathVariable String fileName) throws MalformedURLException {
+        File file = localData.getFile("subasta/" + id, fileName);
+
+        if (!file.exists()) {
+            return ResponseEntity.notFound().build();
+        }
+        Resource res = new UrlResource(file.toURI());
+        return ResponseEntity.ok()
+                .contentType(MediaTypeFactory.getMediaType(fileName)
+                                            .orElse(MediaType.APPLICATION_OCTET_STREAM))
+                .body(res);
     }
 
     @PostMapping("{id}/comentar")
@@ -202,29 +220,21 @@ public class DetailProductController {
         return "redirect:/products/" + id;
     }
 
-    /**
-     * Returns the default profile pic
-     * 
-     * @return
-     */
-    private static InputStream defaultPic() {
-        return new BufferedInputStream(Objects.requireNonNull(
-                UserController.class.getClassLoader().getResourceAsStream(
-                        "static/img/BARATO.png")));
-    }
-
-    private void updatePicture(MultipartFile photo, long id) {
-        if (!photo.getOriginalFilename().isBlank()) {
-
-            try {
-                String filePath = System.getProperty("user.dir") + "\\iwdata\\subastas\\" + id + ".jpg";
-                FileOutputStream fout = new FileOutputStream(filePath);
-                fout.write(photo.getBytes());
-
-                fout.close();
-            } catch (Exception e) {
-                e.printStackTrace();
+    private void updatePicture(MultipartFile[] photos, long id) {
+        if (photos == null || photos.length == 0) 
+            return;
+        File folder = localData.getFolder("subasta" + File.separator + id);
+        try {
+            for (MultipartFile p: photos) {
+                if (p.isEmpty()) 
+                    continue;
+                String fileName = StringUtils.cleanPath(Objects.requireNonNull(p.getOriginalFilename()));
+                File destino = new File(folder, fileName);
+                p.transferTo(destino);
             }
+        } catch (Exception e) {
+            log.error(e);
         }
+       
     }
 }

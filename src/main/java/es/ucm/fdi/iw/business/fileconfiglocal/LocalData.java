@@ -18,7 +18,7 @@ public class LocalData {
 	private static Log log = LogFactory.getLog(LocalData.class);
 
     private File baseFolder;
-    
+
     public LocalData(File baseFolder) {
 		this.baseFolder = baseFolder;
     	log.info("base folder is " + baseFolder.getAbsolutePath());
