@@ -22,7 +22,10 @@
 
 * cualquier cambio que mejore la usabilidad/seguridad (ver por ejemplo preguntas de examen)
   - Solucion:
-    
+    - Se agrega un RateLimite para las rutas desprotegidas de POST siendo el login y el signup.
+    - Se agrega un nuevo Topic para que se muestre en tiempo real en el listado de pujas activas, los precios actualizados sin necesidad
+      de refrescar(NOTA: Esto ha sido sacado del examen, me ha parecido buena idea tenerlo en esta parte.)
+
 
 ## Entrega final Examen
 ### ¿Qué hace?

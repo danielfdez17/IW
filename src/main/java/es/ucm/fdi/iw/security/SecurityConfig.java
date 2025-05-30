@@ -15,6 +15,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 /**
  * Security configuration.
@@ -33,7 +34,8 @@ public class SecurityConfig {
 	private Environment env;
 
  
-
+	@Autowired
+	private RateLimitingFilter rateLimitingFilter;
 	/**
 	 * Main security configuration.
 	 * 
@@ -74,7 +76,8 @@ public class SecurityConfig {
 			.csrf(csrf -> csrf
 				.ignoringRequestMatchers("/api/**", "/chat/private")
 			)
-			
+	  .addFilterBefore(rateLimitingFilter,
+                         UsernamePasswordAuthenticationFilter.class)
       .authorizeHttpRequests(authorize -> authorize
 				.requestMatchers("/css/**", "/js/**", "/img/**", "/", "/error", "/signup").permitAll()
 				.requestMatchers("/api/**").permitAll()            // <-- public api access

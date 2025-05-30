@@ -127,7 +127,7 @@
                         <!--END CAROUSEL -->
                         <div class="row details mt-2 justify-content-between align-items-center">
                             <h3 class="text-uppercase fw-bold col-auto" th:text="${obj.nombre}">Reloj de Muñeca</h3>
-                            <h4 class="fw-bold col-auto text-success" th:text="${obj.precioActual + ' €'}"></h4>
+                            <h4 class="fw-bold col-auto text-success" th:id="'refresh-' + ${obj.id}" th:text="'Precio Actual:' + ' ' + ${obj.precioActual + ' €'}"></h4>
                         </div>
                         <p class="row ps-3 fst-italic" th:if="${obj.estadoSubasta.name() == 'PENDIENTE'}" th:text="${'Estara disponible a las ' + obj.fechaInicio}"></p>
                         <p class="row ps-3 fst-italic" th:if="${obj.estadoSubasta.name() == 'EN_CURSO'}" th:text="${'Disponible hasta ' + obj.fechaFin}"></p>
@@ -156,6 +156,34 @@
             }
             return true;
         }
+        function suscribirmeProductoConIntervalo () {
+            const intervalo = setInterval(() => {
+                if (ws.stompClient && ws.stompClient.connected) {
+                    ws.stompClient.subscribe("/topic/product-updates/", function (message) {
+                        console.log("Mensaje recibido:", message);
+                        try {
+                            const data = JSON.parse(message.body);
+                            console.log("Mejor postor:", data.maximoPujador);
+                            console.log("Mejor oferta:", data.precioActual);
+
+                            // Actualizar datos
+                            const precioActualElem = document.getElementById(`refresh-${data.id}`);
+                            if (precioActualElem) { 
+                                precioActualElem.textContent = `Precio Actual: ${data.precioActual} €`;
+                            }
+                        }
+                        catch (error) {
+                            console.error("Error al parsear el mensaje:", error);
+                        }
+                    });
+                    clearInterval(intervalo);
+                }
+            }, 1000);
+        }
+
+        document.addEventListener("DOMContentLoaded", function () {
+            suscribirmeProductoConIntervalo();
+        });
     </script>
 </body>
 

@@ -133,6 +133,7 @@ public class DetailProductController {
 
     private void sendProductUpdateToWebSocket(ProductDTO producto) {
         messagingTemplate.convertAndSend("/topic/product-updates/" + producto.getId(), producto);
+        messagingTemplate.convertAndSend("/topic/product-updates/", producto);
     }
 
     @PostMapping("/nueva_subasta")
