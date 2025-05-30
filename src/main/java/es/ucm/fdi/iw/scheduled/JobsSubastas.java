@@ -23,7 +23,7 @@ import lombok.extern.log4j.Log4j2;
 @Log4j2
 @AllArgsConstructor
 public class JobsSubastas {
-    
+
     private final SubastasServices subastasServices;
     private final PujaService pujaService;
     private final UserService userService;
@@ -46,21 +46,53 @@ public class JobsSubastas {
     @Transactional
     public void finishSubastas() {
         List<SubastaDTO> listSubastasPending = subastasServices.getSubastasByStatus(EstadoSubasta.EN_CURSO);
-        final LocalDateTime now = LocalDateTime.now();        
-        //Finalizamos las subastas
+        final LocalDateTime now = LocalDateTime.now();
+        // Finalizamos las subastas
         listSubastasPending.stream().forEach(subasta -> {
             if (subasta.getFechaFin().isBefore(now)) {
                 List<PujaDTO> listPujas = pujaService.getPujasBySubastaId(subasta.getId());
-                Optional<PujaDTO> maxPujaOpt = listPujas.stream().max(Comparator.comparingDouble(PujaDTO::getDineroPujado));
+                Optional<PujaDTO> maxPujaOpt = listPujas.stream()
+                        .max(Comparator.comparingDouble(PujaDTO::getDineroPujado));
                 final EstadoSubasta estado = (listPujas.isEmpty()) ? EstadoSubasta.CANCELADA : EstadoSubasta.FINALIZADA;
-                final RepartoSubasta reparto = (listPujas.isEmpty()) ? RepartoSubasta.CANCELADO : RepartoSubasta.REPARTO;
+                final RepartoSubasta reparto = (listPujas.isEmpty()) ? RepartoSubasta.CANCELADO
+                        : RepartoSubasta.REPARTO;
                 subasta.setEnabled(false);
                 subasta.setEstado(estado);
                 subasta.setRepartoSubasta(reparto);
                 maxPujaOpt.ifPresent(maxPuja -> {
                     subasta.setIdUserGanador(maxPuja.getUsuarioId());
                     userService.addMoney(subasta.getIdUserCreator(), maxPuja.getDineroPujado());
-                    listPujas.stream().filter(p -> !p.equals(maxPuja)).forEach(puja -> userService.addMoney(puja.getUsuarioId(), puja.getDineroPujado()));
+                    listPujas.stream().filter(p -> !p.equals(maxPuja))
+                            .forEach(puja -> userService.addMoney(puja.getUsuarioId(), puja.getDineroPujado()));
+                });
+                SubastaDTO s = subastasServices.updateSubasta(subasta);
+                log.info("Subasta {} con nombre {} finalizada", s.getId(), s.getNombre());
+            }
+        });
+    }
+
+    @Scheduled(fixedRate = 1000 * 01) // 1 second
+    @Transactional
+    public void updateSubastas() {
+        List<SubastaDTO> listSubastasPending = subastasServices.getSubastasByStatus(EstadoSubasta.EN_CURSO);
+        final LocalDateTime now = LocalDateTime.now();
+        // Finalizamos las subastas
+        listSubastasPending.stream().forEach(subasta -> {
+            if (subasta.getFechaFin().isBefore(now)) {
+                List<PujaDTO> listPujas = pujaService.getPujasBySubastaId(subasta.getId());
+                Optional<PujaDTO> maxPujaOpt = listPujas.stream()
+                        .max(Comparator.comparingDouble(PujaDTO::getDineroPujado));
+                final EstadoSubasta estado = (listPujas.isEmpty()) ? EstadoSubasta.CANCELADA : EstadoSubasta.FINALIZADA;
+                final RepartoSubasta reparto = (listPujas.isEmpty()) ? RepartoSubasta.CANCELADO
+                        : RepartoSubasta.REPARTO;
+                subasta.setEnabled(false);
+                subasta.setEstado(estado);
+                subasta.setRepartoSubasta(reparto);
+                maxPujaOpt.ifPresent(maxPuja -> {
+                    subasta.setIdUserGanador(maxPuja.getUsuarioId());
+                    userService.addMoney(subasta.getIdUserCreator(), maxPuja.getDineroPujado());
+                    listPujas.stream().filter(p -> !p.equals(maxPuja))
+                            .forEach(puja -> userService.addMoney(puja.getUsuarioId(), puja.getDineroPujado()));
                 });
                 SubastaDTO s = subastasServices.updateSubasta(subasta);
                 log.info("Subasta {} con nombre {} finalizada", s.getId(), s.getNombre());

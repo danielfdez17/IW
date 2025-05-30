@@ -84,6 +84,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public User findUserById(long id) {
+        return userRepository.findById(id).orElseThrow(() -> new RuntimeException("User not found"));
+    }
+
+    @Override
     public double addMoney(long userId, double money) {
         Optional<User> user = userRepository.findById(userId);
         if (user.isEmpty())

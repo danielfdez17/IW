@@ -13,11 +13,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import es.ucm.fdi.iw.business.dto.ProductDTO;
+import es.ucm.fdi.iw.business.services.coplains.ComplainService;
 import es.ucm.fdi.iw.business.services.product.ProductService;
 import es.ucm.fdi.iw.business.services.user.UserService;
 import jakarta.persistence.EntityManager;
 import jakarta.servlet.http.HttpSession;
-
+import lombok.AllArgsConstructor;
 
 @Controller
 @RequestMapping("admin")
@@ -29,24 +30,26 @@ public class AdminController {
     @Autowired
     private ProductService productService;
 
-	
     @Autowired
     private EntityManager entityManager;
 
+    @Autowired
+    private ComplainService complainService;
+
     @ModelAttribute
-    public void populateModel(HttpSession session, Model model) {        
-        for (String name : new String[] {"u", "url", "ws"}) {
+    public void populateModel(HttpSession session, Model model) {
+        for (String name : new String[] { "u", "url", "ws" }) {
             model.addAttribute(name, session.getAttribute(name));
         }
     }
 
     private static final Logger log = LogManager.getLogger(AdminController.class);
 
-	@GetMapping("/")
+    @GetMapping("/")
     public String index(Model model) {
         log.info("Admin acaba de entrar");
-        model.addAttribute("users", 
-            entityManager.createQuery("select u from User u").getResultList());
+        model.addAttribute("users",
+                entityManager.createQuery("select u from User u").getResultList());
         return "admin";
     }
 
@@ -55,6 +58,13 @@ public class AdminController {
         log.info("Admin acaba de entrar");
         model.addAttribute("products", productService.getAllProducts());
         return "admin-subasta";
+    }
+
+    @GetMapping("/quejas")
+    public String adminQuejas(Model model) {
+        log.info("Admin acaba de entrar");
+        model.addAttribute("complains", complainService.getAllComplains());
+        return "admin-quejas";
     }
 
     @PostMapping("/user/disable/{id}")

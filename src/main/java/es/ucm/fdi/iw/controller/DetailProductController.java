@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.Map;
 import java.util.Objects;
 
@@ -134,10 +135,12 @@ public class DetailProductController {
             @ModelAttribute("product") CreateProductDTO product,
             @RequestParam(required = true) LocalDate nuevaFechaInicio,
             @RequestParam(required = true) LocalDate nuevaFechaFin,
+            @RequestParam(required = true) LocalTime nuevaHoraInicio,
+            @RequestParam(required = true) LocalTime nuevaHoraFin,
             @RequestParam(required = false) MultipartFile photo) throws Exception {
         User creador = (User) session.getAttribute("u");
-        LocalDateTime newDateInit = LocalDateTimeMapper.toLocalDateTime(nuevaFechaInicio);
-        LocalDateTime newDateEnd = LocalDateTimeMapper.toLocalDateTime(nuevaFechaFin);
+        LocalDateTime newDateInit = LocalDateTimeMapper.toLocalDateTime(nuevaFechaInicio, nuevaHoraInicio);
+        LocalDateTime newDateEnd = LocalDateTimeMapper.toLocalDateTime(nuevaFechaFin, nuevaHoraFin);
         if (newDateInit.isAfter(newDateEnd)) {
             throw new IllegalArgumentException("La fecha de inicio no puede ser posterior a la fecha de fin");
         }
@@ -172,7 +175,7 @@ public class DetailProductController {
             @RequestParam(required = false) MultipartFile photo,
             @RequestParam(required = true) LocalDate nuevaFechaFin,
             Model model, HttpSession session) throws Exception {
-        product.setFechaFin(LocalDateTimeMapper.toLocalDateTime(nuevaFechaFin));
+        product.setFechaFin(LocalDateTimeMapper.toLocalDateTime(nuevaFechaFin, LocalTime.now()));
         productService.updateProduct(product);
         updatePicture(photo, id);
 
