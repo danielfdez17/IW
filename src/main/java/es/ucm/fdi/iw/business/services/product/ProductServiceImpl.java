@@ -204,4 +204,17 @@ public class ProductServiceImpl implements ProductService {
                 })
                 .toList();
     }
+
+    @Override
+    public List<ProductDTO> getProductsByCreator(long userId) {
+           return subastaRepository.findByCreador(userId).stream()
+                .map(p -> {
+                    ProductDTO dto = SubastaMapper.INSTANCE.subastaToProductDTO(p);
+                    File[] f = localData.getFolder("subasta/" + dto.getId()).listFiles();
+                    List<String> namesPics = Arrays.asList(f).stream().map(File::getName).toList();
+                    dto.setPics(namesPics);
+                    return dto;
+                })
+                .toList();
+    }
 }

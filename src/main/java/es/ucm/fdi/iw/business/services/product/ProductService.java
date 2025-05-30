@@ -32,4 +32,6 @@ public interface ProductService {
     void updateSendProduct(long id, String reparto);
 
     Subasta getSubasta(long id);
+
+    List<ProductDTO> getProductsByCreator(long userId);
 }

@@ -39,6 +39,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import es.ucm.fdi.iw.business.dto.ProductDTO;
 import es.ucm.fdi.iw.business.fileconfiglocal.LocalData;
 import es.ucm.fdi.iw.business.model.Message;
 import es.ucm.fdi.iw.business.model.Subasta;
@@ -46,6 +47,8 @@ import es.ucm.fdi.iw.business.model.Transferable;
 import es.ucm.fdi.iw.business.model.User;
 import es.ucm.fdi.iw.business.model.User.Role;
 import es.ucm.fdi.iw.business.repository.SubastaRepository;
+import es.ucm.fdi.iw.business.services.product.ProductService;
+import es.ucm.fdi.iw.config.Markdown;
 import jakarta.persistence.EntityManager;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -68,7 +71,6 @@ public class UserController {
     // @Autowired
     private final EntityManager entityManager;
 
-    @Autowired
     private final LocalData localData;
 
     // @Autowired
@@ -78,6 +80,10 @@ public class UserController {
     private final PasswordEncoder passwordEncoder;
 
     private final SubastaRepository subastaRepository;
+    private final ProductService productService;
+    private final Markdown markdown;
+
+
 
     @ModelAttribute
     public void populateModel(HttpSession session, Model model) {
@@ -134,11 +140,12 @@ public class UserController {
     public String index(@PathVariable long id, Model model, HttpSession session) {
         User target = entityManager.find(User.class, id);
         model.addAttribute("user", target);
-        List<Subasta> listaSubastas = subastaRepository.findByCreador(id);
+        List<ProductDTO> listaSubastas = productService.getProductsByCreator(id);
         listaSubastas.forEach(subasta -> {
             boolean isEnabled = (subasta.getFechaFin().isEqual(LocalDateTime.now())
                             || subasta.getFechaFin().isAfter(LocalDateTime.now()));
             subasta.setEnabled(isEnabled);
+            subasta.setDescripcion(markdown.toHtml(subasta.getDescripcion()));
         });
 
         //subastas en las que ha pujado

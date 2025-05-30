@@ -1,13 +1,18 @@
 
 # IW 24/25
 
-## Entrega Post Examen
+## Entrega Post Examen - Lo he realizado solo: Alumno Jose Villacres Zumaeta
 * ser posible subir imágenes de producto, independientemente de plataforma (con sólo ésto llegáis al 8). Mejor si es posibl subir varias imágenes de un mismo producto (esto lo podéis hacer subiéndolas a una carpeta `subasta/<id>/<nombre>.jpg`).
   - Solucion:
-    - Se arregla el problema con Linux, se cambia a un LocalData y se modifica el application.properties para que utilice el dir del proyecto.
+    - Se arregla el problema con Linux, se cambia a un LocalData y se modifica el application.properties para que utilice el dir del proyecto,  tanto para las fotos de los usuarios y los productos.
+    - Se agrega una carrusel para las multiples fotos de los productos y se agrega en el input un multiple para aceptar multiples fotos. 
+    - Se agrega el carrusel en el editar y tambien poder agregar multiples fotos. 
 
 * tener descripciones de producto algo mejores que un campo de texto sin formato. Mirad https://github.com/commonmark/commonmark-java - la idea es que el creador de la subasta escriba la descripción en markdown, y en la vista de usuario que quiere pujar, se vea renderizado como html.
   - Solucion: 
+    - Se agrega el paquete de commonmark en el pom.xml y su configuracion en el contenedor en de Spring en la carpeta config clase Markdown.java
+    - Se agrega en el crear subasta el Markdown, incluyendo tambien el editar.
+
 
 * haber perfiles más detallados, al menos de cara a que un usuario sepa cuál es su posición global (cuánto pujado dónde, cuándo se acaba cada puja, en cuáles voy ganando)
   - Solucion: 

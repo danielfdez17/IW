@@ -107,6 +107,12 @@
             <version>${karate.version}</version>
             <scope>test</scope>
         </dependency>
+
+        <dependency>
+            <groupId>org.commonmark</groupId>
+            <artifactId>commonmark</artifactId>
+            <version>0.24.0</version>
+        </dependency>
     </dependencies>
 
     <build>

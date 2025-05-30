@@ -235,15 +235,42 @@
                                         <th:block th:each="bid : ${subastas}">
                                             <tr>
                                                 <td>
-                                                    <img th:src="@{/products/{id}/pic(id=${bid.id})}"
-                                                        class="border border-white rounded" alt="Imagen objeto"
-                                                        width="100" height="100">
+                                                    <!-- INIT CAROUSEL -->
+                                                    <div th:id="'carousel-' + ${bid.id}" class="carousel slide" data-bs-ride="carousel">
+                                                        <div class="carousel-inner">
+
+                                                        <div th:each="pic, it : ${bid.pics}"
+                                                            th:class="'carousel-item' + (${it.index}==0 ? ' active' : '')">
+                                                            <img class="d-block w-100 border border-white rounded"
+                                                                th:src="@{/products/{id}/pic/{file}(id=${bid.id},file=${pic})}"
+                                                                alt="Imagen subasta-[[${bid.nombre}]]"
+                                                                width="50" height="100">
+                                                        </div>
+
+                                                        <!-- SI NO HAY FOTO -->
+                                                        <div th:if="${#lists.isEmpty(bid.pics)}" class="carousel-item active">
+                                                            <img class="d-block w-100 border border-white rounded"
+                                                                src="/img/BARATO.png" width="400" height="500">
+                                                        </div>
+
+                                                        </div>
+                                                        <button class="carousel-control-prev" type="button"
+                                                                th:data-bs-target="'#carousel-' + ${bid.id}" data-bs-slide="prev">
+                                                        <span class="carousel-control-prev-icon"></span>
+                                                        </button>
+                                                        <button class="carousel-control-next" type="button"
+                                                                th:data-bs-target="'#carousel-' + ${bid.id}" data-bs-slide="next">
+                                                        <span class="carousel-control-next-icon"></span>
+                                                        </button>
+                                                    </div>
+                                                    <!--END CAROUSEL -->
+                                                    
                                                 </td>
                                                 <td>
                                                     <p th:text="${bid.nombre}"></p>
                                                 </td>
                                                 <td>
-                                                    <p th:text="${bid.descripcion}"></p>
+                                                    <p class="markdown" th:utext="${bid.descripcion}"></p>
                                                 </td>
                                                 <td>
                                                     <p>Precio inicial: <span th:text="${bid.precio}">0</span>€</p>
@@ -258,7 +285,7 @@
                                                             th:text="${#temporals.format(bid.fechaFin, 'dd/MM/yyyy - HH:mm:ss')}"></span>
                                                     </p>
                                                 </td>
-                                                <td th:switch="${bid.estado.name()}">
+                                                <td th:switch="${bid.estadoSubasta.name()}">
                                                     <p th:case="'PENDIENTE'"
                                                         class="badge text-bg-secondary text-uppercase">Pendiente</p>
                                                     <p th:case="'EN_CURSO'"
@@ -270,7 +297,7 @@
                                                 </td>
                                                 <td>
                                                     <button type="button" class="btn btn-info"
-                                                        th:disabled="${bid.estado.name() == 'CANCELADA' OR bid.estado.name() == 'FINALIZADA'}"
+                                                        th:disabled="${bid.estadoSubasta.name() == 'CANCELADA' OR bid.estadoSubasta.name() == 'FINALIZADA'}"
                                                         th:data-id="${bid.id}" data-bs-toggle="modal"
                                                          th:data-bs-target="'#modalEditarSubasta' + ${bid.id}">Editar</button>
                                                 </td>
@@ -336,7 +363,7 @@
                                                                     <label for="photo" class="form-label">Foto de
                                                                         objeto</label>
                                                                     <input class="form-control" type="file" name="photo"
-                                                                        id="photo">
+                                                                        id="photo" multiple>
                                                                 </div>
                                                                 <div class="mb-3">
                                                                     <label for="nombre"
@@ -351,7 +378,7 @@
                                                                     <input type="text" name="descripcion"
                                                                         id="editdescripcion"
                                                                         th:value="${bid.descripcion}"
-                                                                        class="form-control" required>
+                                                                        class="form-control markdown" required>
                                                                 </div>
                                                                 <div class="mb-3">
                                                                     <label for="nuevaFechaFin" class="form-label">Fecha

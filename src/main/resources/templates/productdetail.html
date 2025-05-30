@@ -51,7 +51,7 @@
                     </div>
                     <div class="col-md-6">
                         <h5 class="text-muted">Descripción</h5>
-                        <p th:text="${producto.descripcion}">Descripción del producto.</p>
+                        <p class="markdown" th:utext="${producto.descripcion}">Descripción del producto.</p>
 
                         <h5 class="text-muted">Precio</h5>
                         <p class="fs-4 text-success fw-bold mb-3">

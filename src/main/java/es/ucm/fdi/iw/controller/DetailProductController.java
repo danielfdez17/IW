@@ -1,11 +1,7 @@
 package es.ucm.fdi.iw.controller;
 
-import java.io.BufferedInputStream;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -23,7 +19,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.util.FileCopyUtils;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -33,7 +28,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBody;
 
 import es.ucm.fdi.iw.business.dto.CreateProductDTO;
 import es.ucm.fdi.iw.business.dto.ProductDTO;
@@ -48,6 +42,7 @@ import es.ucm.fdi.iw.business.model.User;
 import es.ucm.fdi.iw.business.services.product.ProductService;
 import es.ucm.fdi.iw.business.services.puja.PujaService;
 import es.ucm.fdi.iw.business.services.user.UserService;
+import es.ucm.fdi.iw.config.Markdown;
 import jakarta.servlet.http.HttpSession;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
@@ -64,6 +59,7 @@ public class DetailProductController {
     private final PujaService pujaService;
     private final UserService userService;
     private final LocalData localData;
+    private final Markdown markdown;
 
     @ModelAttribute
     public void populateModel(HttpSession session, Model model) {
@@ -81,6 +77,7 @@ public class DetailProductController {
     @GetMapping("/{id}")
     public String product(@PathVariable int id, Model model) {
         ProductDTO producto = productService.getProduct(id);
+        producto.setDescripcion(markdown.toHtml(producto.getDescripcion()));
         model.addAttribute("producto", producto);
         model.addAttribute("estado", EstadoSubasta.getTxt(producto.getEstadoSubasta()));
         User session = (User) model.getAttribute("u");
