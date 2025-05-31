@@ -12,7 +12,7 @@
 
     <main class="flex-shrink-0">
         <div class="container">
-            <form class="form-signup" method="post" th:action="@{/signup}">
+            <form id="signup-form" class="form-signup" method="post" th:action="@{/signup}">
                 <h2 class="form-signup-heading">Registrarse</h2>
                 <p th:if="${signupError != false}" class="error">
                     <!-- Error en nombre de usuario o contraseña -->
@@ -43,12 +43,18 @@
                         required="required">
                     <label for="password" class="text-dark">Contraseña</label>
                 </div>
-                <button class="btn btn-lg btn-primary btn-block" type="submit">Registrarse</button>
+                <div class="mb-3 row text-dark btn-group" role="group" aria-label="Checkbox generator"
+                    id="checkbox-generator">
+                    <label class="text-dark">Para verificar que no eres un robot, marca los campos con valores</label>
+
+                </div>
+                <button disabled id="submitBtn" class="btn btn-lg btn-primary btn-block" type="submit">Registrarse</button>
             </form>
         </div>
     </main>
 
     <th:block th:replace="~{fragments/footer.html :: footer}" />
+    <script th:src="@{/js/signup.js}"></script>
 </body>
 
 </html>

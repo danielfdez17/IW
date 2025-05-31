@@ -16,32 +16,38 @@
             <h1 class="mt-5">Administración Usuarios</h1>
         </div>
         <div class="container">
+            <th:block th:insert="~{fragments/btn-admin.html :: btn-admin}"></th:block>
             <table class="w-100">
                 <thead>
-                    <tr>
+                    <tr class="text-center">
                         <th>Id</th>
                         <th>Nombre & Apellidos</th>
+                        <th>Username</th>
                         <th>Roles</th>
                         <th>Acciones</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr th:each="user : ${users}">
+                    <tr th:each="user : ${users}" class="text-center">
                         <td th:text="${user.id}">1</td>
                         <td th:text="${user.firstName + ' ' + user.lastName}">Nombre</td>
+                        <td th:text="${user.username}">Nombre</td>
                         <td>
                             <ul>
                                 <li th:text="${user.roles}">Role</li>
                             </ul>
                         </td>
-                        <td>
+                        <td class="d-flex justify-content-between">
                             <form th:action="@{'/admin/user/disable/' + ${user.id}}"
                                 th:method="post"  th:if="${user.enabled} == true" >
-                                <button type="submit" class="toggle btn btn-danger">Deshabilitar</button> 
+                                <button type="submit" class="toggle btn btn-danger"><i class="bi bi-pen-fill"></i> Deshabilitar</button> 
                             </form>
                             <form th:action="@{'/admin/user/enable/' + ${user.id}}"
                                 th:method="post"  th:unless="${user.enabled}"  >
-                                <button type="submit" class="toggle btn btn-primary">Habilitar</button> 
+                                <button type="submit" class="toggle btn btn-primary"><i class="bi bi-pen"></i> Habilitar</button> 
+                            </form>
+                            <form th:action="@{'/user/' + ${user.id}}" th:method="get">
+                                <button type="submit" class="btn btn-warning"><i class="bi bi-eye"></i> Ver usuario</button>
                             </form>
                         </td>
                     </tr>

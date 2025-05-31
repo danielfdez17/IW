@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html class="h-100" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <th:block th:replace="~{fragments/head :: header}" />
+    <title>¡Barato, Barato! | Admin Quejas</title>
+    <link rel="stylesheet" th:href="@{/css/admin.css}">
+</head>
+
+
+<body class="d-flex flex-column h-100">
+    <header th:replace="~{fragments/nav.html :: nav}"></header>
+
+    <main class="container flex-shrink-0">
+        <div class="container">
+            <h1 class="mt-5">Administración Quejas</h1>
+        </div>
+        <div class="container">
+            <th:block th:insert="~{fragments/btn-admin.html :: btn-admin}"></th:block>
+
+            <table class="w-100">
+                <thead>
+                    <tr class="text-center">
+                        <th>Id</th>
+                        <th>Id creador</th>
+                        <th>Fecha</th>
+                        <th>Queja</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="com : ${complains}" class="text-center">
+                        <td th:text="${com.id}"></td>
+                        <td th:text="${com.creatorId}"></td>
+                        <td th:text="${#temporals.format(com.dateTime, 'dd/MM/yyyy hh:mm:ss')}"></td>
+                        <td th:text="${com.text}"></td>
+
+                    </tr>
+                </tbody>
+            </table>
+
+        </div>
+    </main>
+
+    <th:block th:replace="~{fragments/footer.html :: footer}" />
+
+    <script>
+
+    </script>
+</body>
+
+</html>

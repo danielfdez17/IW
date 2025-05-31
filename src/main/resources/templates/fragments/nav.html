@@ -2,7 +2,7 @@
 <html class="h-100" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 
 <head>
-      <link rel="stylesheet" th:href="@{/css/login.css}">
+    <link rel="stylesheet" th:href="@{/css/login.css}">
 </head>
 
 <body class="d-flex flex-column h-100">
@@ -13,7 +13,8 @@
             <div class="container-fluid text-white">
                 <!-- nombre del sitio; es un enlace que lleva a la página ppal -->
                 <a class="navbar-brand" th:href="@{/}" href="/">
-                    <img th:src="@{/img/BARATO.png}" src="/img/BARATO.png" alt="logo BB" width="32" height="32" class="d-inline-block align-text-top"> ¡Barato,Barato!<h3>Casa de Subastas</h3>
+                    <img th:src="@{/img/BARATO.png}" src="/img/BARATO.png" alt="logo BB" width="32" height="32"
+                        class="d-inline-block align-text-top"> ¡Barato,Barato!<h3>Casa de Subastas</h3>
                 </a>
                 <!-- menu hamburguesa si no cabe todo -->
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
@@ -34,13 +35,45 @@
                                 <a class="nav-link active" th:href="@{/chat}">Chats</a>
                             </li>
                             <li class="nav-item dropdown mx-3" th:if="${u.hasRole('ADMIN')}">
-                                <button class="nav-link active dropdown-toggle" data-bs-toggle="dropdown">
-                                    Administrar
+                                <a th:href="@{/admin/subasta}" class="nav-link active">Administrar</a>
+                            </li>
+                            <li class="nav-item dropdown mx-3" th:if="${u.hasRole('USER')}">
+                                <!-- Button trigger modal -->
+                                <button type="button" class="btn btn-danger" data-bs-toggle="modal"
+                                    data-bs-target="#modalQuejas">
+                                    Añadir queja
                                 </button>
-                                <ul class="dropdown-menu">
-                                    <li><a class="dropdown-item" th:href="@{/admin/}">Usuarios</a></li>
-                                    <li><a class="dropdown-item" th:href="@{/admin/subasta}">Subasta</a></li>
-                                </ul>                                
+
+                                <!-- Modal -->
+                                <div class="modal fade text-dark" id="modalQuejas" tabindex="-1"
+                                    aria-labelledby="modalQuejasLabel" aria-hidden="true">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h1 class="modal-title fs-5" id="modalQuejasLabel">Poner una queja</h1>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                    aria-label="Close"></button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <form th:action="@{/quejas/}" th:method="post">
+                                                    <input type="hidden" name="userId" th:value="${u.id}">
+                                                    <div class="form-floating">
+                                                        <textarea required class="form-control"
+                                                            placeholder="Leave a comment here" id="floatingTextarea2"
+                                                            style="height: 100px" name="text"></textarea>
+                                                        <label for="floatingTextarea2">Exponga la queja que desea poner,
+                                                            por favor muestre respeto</label>
+                                                    </div>
+                                                    <button type="submit" class="btn btn-warning">Enviar queja</button>
+                                                </form>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary"
+                                                    data-bs-dismiss="modal">Cerrar</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             </li>
 
                             <li class="nav-item mx-2">
@@ -54,7 +87,8 @@
                             </li>
                             <li class="nav-item align-self-center">
                                 <form th:action="@{/logout}" method="post">
-                                    <button type="submit" class="btn btn-outline-secondary btn-sm text-white">logout</button>
+                                    <button type="submit"
+                                        class="btn btn-outline-secondary btn-sm text-white">logout</button>
                                 </form>
                             </li>
                         </th:block>

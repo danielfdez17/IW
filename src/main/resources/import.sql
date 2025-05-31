@@ -12,6 +12,8 @@ INSERT INTO IWUser (id, enabled, roles, username, password, first_name, last_nam
 VALUES (4, TRUE, 'USER', 'd',
     '{bcrypt}$2a$10$2BpNTbrsarbHjNsUWgzfNubJqBRf.0Vz9924nRSHBqlbPKerkgX.W', 'Jose4', 'V', 1000);
 
+INSERT INTO complains (id, date_time, text, user_id) VALUES (1, '2025-05-28T11:56:47.472719', 'probando', 1);
+
 -- start id numbering from a value that is larger than any assigned above
 ALTER SEQUENCE "PUBLIC"."GEN" RESTART WITH 1024;
 -- INSERT INTO SUBASTA (fecha_inicio, fecha_fin, enabled, ruta_imagen, precio, descripcion, nombre, user_id) VALUES ('2022-01-01 00:00:00', '2022-01-01 00:00:00', true, '/img', 10.00, 'Descripcion', 'Reloj', 1), ('2022-01-01 00:00:00', '2022-01-01 00:00:00', true, '/img', 10.0, 'Descripcion', 'Reloj', 1), ('2022-01-01 00:00:00', '2022-01-01 00:00:00', true, '/img', 10.0, 'Descripcion', 'Reloj', 1), ('2022-01-01 00:00:00', '2022-01-01 00:00:00', true, '/img', 10.0, 'Descripcion', 'Reloj', 1), ('2022-01-01 00:00:00', '2022-01-01 00:00:00', true, '/img', 10.0, 'Descripcion', 'Reloj', 1),('2022-01-01 00:00:00', '2022-01-01 00:00:00', true, '/img', 10.0, 'Descripcion', 'Reloj', 1); 
