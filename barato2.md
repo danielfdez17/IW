@@ -251,11 +251,11 @@ Estas son las instrucciones del examen. Léelas con atención antes de nada, y p
 
 ¿En qué partes de este proyecto has trabajado más? ¿En cuáles menos? Indica tu participación describiendo las 3 ó 4 partes más importantes de tu aplicación, y el porcentaje del total de cada parte al que consideras que has contribuído. Contesta directamente en el `.md`, debajo de este texto y antes de la siguiente pregunta.
 
-### pregunta B
+### pregunta B (hecho)
 
 En muchas aplicaciones web, el registro de nuevos usuarios está protegido mediante un "captcha". Haz que, para registrar un nuevo usuario, sea necesario resolver uno muy sencillo de tu elección. Por ejemplo, genera 4 checkboxes de formulario con números aleatorios pares e impares y solicita (y verifica) que sólo pulsa en los pares.
 
-### pregunta C
+### pregunta C (hecho)
 
 Explica brevemente cómo funciona la resolución de una subasta una vez se acaba el plazo de la misma. Modifica el diálogo de creación de subasta para que no sólo se pueda especificar una fecha de inicio y final, sino también una hora - esto permite hacer pruebas más sencillas para ver quién ha ganado cuándo. 
 
@@ -263,11 +263,11 @@ Explica brevemente cómo funciona la resolución de una subasta una vez se acaba
 
 Haz que, si estás viendo la página de subastas activas y alguien aumenta la puja ganadora, se modifique el valor de la puja ganadora/persona que va ganando en la tabla, sin necesidad de recargar la vista. 
 
-### pregunta E
+### pregunta E (hecho)
 
 Modifica la vista de administrador para añadir enlaces directos a las subastas (en la vista de subasta) y a usuarios (en la vista de usuarios). Añade una columna "username" en la vista de usuarios. Añade dos botones grandes en la parte de arriba de estas vistas para pasar rápidamente de usuarios a subastas y viceversa. Elimina el drop-down del menú de Administrar, y que pulsarlo lleve directamente a administrar subastas. 
 
-### pregunta F
+### pregunta F (hecho)
 
 Siempre que los usuarios se pueden comunicar unos con otros, pueden hacer cosas feas - y más si hay dinero de por medio. Añade un enlace "quejas" en el navbar de los usuarios (y sólo los usuarios) que les permita enviar una queja al admin. La queja contendrá texto, autor, y fecha de creación, y el admin debería poder ver una tabla de quejas desde su vista de administrador (añade un botón a lo que pide el ejercicio E para acceder a esta tabla).
 

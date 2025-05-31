@@ -45,8 +45,9 @@
                 </div>
                 <div class="mb-3 row text-dark btn-group" role="group" aria-label="Checkbox generator"
                     id="checkbox-generator">
-                    <label class="text-dark">Para verificar que no eres un robot, marca los campos con valores</label>
-
+                    <label class="text-dark">Para verificar que no eres un robot, marca SOLO los campos con valores pares</label>
+                    <div id="checkboxes" class="d-flex justify-content-around"></div>
+                    <p id="errorMsg" class="d-none text-danger">Has seleccionado algún valor impar</p>
                 </div>
                 <button disabled id="submitBtn" class="btn btn-lg btn-primary btn-block" type="submit">Registrarse</button>
             </form>

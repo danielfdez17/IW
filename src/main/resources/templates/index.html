@@ -4,13 +4,6 @@
 <head>
     <th:block th:replace="~{fragments/head :: header}" />
     <title>IW: Subastas</title>
-    <style>
-        .disabled-a {
-            pointer-events: none; 
-            color: gray; 
-            text-decoration: none;
-        }
-    </style>
 </head>
 
 <body class="d-flex flex-column h-100">
@@ -116,8 +109,8 @@
                         <p class="row ps-3 fst-italic" th:if="${obj.estadoSubasta.name() == 'PENDIENTE'}" th:text="${'Estara disponible a las ' + obj.fechaInicio}"></p>
                         <p class="row ps-3 fst-italic" th:if="${obj.estadoSubasta.name() == 'EN_CURSO'}" th:text="${'Disponible hasta ' + obj.fechaFin}"></p>
                         <div class="btn-group-vertical w-100" role="group" aria-label="Vertical button group">
-                            <a th:href="@{/products/{id}(id=${obj.id})}"  th:classappend="${obj.estadoSubasta.name() == 'PENDIENTE'} ? 'disabled-a' : ''"
-                                class="btn btn-danger fw-bolder text-uppercase fs-3 text-white">
+                            <a th:href="@{/products/{id}(id=${obj.id})}"
+                                class="btn btn-danger fw-bolder text-uppercase fs-3">
                                 <i class="bi bi-person-raised-hand"></i>
                                 ¡Pujar!
                                 <i class="bi bi-person-raised-hand"></i>

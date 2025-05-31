@@ -28,9 +28,9 @@
                 <div class="col-lg-3 mb-4">
                     <!-- Tarjeta de Perfil -->
                     <div class="card mb-3">
+                        <img th:src="@{/user/{id}/pic(id=${u.id})}" class="card-img-top" alt="Foto de perfil"
+                            width="150">
                         <div class="card-body text-center">
-                            <img th:src="@{/user/{id}/pic(id=${u.id})}" class="rounded-circle mb-3" alt="Foto de perfil"
-                                width="150">
                             <h5 class="card-title" th:text="${user.firstName + ' ' + user.lastName}">Juan Pérez</h5>
                             <p>
                                 <strong>Calificación:</strong>
@@ -176,7 +176,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-lg-auto">
+                <div class="col-lg-9">
                     <!-- Información del Usuario -->
                     <h2 th:if="${subastasPujadas == null}" class="col-lg-auto">No he pujado en ninguna subasta todavía
                     </h2>
@@ -193,6 +193,7 @@
                                             <th>Fecha de Fin</th>
                                             <th>Precio Inicial</th>
                                             <th>Pujado</th>
+                                            <th>Ganador</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -201,8 +202,16 @@
                                             <td th:text="${subastasPujadas.nombre}">Nombre de la Subasta</td>
                                             <td th:text="${#temporals.format(subastasPujadas.fechaFin, 'dd/MM/yyyy - HH:mm:ss')}">Fecha de Fin</td>
                                             <td th:text="${subastasPujadas.precio}">Precio Inicial</td>
-                                            <td th:text="${subastasPujadas.precioActual}">Pujado</td>
-                                        </tr>
+                                            <td>
+                                                <i class="bi bi-cash-stack text-success"></i>
+                                                <span th:text="${subastasPujadas.precioActual}"></span>
+                                            </td>
+                                            <td th:unless="${subastasPujadas.maximoPujador == u.username}" th:text="${subastasPujadas.maximoPujador}">Ganador</td>
+                                            <td th:if="${subastasPujadas.maximoPujador == u.username}" >
+                                                <i class="bi bi-trophy-fill text-warning"></i>
+                                                <span th:text="${subastasPujadas.maximoPujador}"></span>
+                                            </td>
+                                        </tr>                                    
                                     </tbody>
                                 </table>
                             </div>
@@ -222,8 +231,7 @@
                                     <thead>
                                         <tr>
                                             <th>Imagen</th>
-                                            <th>Nombre</th>
-                                            <th>Descripción</th>
+                                            <th>Nombre y descripción</th>
                                             <th>Precios</th>
                                             <th>Plazos</th>
                                             <th>Estado</th>
@@ -241,9 +249,7 @@
                                                 </td>
                                                 <td>
                                                     <p th:text="${bid.nombre}"></p>
-                                                </td>
-                                                <td>
-                                                    <p th:text="${bid.descripcion}"></p>
+                                                    <p class="fst-italic" th:text="${bid.descripcion}"></p>
                                                 </td>
                                                 <td>
                                                     <p>Precio inicial: <span th:text="${bid.precio}">0</span>€</p>
