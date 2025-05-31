@@ -136,18 +136,18 @@ public class UserController {
         List<Subasta> listaSubastas = subastaRepository.findByCreador(id);
         listaSubastas.forEach(subasta -> {
             boolean isEnabled = (subasta.getFechaFin().isEqual(LocalDateTime.now())
-                            || subasta.getFechaFin().isAfter(LocalDateTime.now()));
+                    || subasta.getFechaFin().isAfter(LocalDateTime.now()));
             subasta.setEnabled(isEnabled);
         });
 
-        //subastas en las que ha pujado
+        // subastas en las que ha pujado
         List<Subasta> subastasPujadas = subastaRepository.findSubastasByUserId(id);
         int valoracion = (int) Math.round(subastasPujadas.stream()
-                                        .map(Subasta::getValoracionGanador)
-                                        .filter(Objects::nonNull)
-                                        .mapToInt(Byte::intValue)
-                                        .average()
-                                        .orElse(0));
+                .map(Subasta::getValoracionGanador)
+                .filter(Objects::nonNull)
+                .mapToInt(Byte::intValue)
+                .average()
+                .orElse(0));
         model.addAttribute("valoracion", valoracion);
         model.addAttribute("subastasPujadas", subastasPujadas.isEmpty() ? null : subastasPujadas);
         model.addAttribute("subastas", listaSubastas.isEmpty() ? null : listaSubastas);
@@ -251,7 +251,7 @@ public class UserController {
      */
     @GetMapping("{id}/pic")
     public StreamingResponseBody getPic(@PathVariable long id) throws IOException {
-        File f = localData.getFile("users", "" + id + ".jpg");
+        File f = localData.getFile("users", String.format("%d.jpg", id));
         InputStream in = new BufferedInputStream(f.exists() ? new FileInputStream(f) : UserController.defaultPic());
         return os -> FileCopyUtils.copy(in, os);
     }
@@ -279,7 +279,7 @@ public class UserController {
         }
 
         log.info("Updating photo for user {}", id);
-        File f = localData.getFile("user", "" + id + ".jpg");
+        File f = localData.getFile("user", String.format("%d.jpg", id));
         if (photo.isEmpty()) {
             log.info("failed to upload photo: emtpy file?");
         } else {

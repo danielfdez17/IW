@@ -1,6 +1,8 @@
 package es.ucm.fdi.iw.business.fileconfiglocal;
 
 import java.io.File;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -43,9 +45,14 @@ public class LocalData {
      * created if absent.
      */
     public File getFolder(String folderName) {
-    	File folder = new File(baseFolder, folderName);
-    	if ( ! folder.exists()) {
-    		folder.mkdirs();
+        Path folderPath = Paths.get(baseFolder.getAbsolutePath(), folderName);
+    	File folder = folderPath.toFile();
+    	if (!folder.exists()) {
+    		if (folder.mkdirs()) {
+                log.info("Created folder: " + folder.getAbsolutePath());
+            } else {
+                log.error("Could not create folder: " + folder.getAbsolutePath());
+            }
     	}
     	return folder;
     }
@@ -60,6 +67,8 @@ public class LocalData {
      * does not exist, it *will* be created (as by a call to getFolder).
      */
     public File getFile(String folderName, String fileName) {
-    	return new File(getFolder(folderName), fileName);
+        File folder = getFolder(folderName);
+        Path filePath = Paths.get(folder.getAbsolutePath(), fileName);
+    	return filePath.toFile();
     }
 }
