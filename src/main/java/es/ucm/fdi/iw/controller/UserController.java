@@ -40,6 +40,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import es.ucm.fdi.iw.business.fileconfiglocal.LocalData;
 import es.ucm.fdi.iw.business.model.Message;
+import es.ucm.fdi.iw.business.model.Puja;
+import es.ucm.fdi.iw.business.model.SubPuja;
 import es.ucm.fdi.iw.business.model.Subasta;
 import es.ucm.fdi.iw.business.model.Transferable;
 import es.ucm.fdi.iw.business.model.User;
@@ -136,20 +138,34 @@ public class UserController {
         List<Subasta> listaSubastas = subastaRepository.findByCreador(id);
         listaSubastas.forEach(subasta -> {
             boolean isEnabled = (subasta.getFechaFin().isEqual(LocalDateTime.now())
-                    || subasta.getFechaFin().isAfter(LocalDateTime.now()));
+                            || subasta.getFechaFin().isAfter(LocalDateTime.now()));
             subasta.setEnabled(isEnabled);
         });
 
-        // subastas en las que ha pujado
+        //subastas en las que ha pujado
         List<Subasta> subastasPujadas = subastaRepository.findSubastasByUserId(id);
         int valoracion = (int) Math.round(subastasPujadas.stream()
-                .map(Subasta::getValoracionGanador)
-                .filter(Objects::nonNull)
-                .mapToInt(Byte::intValue)
-                .average()
-                .orElse(0));
+                                        .map(Subasta::getValoracionGanador)
+                                        .filter(Objects::nonNull)
+                                        .mapToInt(Byte::intValue)
+                                        .average()
+                                        .orElse(0));
+
+        
+       // List<SubPuja> subPujas = new ArrayList<>();
+        List<SubPuja> subPujas = subastasPujadas.stream()
+                .flatMap(s -> s.getPujas().stream()
+                    .filter(p -> p.getUser().getId() == id)
+                    .map(p -> new SubPuja(s, p)))
+                .collect(Collectors.toList());
+
+            // Lista de pujas realizadas por el usuario
+            List<Puja> pujas = subPujas.stream()
+                .map(SubPuja::getPuja)
+                .collect(Collectors.toList());
+
         model.addAttribute("valoracion", valoracion);
-        model.addAttribute("subastasPujadas", subastasPujadas.isEmpty() ? null : subastasPujadas);
+        model.addAttribute("subastasPujadas", subastasPujadas.isEmpty() ? null : subPujas);
         model.addAttribute("subastas", listaSubastas.isEmpty() ? null : listaSubastas);
         return "user";
     }

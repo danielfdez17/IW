@@ -192,26 +192,29 @@
                                             <th>Subasta</th>
                                             <th>Fecha de Fin</th>
                                             <th>Precio Inicial</th>
-                                            <th>Pujado</th>
-                                            <th>Ganador</th>
+                                            <th>Precio Actual</th>
+                                            <th>Mi Puja</th>
+                                            <th></th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         <!-- Itera sobre las subastas -->
-                                        <tr th:each="subastasPujadas : ${subastasPujadas}">
-                                            <td th:text="${subastasPujadas.nombre}">Nombre de la Subasta</td>
-                                            <td th:text="${#temporals.format(subastasPujadas.fechaFin, 'dd/MM/yyyy - HH:mm:ss')}">Fecha de Fin</td>
-                                            <td th:text="${subastasPujadas.precio}">Precio Inicial</td>
+                                       <tr th:each="subastasPujadas : ${subastasPujadas}">
+                                            <td th:text="${subastasPujadas.subasta.nombre}">Nombre de la Subasta</td>
+                                            <td th:text="${#temporals.format(subastasPujadas.subasta.fechaFin, 'dd/MM/yyyy - HH:mm:ss')}">Fecha de Fin</td>
+                                            <td th:text="${subastasPujadas.subasta.precio}">Precio Inicial</td>
+                                            <td th:text="${subastasPujadas.subasta.precioActual}">Precio Actual</td>
+                                            <td th:text="${subastasPujadas.puja.dineroPujado}">Pujado</td>
                                             <td>
-                                                <i class="bi bi-cash-stack text-success"></i>
-                                                <span th:text="${subastasPujadas.precioActual}"></span>
+                                                <span th:if="${subastasPujadas.subasta.maximoPujador == user.username}" class="text-success fw-bold">
+                                                    ¡Vas ganando!
+                                                </span>
+                                                <span th:if="${subastasPujadas.subasta.maximoPujador != user.username}" class="text-danger fw-bold">
+                                                    ¡Sube tu puja y conviértete en ganador!
+                                                </span>
                                             </td>
-                                            <td th:unless="${subastasPujadas.maximoPujador == u.username}" th:text="${subastasPujadas.maximoPujador}">Ganador</td>
-                                            <td th:if="${subastasPujadas.maximoPujador == u.username}" >
-                                                <i class="bi bi-trophy-fill text-warning"></i>
-                                                <span th:text="${subastasPujadas.maximoPujador}"></span>
-                                            </td>
-                                        </tr>                                    
+                                        </tr>
+
                                     </tbody>
                                 </table>
                             </div>
