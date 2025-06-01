@@ -46,6 +46,9 @@ import jakarta.servlet.http.HttpSession;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 
+import java.nio.file.Path;
+import java.nio.file.Paths;
+
 @Controller
 @RequestMapping("products")
 @AllArgsConstructor
@@ -115,18 +118,19 @@ public class DetailProductController {
                 "availableMoney", String.valueOf(x));
     }
 
+
+    @Autowired
+    private SimpMessagingTemplate messagingTemplate;
+    private void sendProductUpdateToWebSocket(ProductDTO producto) {
+        messagingTemplate.convertAndSend("/topic/product-updates/" + producto.getId(), producto);
+    }
+
+
     @PostMapping("/send_product/{id}")
     public String updateSendProduct(@PathVariable long id, @RequestParam String reparto, HttpSession session) {
         productService.updateSendProduct(id, reparto);
         User usuario = (User) session.getAttribute("u");
         return "redirect:/user/" + usuario.getId();
-    }
-
-    @Autowired
-    private SimpMessagingTemplate messagingTemplate;
-
-    private void sendProductUpdateToWebSocket(ProductDTO producto) {
-        messagingTemplate.convertAndSend("/topic/product-updates/" + producto.getId(), producto);
     }
 
     @PostMapping("/nueva_subasta")
@@ -216,7 +220,25 @@ public class DetailProductController {
                         "static/img/BARATO.png")));
     }
 
+
+
     private void updatePicture(MultipartFile photo, long id) {
+        if (!photo.getOriginalFilename().isBlank()) {
+            try {
+                Path path = Paths.get(System.getProperty("user.dir"), "iwdata", "subastas", id + ".jpg");
+                File file = path.toFile();
+
+                try (FileOutputStream fout = new FileOutputStream(file)) {
+                    fout.write(photo.getBytes());
+                }
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    /*    private void updatePicture(MultipartFile photo, long id) {
         if (!photo.getOriginalFilename().isBlank()) {
 
             try {
@@ -229,5 +251,6 @@ public class DetailProductController {
                 e.printStackTrace();
             }
         }
-    }
+    } */
+
 }
