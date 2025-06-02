@@ -80,9 +80,8 @@
                                         <div class="mb-3">
                                             <label class="form-label" for="precioInicial">Precio inicial de
                                                 subasta</label>
-                                            <input class="form-control" id="precioInicial" name="precio"
-                                                type="number" placeholder="Introduce el precio inicial" min="0"
-                                                required>
+                                            <input class="form-control" id="precioInicial" name="precio" type="number"
+                                                placeholder="Introduce el precio inicial" min="0" required>
                                         </div>
                                         <div class="mb-3">
                                             <button id="btnCrearSubasta" class="btn btn-danger w-100"
@@ -107,12 +106,14 @@
                             alt="Imagen objeto" width="400" height="500">
                         <div class="row details mt-2 justify-content-between align-items-center">
                             <h3 class="text-uppercase fw-bold col-auto" th:text="${obj.nombre}">Reloj de Muñeca</h3>
-                            <h4 class="fw-bold col-auto text-success"
-                                    th:attr="id='precio-actual-' + ${obj.id}"
-                                    th:text="${obj.precioActual + ' €'}">0.00 €</h4>
+                            <h4 class="fw-bold col-auto text-success" th:attr="id='precio-actual-' + ${obj.id}"
+                                th:text="${obj.precioActual + ' €'}">0.00 €
+                            </h4>
                         </div>
-                        <p class="row ps-3 fst-italic" th:if="${obj.estadoSubasta.name() == 'PENDIENTE'}" th:text="${'Estara disponible a las ' + obj.fechaInicio}"></p>
-                        <p class="row ps-3 fst-italic" th:if="${obj.estadoSubasta.name() == 'EN_CURSO'}" th:text="${'Disponible hasta ' + obj.fechaFin}"></p>
+                        <p class="row ps-3 fst-italic" th:if="${obj.estadoSubasta.name() == 'PENDIENTE'}"
+                            th:text="${'Estara disponible a las ' + obj.fechaInicio}"></p>
+                        <p class="row ps-3 fst-italic" th:if="${obj.estadoSubasta.name() == 'EN_CURSO'}"
+                            th:text="${'Disponible hasta ' + obj.fechaFin}"></p>
                         <div class="btn-group-vertical w-100" role="group" aria-label="Vertical button group">
                             <a th:href="@{/products/{id}(id=${obj.id})}"
                                 class="btn btn-danger fw-bolder text-uppercase fs-3">
@@ -126,20 +127,72 @@
             </div>
     </main>
 
-    <th:block th:replace="~{fragments/footer.html :: footer}" />
-    
     <script>
-        function validarFormulario() {
+        function validarFormulario () {
             const fechaInicio = document.getElementById("nuevaFechaInicio").value;
             const fechaFin = document.getElementById("nuevaFechaFin").value;
 
             if (fechaInicio >= fechaFin) {
                 alert("La fecha de inicio no puede ser posterior a la fecha de fin.");
-                return false; 
+                return false;
             }
             return true;
         }
+        function suscribirmeProductoConIntervalo (productoId) {
+
+            // if (config.socketUrl) {
+            // let subs = [`/topic/product-updates/${productId}`]
+            // console.warn("Suscribiendome a la cola de subastas: " + productId)
+            // ws.initialize(config.socketUrl, subs);
+
+            // }
+
+            const intervalo = setInterval(() => {
+                if (ws.stompClient && ws.stompClient.connected) {
+                    ws.stompClient.subscribe("/topic/product-updates/" + productoId, function (message) {
+                        console.log("Mensaje recibido:", message);
+                        try {
+                            const data = JSON.parse(message.body);
+                            console.log("Mejor postor:", data.maximoPujador);
+                            console.log("Mejor oferta:", data.precioActual);
+
+                            // Actualizar datos
+                            const precioActualElem = document.getElementById("precio-actual-" + productoId);
+                            if (precioActualElem) {
+                                precioActualElem.textContent = '€' + data.precioActual;
+                            }
+                            const mejorPostorElem = document.getElementById("mejor-postor");
+                            if (mejorPostorElem) {
+                                mejorPostorElem.textContent = data.maximoPujador || 'Sin pujas aún';
+                            }
+                        }
+                        catch (error) {
+                            console.error("Error al parsear el mensaje:", error);
+                        }
+                        //location.reload();  // Recarga la página actual
+                    });
+                    clearInterval(intervalo); // Deja de intentar una vez suscrito
+                }
+            }, 1000);
+
+
+        }
+
+        document.addEventListener("DOMContentLoaded", function () {
+            const subastas = document.getElementsByClassName("border border-white rounded");
+            console.warn(subastas);
+            for (let i = 0; i < subastas.length; ++i) {
+                const img = subastas[i]
+                const id = img.getAttribute("src").split("/products/")[1].split("/pic")[0];
+                suscribirmeProductoConIntervalo(id);
+            }
+        });
+
     </script>
+
+    <th:block th:replace="~{fragments/footer.html :: footer}" />
+
+
 
 
 

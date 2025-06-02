@@ -259,7 +259,7 @@ En muchas aplicaciones web, el registro de nuevos usuarios está protegido media
 
 Explica brevemente cómo funciona la resolución de una subasta una vez se acaba el plazo de la misma. Modifica el diálogo de creación de subasta para que no sólo se pueda especificar una fecha de inicio y final, sino también una hora - esto permite hacer pruebas más sencillas para ver quién ha ganado cuándo. 
 
-### pregunta D
+### pregunta D (hecha)
 
 Haz que, si estás viendo la página de subastas activas y alguien aumenta la puja ganadora, se modifique el valor de la puja ganadora/persona que va ganando en la tabla, sin necesidad de recargar la vista. 
 

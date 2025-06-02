@@ -5776,6 +5776,7 @@ create global temporary table HTE_message(rn_ integer not null, date_read timest
 org.h2.jdbc.JdbcSQLSyntaxErrorException: Tabla "HTE_IWUSER" ya existe
 Table "HTE_IWUSER" already exists; SQL statement:
 create global temporary table HTE_iwuser(enabled boolean, rn_ integer not null, available_money float(53), id bigint, first_name varchar(255), last_name varchar(255), password varchar(255), roles varchar(255), username varchar(255), primary key (rn_)) TRANSACTIONAL [42101-232]
+<<<<<<< Updated upstream
 2025-06-01 13:19:42.411243+02:00 jdbc[3]: exception
 org.h2.jdbc.JdbcSQLNonTransientConnectionException: La base de datos ya esta cerrada (para des-habilitar el cerrado automatico durante el shutdown de la VM, agregue ";DB_CLOSE_ON_EXIT=FALSE" a la URL de conexión)
 Database is already closed (to disable automatic closing at VM shutdown, add ";DB_CLOSE_ON_EXIT=FALSE" to the db URL) [90121-232]
@@ -5932,3 +5933,48 @@ Database is already closed (to disable automatic closing at VM shutdown, add ";D
 	at java.base/java.lang.Iterable.forEach(Iterable.java:75)
 	at org.springframework.boot.SpringApplicationShutdownHook.run(SpringApplicationShutdownHook.java:116)
 	at java.base/java.lang.Thread.run(Thread.java:1583)
+=======
+2025-05-31 07:30:07.961002+02:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "alter table if exists complains alter column text set data type VARCHAR(1000) [*]default ''"; SQL statement:
+alter table if exists complains alter column text set data type VARCHAR(1000) default '' [42000-232]
+2025-05-31 07:31:03.353610+02:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "alter table if exists complains alter column text set data type VARCHAR(1000) [*]default ''"; SQL statement:
+alter table if exists complains alter column text set data type VARCHAR(1000) default '' [42000-232]
+2025-05-31 08:00:23.668196+02:00 jdbc[15]: null
+org.h2.message.DbException: The connection was not closed by the application and is garbage collected [90018-232]
+	at org.h2.message.DbException.get(DbException.java:223)
+	at org.h2.message.DbException.get(DbException.java:199)
+	at org.h2.message.DbException.get(DbException.java:188)
+	at org.h2.jdbc.JdbcConnection.closeOld(JdbcConnection.java:217)
+	at org.h2.jdbc.JdbcConnection.<init>(JdbcConnection.java:134)
+	at org.h2.Driver.connect(Driver.java:59)
+	at com.zaxxer.hikari.util.DriverDataSource.getConnection(DriverDataSource.java:137)
+	at com.zaxxer.hikari.pool.PoolBase.newConnection(PoolBase.java:360)
+	at com.zaxxer.hikari.pool.PoolBase.newPoolEntry(PoolBase.java:202)
+	at com.zaxxer.hikari.pool.HikariPool.createPoolEntry(HikariPool.java:461)
+	at com.zaxxer.hikari.pool.HikariPool$PoolEntryCreator.call(HikariPool.java:724)
+	at com.zaxxer.hikari.pool.HikariPool$PoolEntryCreator.call(HikariPool.java:703)
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:317)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1144)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:642)
+	at java.base/java.lang.Thread.run(Thread.java:1583)
+Caused by: org.h2.jdbc.JdbcSQLNonTransientConnectionException: The connection was not closed by the application and is garbage collected [90018-232]
+	at org.h2.message.DbException.getJdbcSQLException(DbException.java:690)
+	at org.h2.message.DbException.getJdbcSQLException(DbException.java:489)
+	... 16 more
+>>>>>>> Stashed changes
+2025-06-02 14:45:47.869850+02:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "alter table if exists complains alter column text set data type VARCHAR(1000) [*]default ''"; SQL statement:
+alter table if exists complains alter column text set data type VARCHAR(1000) default '' [42000-232]
+2025-06-02 14:48:37.353703+02:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "alter table if exists complains alter column text set data type VARCHAR(1000) [*]default ''"; SQL statement:
+alter table if exists complains alter column text set data type VARCHAR(1000) default '' [42000-232]
+2025-06-02 14:58:08.072162+02:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "alter table if exists complains alter column text set data type VARCHAR(1000) [*]default ''"; SQL statement:
+alter table if exists complains alter column text set data type VARCHAR(1000) default '' [42000-232]
+2025-06-02 14:58:10.443975+02:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "alter table if exists complains alter column text set data type VARCHAR(1000) [*]default ''"; SQL statement:
+alter table if exists complains alter column text set data type VARCHAR(1000) default '' [42000-232]
+2025-06-02 15:42:51.067121+02:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "alter table if exists complains alter column text set data type VARCHAR(1000) [*]default ''"; SQL statement:
+alter table if exists complains alter column text set data type VARCHAR(1000) default '' [42000-232]

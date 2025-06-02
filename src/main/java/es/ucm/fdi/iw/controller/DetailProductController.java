@@ -6,13 +6,14 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.Map;
 import java.util.Objects;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -46,9 +47,6 @@ import jakarta.servlet.http.HttpSession;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 
-import java.nio.file.Path;
-import java.nio.file.Paths;
-
 @Controller
 @RequestMapping("products")
 @AllArgsConstructor
@@ -58,6 +56,7 @@ public class DetailProductController {
     private final PujaService pujaService;
     private final UserService userService;
     private final LocalData localData;
+    private final SimpMessagingTemplate messagingTemplate;
 
     @ModelAttribute
     public void populateModel(HttpSession session, Model model) {
@@ -119,8 +118,7 @@ public class DetailProductController {
     }
 
 
-    @Autowired
-    private SimpMessagingTemplate messagingTemplate;
+
     private void sendProductUpdateToWebSocket(ProductDTO producto) {
         messagingTemplate.convertAndSend("/topic/product-updates/" + producto.getId(), producto);
     }
