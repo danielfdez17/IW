@@ -19,8 +19,16 @@
             <div class="card-body">
                 <div class="row">
                     <div class="col-md-6">
-                        <img th:src="@{/products/{id}/pic(id=${producto.id})}" width="500" height="500"
-                            class="img-fluid rounded" alt="Producto">
+                        <img th:if="${pictureNames.size == 0}" th:src="@{/products/{id}/pic(id=${producto.id})}"
+                            width="500" height="500" class="img-fluid rounded" alt="Producto">
+                        <div class="scrollable-pics">
+
+                            <th:block th:unless="${pictureNames.size == 0}" th:each="picName : ${pictureNames}">
+                                <img th:src="'/products/' + ${producto.id} + '/' + ${picName}" width="500" height="500"
+                                    class="img-fluid rounded" alt="Producto">
+                                <hr class="border border-primary border-3 opacity-75">
+                            </th:block>
+                        </div>
                     </div>
                     <div class="col-md-6">
                         <h5 class="text-muted">Descripción</h5>

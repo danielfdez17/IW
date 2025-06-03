@@ -15,6 +15,9 @@ import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
@@ -78,7 +81,7 @@ public class DetailProductController {
     }
 
     @GetMapping("/{id}")
-    public String product(@PathVariable int id, Model model) {
+    public String product(@PathVariable long id, Model model) {
         ProductDTO producto = productService.getProduct(id);
         model.addAttribute("producto", producto);
         model.addAttribute("estado", EstadoSubasta.getTxt(producto.getEstadoSubasta()));
@@ -90,6 +93,7 @@ public class DetailProductController {
         model.addAttribute("canAddComment",
                 winner == session.getId() && RepartoSubasta.ENTREGADO.equals(producto.getRepartoSubasta()));
         model.addAttribute("isGanador", winner == session.getId());
+        model.addAttribute("pictureNames", getPictureNames(id));
         return "productdetail";
     }
 
@@ -212,6 +216,25 @@ public class DetailProductController {
         return os -> FileCopyUtils.copy(in, os);
     }
 
+    @GetMapping("{id}/{picName}")
+    public StreamingResponseBody getPic(@PathVariable long id, @PathVariable String picName) throws IOException {
+        Path path = Paths.get(System.getProperty("user.dir"), "iwdata", "subastas", "" + id);
+        File folder = path.toFile();
+        File f = null;
+        if (folder.exists() && folder.isDirectory()) {
+            File[] files = folder.listFiles(file -> file.isFile() && file.getName().equals(picName));
+            if (files != null && files.length > 0) {
+                f = files[0];
+            }
+        }
+        if (f == null) {
+            f = localData.getFile("subastas", "" + id + ".jpg");
+        }
+        InputStream in = new BufferedInputStream(
+                f.exists() ? new FileInputStream(f) : DetailProductController.defaultPic());
+        return os -> FileCopyUtils.copy(in, os);
+    }
+
     @PostMapping("{id}/comentar")
     public String comentarProducto(@PathVariable Long id,
             @RequestParam String comentario,
@@ -259,6 +282,21 @@ public class DetailProductController {
                 }
             }
         }
+    }
+
+    private List<String> getPictureNames(Long id) {
+        Path path = Paths.get(System.getProperty("user.dir"), "iwdata", "subastas", "" + id);
+        File folder = path.toFile();
+        List<String> fileNames = new ArrayList<>();
+        if (folder.exists() && folder.isDirectory()) {
+            File[] files = folder.listFiles(file -> file.isFile());
+            if (files != null && files.length > 0) {
+                for (File f : files) {
+                    fileNames.add(f.getName());
+                }
+            }
+        }
+        return fileNames;
     }
 
 }
