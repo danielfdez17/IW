@@ -54,6 +54,11 @@ import jakarta.servlet.http.HttpSession;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 
+//markdown
+import org.commonmark.parser.Parser;
+import org.commonmark.node.Node;
+import org.commonmark.renderer.html.HtmlRenderer;
+
 /**
  * User management.
  *
@@ -135,11 +140,17 @@ public class UserController {
     public String index(@PathVariable long id, Model model, HttpSession session) {
         User target = entityManager.find(User.class, id);
         model.addAttribute("user", target);
+
         List<Subasta> listaSubastas = subastaRepository.findByCreador(id);
         listaSubastas.forEach(subasta -> {
             boolean isEnabled = (subasta.getFechaFin().isEqual(LocalDateTime.now())
                             || subasta.getFechaFin().isAfter(LocalDateTime.now()));
             subasta.setEnabled(isEnabled);
+            Parser parser = Parser.builder().build();
+            HtmlRenderer renderer = HtmlRenderer.builder().build();
+            Node document = parser.parse(subasta.getDescripcion());
+            String descripcionMarkdown = renderer.render(document);
+            subasta.setDescripcion(descripcionMarkdown);
         });
 
         //subastas en las que ha pujado

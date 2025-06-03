@@ -55,6 +55,12 @@ import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+//markdown
+import org.commonmark.parser.Parser;
+import org.commonmark.node.Node;
+import org.commonmark.renderer.html.HtmlRenderer;
+
+
 @Slf4j
 @Controller
 @RequestMapping("products")
@@ -80,7 +86,37 @@ public class DetailProductController {
         return "subastas";
     }
 
+    
     @GetMapping("/{id}")
+    public String product(@PathVariable long id, Model model) {
+        ProductDTO producto = productService.getProduct(id);
+
+        // Convertir la descripción de Markdown a HTML
+        Parser parser = Parser.builder().build();
+        HtmlRenderer renderer = HtmlRenderer.builder().build();
+        Node document = parser.parse(producto.getDescripcion());
+        String descripcionMarkdown = renderer.render(document);
+        producto.setDescripcion(descripcionMarkdown);  
+
+
+        model.addAttribute("producto", producto);
+        model.addAttribute("estado", EstadoSubasta.getTxt(producto.getEstadoSubasta()));
+
+        User session = (User) model.getAttribute("u");
+        Long winner = -1L;
+        if (producto.getIdUserGanador() != null && EstadoSubasta.FINALIZADA.equals(producto.getEstadoSubasta()))
+            winner = producto.getIdUserGanador();
+
+        model.addAttribute("canAddComment",
+                winner == session.getId() && RepartoSubasta.ENTREGADO.equals(producto.getRepartoSubasta()));
+        model.addAttribute("isGanador", winner == session.getId());
+        model.addAttribute("pictureNames", getPictureNames(id));
+
+        return "productdetail";
+    }
+ 
+/* 
+ *     @GetMapping("/{id}")
     public String product(@PathVariable long id, Model model) {
         ProductDTO producto = productService.getProduct(id);
         model.addAttribute("producto", producto);
@@ -96,6 +132,8 @@ public class DetailProductController {
         model.addAttribute("pictureNames", getPictureNames(id));
         return "productdetail";
     }
+*/
+
 
     @PostMapping("/{id}/pujar")
     @ResponseBody
