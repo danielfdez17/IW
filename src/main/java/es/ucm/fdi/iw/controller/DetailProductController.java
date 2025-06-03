@@ -195,7 +195,18 @@ public class DetailProductController {
      */
     @GetMapping("{id}/pic")
     public StreamingResponseBody getPic(@PathVariable long id) throws IOException {
-        File f = localData.getFile("subastas", "" + id + ".jpg");
+        Path path = Paths.get(System.getProperty("user.dir"), "iwdata", "subastas", "" + id);
+        File folder = path.toFile();
+        File f = null;
+        if (folder.exists() && folder.isDirectory()) {
+            File[] files = folder.listFiles(file -> file.isFile());
+            if (files != null && files.length > 0) {
+                f = files[0];
+            }
+        }
+        if (f == null) {
+            f = localData.getFile("subastas", "" + id + ".jpg");
+        }
         InputStream in = new BufferedInputStream(
                 f.exists() ? new FileInputStream(f) : DetailProductController.defaultPic());
         return os -> FileCopyUtils.copy(in, os);
