@@ -148,5 +148,5 @@ Una vez registrado, el usuario puede editar su perfil como desee, guardar sus su
 - Todos los ejercicios hechos propuestos en el examen
 - La subida de imágenes a la app independientemente del sistema operativo
 - Los perfiles son un poco más detallados (antes ya se mostraba el dinero pujado en cada puja y cuándo acababa la subasta)
-- [] Dar posibilidad al usuario de subir varias imágenes
-- [] Descripción del producto como markdown
+- [ ] Dar posibilidad al usuario de subir varias imágenes
+- [ ] Descripción del producto como markdown
