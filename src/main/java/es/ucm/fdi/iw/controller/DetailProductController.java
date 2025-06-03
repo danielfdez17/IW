@@ -1,11 +1,15 @@
 package es.ucm.fdi.iw.controller;
 
 import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
+import java.nio.file.Files;
+import java.nio.file.OpenOption;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalDate;
@@ -46,7 +50,9 @@ import es.ucm.fdi.iw.business.services.user.UserService;
 import jakarta.servlet.http.HttpSession;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @Controller
 @RequestMapping("products")
 @AllArgsConstructor
@@ -117,12 +123,9 @@ public class DetailProductController {
                 "availableMoney", String.valueOf(x));
     }
 
-
-
     private void sendProductUpdateToWebSocket(ProductDTO producto) {
         messagingTemplate.convertAndSend("/topic/product-updates/" + producto.getId(), producto);
     }
-
 
     @PostMapping("/send_product/{id}")
     public String updateSendProduct(@PathVariable long id, @RequestParam String reparto, HttpSession session) {
@@ -139,7 +142,7 @@ public class DetailProductController {
             @RequestParam(required = true) LocalDate nuevaFechaFin,
             @RequestParam(required = true) LocalTime nuevaHoraInicio,
             @RequestParam(required = true) LocalTime nuevaHoraFin,
-            @RequestParam(required = false) MultipartFile photo) throws Exception {
+            @RequestParam(required = false) MultipartFile photos[]) throws Exception {
         User creador = (User) session.getAttribute("u");
         LocalDateTime newDateInit = LocalDateTimeMapper.toLocalDateTime(nuevaFechaInicio, nuevaHoraInicio);
         LocalDateTime newDateEnd = LocalDateTimeMapper.toLocalDateTime(nuevaFechaFin, nuevaHoraFin);
@@ -163,8 +166,7 @@ public class DetailProductController {
         productDTO.setUsuarioHaPujado(false);
         productDTO.setEstadoSubasta(estadoSubasta);
         ProductDTO subasta = productService.createSubasta(productDTO);
-
-        updatePicture(photo, subasta.getId());
+        updatePicture(photos, subasta.getId());
 
         return "redirect:/index";
     }
@@ -174,12 +176,12 @@ public class DetailProductController {
     public String editarSubasta(
             @PathVariable long id,
             @ModelAttribute("product") ProductDTO product,
-            @RequestParam(required = false) MultipartFile photo,
+            @RequestParam(required = false) MultipartFile photos[],
             @RequestParam(required = true) LocalDate nuevaFechaFin,
             Model model, HttpSession session) throws Exception {
         product.setFechaFin(LocalDateTimeMapper.toLocalDateTime(nuevaFechaFin, LocalTime.now()));
         productService.updateProduct(product);
-        updatePicture(photo, id);
+        updatePicture(photos, id);
 
         return "redirect:/index";
     }
@@ -218,37 +220,34 @@ public class DetailProductController {
                         "static/img/BARATO.png")));
     }
 
+    private void updatePicture(MultipartFile photos[], long id) {
+        for (MultipartFile photo : photos) {
+            if (!photo.getOriginalFilename().isBlank()) {
+                try {
+                    Path path = Paths.get(System.getProperty("user.dir"), "iwdata", "subastas", "" + id,
+                            photo.getOriginalFilename() + ".jpg");
+                    File file = path.toFile();
 
+                    file.getParentFile().mkdirs();
 
-    private void updatePicture(MultipartFile photo, long id) {
-        if (!photo.getOriginalFilename().isBlank()) {
-            try {
-                Path path = Paths.get(System.getProperty("user.dir"), "iwdata", "subastas", id + ".jpg");
-                File file = path.toFile();
+                    try (BufferedOutputStream stream = new BufferedOutputStream(new FileOutputStream(file))) {
+                        byte[] bytes = photo.getBytes();
+                        stream.write(bytes);
+                        log.info("Uploaded photo for {} into {}!", id, file.getAbsolutePath());
+                    } catch (Exception e) {
+                        log.warn("Error uploading " + id + " ", e);
+                        if (file.createNewFile()) {
+                            log.info("Uploaded photo for {} into {}!", id, file.getAbsolutePath());
+                        } else {
+                            log.warn("Error uploading " + id + " ", e);
+                        }
+                    }
 
-                try (FileOutputStream fout = new FileOutputStream(file)) {
-                    fout.write(photo.getBytes());
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
-
-            } catch (Exception e) {
-                e.printStackTrace();
             }
         }
     }
-
-    /*    private void updatePicture(MultipartFile photo, long id) {
-        if (!photo.getOriginalFilename().isBlank()) {
-
-            try {
-                String filePath = System.getProperty("user.dir") + "\\iwdata\\subastas\\" + id + ".jpg";
-                FileOutputStream fout = new FileOutputStream(filePath);
-                fout.write(photo.getBytes());
-
-                fout.close();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-    } */
 
 }
