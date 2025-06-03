@@ -139,3 +139,14 @@ Una vez registrado, el usuario puede editar su perfil como desee, guardar sus su
 ```mvn test -Dtest=InternalRunner```
 ```mvn test -Dtest=ExternalRunner```
 
+# Entrega final post-examen
+## En esta entrega hemos participado:
+- Elena Abreu Fernández
+- Daniel Fernández Ortiz
+
+## Esta entrega contiene las siguientes mejoras:
+- Todos los ejercicios hechos propuestos en el examen
+- La subida de imágenes a la app independientemente del sistema operativo
+- Los perfiles son un poco más detallados (antes ya se mostraba el dinero pujado en cada puja y cuándo acababa la subasta)
+[] Dar posibilidad al usuario de subir varias imágenes
+[] Descripción del producto como markdown
